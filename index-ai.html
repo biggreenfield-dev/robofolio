@@ -119,10 +119,22 @@
         }
 
         .hero-bg iframe {
-            width: 100%;
-            height: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120vw;
+            height: 120vh;
+            min-width: 120%;
+            min-height: 120%;
+            transform: translate(-50%, -50%);
             border: none;
-            display: block;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .hero-bg iframe.active-video {
+            opacity: 1;
         }
 
         .hero-overlay {
@@ -990,12 +1002,24 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-bg">
-            <iframe
+        <div class="hero-bg" id="heroBg">
+            <!-- Video 1: Roboterarm Fertigung -->
+            <iframe class="active-video"
                 src="https://www.youtube.com/embed/fn3KWM1kuAw?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=fn3KWM1kuAw"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen=""
-                style="border: none;">
+                allowfullscreen="">
+            </iframe>
+            <!-- Video 2: Universal Robots Cobot -->
+            <iframe
+                src="https://www.youtube.com/embed/2VMQM5eCnaA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=2VMQM5eCnaA"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen="">
+            </iframe>
+            <!-- Video 3: KUKA Roboter in Aktion -->
+            <iframe
+                src="https://www.youtube.com/embed/VFnaMr-6SIs?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=VFnaMr-6SIs"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen="">
             </iframe>
         </div>
         <div class="hero-overlay"></div>
@@ -1835,6 +1859,18 @@
             localStorage.setItem('robofolio_lead', JSON.stringify(lead));
             window.location.href = 'portal.html';
         }
+
+        // Hero video rotation — cycles through background videos every 12 seconds
+        (function() {
+            const videos = document.querySelectorAll('#heroBg iframe');
+            if (videos.length <= 1) return;
+            let current = 0;
+            setInterval(() => {
+                videos[current].classList.remove('active-video');
+                current = (current + 1) % videos.length;
+                videos[current].classList.add('active-video');
+            }, 12000);
+        })();
     </script>
 </body>
 </html>
