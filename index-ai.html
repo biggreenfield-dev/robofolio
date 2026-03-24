@@ -3,150 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Robofolio - Find your perfect robotics partner in 2 minutes with AI">
-    <title>Robofolio - AI-Powered Robotics Marketplace</title>
+    <meta name="description" content="Robofolio — Finden Sie den passenden Robotik-Integrator in 2 Minuten per KI-Matching">
+    <title>Robofolio — KI-gestützter Robotik-Marktplatz</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #fcf9f7;
-            color: #0d2130;
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            color: #1a1a2e;
             line-height: 1.6;
-        }
-
-        html, body, .page-container {
-            height: 100%;
         }
 
         /* ===== NAVIGATION ===== */
         nav {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
             background: transparent;
-            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
-            padding: 20px 40px;
+            padding: 0 48px;
+            height: 72px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         nav.scrolled {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        nav.scrolled .logo {
-            color: #0d2130;
+            background: rgba(255, 255, 255, 0.97);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.08);
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 1px;
             color: white;
             transition: color 0.3s ease;
         }
 
+        nav.scrolled .logo { color: #1a1a2e; }
+
         .nav-right {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
 
-        /* Language Toggle */
         .lang-toggle {
             display: flex;
-            gap: 4px;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 6px;
-            border-radius: 100px;
-            backdrop-filter: blur(20px);
+            gap: 2px;
+            background: rgba(255,255,255,0.15);
+            padding: 4px;
+            border-radius: 4px;
         }
 
-        nav.scrolled .lang-toggle {
-            background: #f0f0f0;
-        }
+        nav.scrolled .lang-toggle { background: #f0f0f0; }
 
         .lang-btn {
-            padding: 8px 14px;
+            padding: 6px 12px;
             border: none;
             background: transparent;
             cursor: pointer;
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s ease;
-            color: rgba(255, 255, 255, 0.7);
+            border-radius: 3px;
+            font-weight: 700;
+            font-size: 12px;
+            color: rgba(255,255,255,0.7);
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
         }
 
-        nav.scrolled .lang-btn {
-            color: #0d2130;
-        }
+        nav.scrolled .lang-btn { color: #666; }
 
         .lang-btn.active {
-            background: #e11b22;
+            background: #00B0F0;
             color: white;
         }
+
+        .nav-cta {
+            padding: 10px 24px;
+            background: #EC671A;
+            color: white;
+            border: none;
+            border-radius: 0;
+            font-weight: 700;
+            font-size: 13px;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background 0.2s ease;
+        }
+
+        .nav-cta:hover { background: #d45a15; }
 
         /* ===== HERO SECTION ===== */
         .hero {
             position: relative;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
             overflow: hidden;
-            background: #0d2130;
+            background: #0b1929;
         }
 
         .hero-bg {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             overflow: hidden;
         }
 
-        .hero-bg iframe {
+        /* Video background — replace src with your MP4 when ready */
+        .hero-bg video {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 120vw;
-            height: 120vh;
-            min-width: 120%;
-            min-height: 120%;
+            top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
             transform: translate(-50%, -50%);
-            border: none;
-            pointer-events: none;
+            object-fit: cover;
             opacity: 0;
             transition: opacity 1.5s ease;
         }
 
-        .hero-bg iframe.active-video {
-            opacity: 1;
+        .hero-bg video.active-video { opacity: 1; }
+
+        /* Fallback gradient when no video loads */
+        .hero-bg-fallback {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                radial-gradient(ellipse at 30% 50%, rgba(0,176,240,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(236,103,26,0.1) 0%, transparent 50%),
+                linear-gradient(160deg, #0b1929 0%, #142d44 40%, #0f2236 100%);
+        }
+
+        /* Animated dots pattern overlay */
+        .hero-bg-fallback::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                radial-gradient(circle, rgba(0,176,240,0.08) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
         .hero-overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: linear-gradient(
-                135deg,
-                rgba(13, 33, 48, 0.75) 0%,
-                rgba(13, 33, 48, 0.85) 100%
+                to right,
+                rgba(11,25,41,0.85) 0%,
+                rgba(11,25,41,0.6) 50%,
+                rgba(11,25,41,0.4) 100%
             );
             z-index: 2;
         }
@@ -154,166 +172,222 @@
         .hero-content {
             position: relative;
             z-index: 3;
-            text-align: center;
-            color: white;
-            max-width: 900px;
-            padding: 40px;
-            animation: fadeInUp 0.8s ease-out;
+            max-width: 700px;
+            padding: 120px 48px 80px;
+            animation: fadeInUp 0.7s ease-out;
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero-badge {
+        .hero-label {
             display: inline-block;
-            background: rgba(225, 27, 34, 0.2);
-            border: 1px solid #e11b22;
-            color: #fff;
-            padding: 8px 18px;
-            border-radius: 100px;
-            font-weight: 600;
+            color: #00B0F0;
+            font-weight: 700;
             font-size: 13px;
-            margin-bottom: 24px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
         }
 
         .hero h1 {
-            font-size: 56px;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
+            font-size: 52px;
+            font-weight: 900;
+            line-height: 1.1;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #00B0F0;
         }
 
         .hero p {
-            font-size: 22px;
-            font-weight: 500;
-            opacity: 0.95;
-            margin-bottom: 36px;
-            line-height: 1.4;
+            font-size: 18px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 40px;
+            line-height: 1.7;
+            max-width: 540px;
         }
 
-        .hero-scroll-btn {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 4;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            40% {
-                transform: translateX(-50%) translateY(-10px);
-            }
-            60% {
-                transform: translateX(-50%) translateY(-5px);
-            }
-        }
-
-        .scroll-arrow {
-            width: 24px;
-            height: 24px;
-            border: 2px solid white;
-            border-radius: 50%;
+        .hero-actions {
             display: flex;
+            gap: 16px;
             align-items: center;
-            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero-primary {
+            padding: 16px 40px;
+            background: #00B0F0;
+            color: white;
+            border: none;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.2s ease;
         }
 
-        .scroll-arrow:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
+        .btn-hero-primary:hover { background: #009dd6; }
 
-        .scroll-arrow::after {
-            content: '↓';
+        .btn-hero-secondary {
+            padding: 16px 40px;
+            background: transparent;
             color: white;
-            font-size: 12px;
-            font-weight: bold;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s ease;
         }
 
-        /* ===== TRUST INDICATORS ===== */
-        .trust-section {
-            background: #0d2130;
-            color: white;
-            padding: 60px 40px;
-            border-top: 1px solid rgba(225, 27, 34, 0.2);
+        .btn-hero-secondary:hover {
+            border-color: white;
+            background: rgba(255,255,255,0.05);
         }
 
-        .trust-grid {
+        /* ===== STATS BAR ===== */
+        .stats-bar {
+            background: #f7f8fa;
+            border-bottom: 1px solid #e8eaed;
+            padding: 40px 48px;
+        }
+
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .trust-item {
-            text-align: center;
-        }
-
-        .trust-number {
-            font-size: 32px;
-            font-weight: 800;
-            color: #e11b22;
-            margin-bottom: 8px;
-        }
-
-        .trust-label {
-            font-size: 15px;
-            font-weight: 500;
-            opacity: 0.9;
-        }
-
-        /* ===== MAIN FORM SECTION ===== */
-        .form-section {
-            background: #fcf9f7;
-            padding: 80px 40px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
             max-width: 1100px;
             margin: 0 auto;
         }
 
-        .form-container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
-            padding: 60px;
-            max-width: 900px;
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 900;
+            color: #00B0F0;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== HOW IT WORKS ===== */
+        .how-section {
+            padding: 80px 48px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
-        /* Progress Bar & Steps */
-        .progress-container {
-            margin-bottom: 50px;
+        .section-label {
+            color: #00B0F0;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
         }
 
+        .section-title {
+            font-size: 36px;
+            font-weight: 900;
+            color: #1a1a2e;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 48px;
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .step-card {
+            padding: 32px;
+            background: #f7f8fa;
+            border-left: 3px solid #00B0F0;
+            transition: all 0.2s ease;
+        }
+
+        .step-card:hover {
+            background: #f0f6ff;
+        }
+
+        .step-num {
+            font-size: 48px;
+            font-weight: 900;
+            color: #00B0F0;
+            opacity: 0.3;
+            margin-bottom: 16px;
+            line-height: 1;
+        }
+
+        .step-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .step-card p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* ===== FORM SECTION ===== */
+        .form-section {
+            background: #f7f8fa;
+            padding: 80px 48px;
+        }
+
+        .form-container {
+            background: white;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 56px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+        }
+
+        /* Progress Bar */
+        .progress-container { margin-bottom: 48px; }
+
         .progress-bar-wrapper {
-            background: #e8ecf1;
+            background: #e8eaed;
             height: 3px;
-            border-radius: 100px;
             overflow: hidden;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
         #progressBarFill {
             height: 100%;
-            background: linear-gradient(90deg, #e11b22 0%, #3e769b 100%);
-            border-radius: 100px;
+            background: #00B0F0;
             width: 0%;
             transition: width 0.4s ease;
         }
@@ -321,7 +395,7 @@
         .progress-steps {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
+            gap: 16px;
         }
 
         .progress-step {
@@ -332,123 +406,102 @@
         }
 
         .progress-step-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #e8ecf1;
-            border: 2px solid #e8ecf1;
+            width: 36px;
+            height: 36px;
+            border-radius: 0;
+            background: #e8eaed;
+            border: 2px solid #e8eaed;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            color: #666;
-            font-size: 16px;
+            font-weight: 800;
+            color: #999;
+            font-size: 14px;
             transition: all 0.3s ease;
         }
 
         .progress-step.active .progress-step-circle {
-            background: #e11b22;
-            border-color: #e11b22;
+            background: #00B0F0;
+            border-color: #00B0F0;
             color: white;
-            box-shadow: 0 0 0 6px rgba(225, 27, 34, 0.1);
         }
 
         .progress-step.completed .progress-step-circle {
-            background: #10b981;
-            border-color: #10b981;
+            background: #2ecc71;
+            border-color: #2ecc71;
             color: white;
         }
 
         .progress-step-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #666;
+            font-size: 12px;
+            font-weight: 700;
+            color: #999;
             text-align: center;
-            min-height: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .progress-step.active .progress-step-label {
-            color: #e11b22;
-        }
-
-        .progress-step.completed .progress-step-label {
-            color: #10b981;
-        }
+        .progress-step.active .progress-step-label { color: #00B0F0; }
+        .progress-step.completed .progress-step-label { color: #2ecc71; }
 
         /* Form Steps */
-        .form-step {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .form-step.active {
-            display: block;
-        }
+        .form-step { display: none; animation: fadeIn 0.3s ease; }
+        .form-step.active { display: block; }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .step-title {
-            font-size: 32px;
-            font-weight: 800;
-            color: #0d2130;
-            margin-bottom: 16px;
+            font-size: 28px;
+            font-weight: 900;
+            color: #1a1a2e;
+            margin-bottom: 8px;
         }
 
         .step-description {
-            font-size: 16px;
+            font-size: 15px;
             color: #666;
-            margin-bottom: 40px;
+            margin-bottom: 36px;
             line-height: 1.6;
         }
 
         /* Form Groups */
-        .form-group {
-            margin-bottom: 28px;
-        }
+        .form-group { margin-bottom: 24px; }
 
         .form-label {
             display: block;
-            font-size: 14px;
-            font-weight: 700;
-            color: #0d2130;
-            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
         }
 
-        .required {
-            color: #e11b22;
-        }
+        .required { color: #EC671A; }
 
         .form-input,
         .form-textarea,
         .form-select {
             width: 100%;
             padding: 14px 16px;
-            border: 2px solid #e8ecf1;
-            border-radius: 8px;
+            border: 1px solid #d0d4da;
+            border-radius: 0;
             font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s ease;
-            background: #fcf9f7;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.2s ease;
+            background: #fff;
+            color: #1a1a2e;
         }
 
         .form-input:focus,
         .form-textarea:focus,
         .form-select:focus {
             outline: none;
-            border-color: #3e769b;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(62, 118, 155, 0.1);
+            border-color: #00B0F0;
+            box-shadow: 0 0 0 2px rgba(0,176,240,0.15);
         }
 
         .form-textarea {
@@ -456,535 +509,346 @@
             min-height: 100px;
         }
 
-        /* Website Analysis Step */
+        /* Website Analysis */
         .website-input-group {
             display: grid;
             grid-template-columns: 1fr auto;
             gap: 12px;
-            margin-bottom: 28px;
         }
 
-        #analyzeWebsiteBtn {
-            padding: 14px 32px;
-        }
+        #analyzeWebsiteBtn { padding: 14px 28px; }
 
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 30px;
-        }
-
-        .loading-spinner.active {
-            display: block;
-        }
+        .loading-spinner { display: none; text-align: center; padding: 28px; }
+        .loading-spinner.active { display: block; }
 
         .spinner {
-            border: 3px solid #e8ecf1;
-            border-top: 3px solid #e11b22;
+            border: 3px solid #e8eaed;
+            border-top: 3px solid #00B0F0;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
+            margin: 0 auto 12px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .extracted-data {
-            background: #f0f4f8;
-            border-left: 4px solid #e11b22;
-            border-radius: 8px;
+            background: #f7f8fa;
+            border-left: 3px solid #00B0F0;
             padding: 24px;
-            margin: 28px 0;
+            margin: 24px 0;
             display: none;
         }
 
-        .extracted-data.hidden {
-            display: none;
-        }
-
-        .extracted-data:not(.hidden) {
-            display: block;
-        }
+        .extracted-data.hidden { display: none; }
+        .extracted-data:not(.hidden) { display: block; }
 
         .extracted-data-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #e0e7f1;
+            padding: 10px 0;
+            border-bottom: 1px solid #e8eaed;
         }
 
-        .extracted-data-item:last-child {
-            border-bottom: none;
-        }
+        .extracted-data-item:last-child { border-bottom: none; }
 
         .extracted-data-label {
-            font-weight: 600;
-            color: #0d2130;
-            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a2e;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .extracted-data-value {
-            color: #e11b22;
-            font-weight: 700;
+            color: #00B0F0;
+            font-weight: 800;
         }
 
-        .manual-input-toggle {
-            display: inline-block;
-            margin-top: 16px;
-        }
+        .manual-input-toggle { margin-top: 16px; }
 
         .manual-input-toggle button {
             background: none;
             border: none;
-            color: #3e769b;
-            font-weight: 600;
+            color: #00B0F0;
+            font-weight: 700;
             cursor: pointer;
+            font-size: 13px;
             text-decoration: underline;
-            font-size: 14px;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .manual-input-toggle button:hover {
-            color: #e11b22;
-        }
+        .manual-input-toggle button:hover { color: #EC671A; }
 
         #manualInputFields {
-            background: #f9fafb;
+            background: #f7f8fa;
             padding: 24px;
-            border-radius: 8px;
             margin-top: 20px;
             display: none;
         }
 
-        #manualInputFields.hidden {
-            display: none;
-        }
-
-        #manualInputFields:not(.hidden) {
-            display: block;
-        }
+        #manualInputFields.hidden { display: none; }
+        #manualInputFields:not(.hidden) { display: block; }
 
         /* Photo Upload */
         .upload-area {
-            border: 2px dashed #3e769b;
-            border-radius: 12px;
+            border: 2px dashed #d0d4da;
             padding: 40px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f9fafb;
-            margin-bottom: 28px;
+            transition: all 0.2s ease;
+            background: #f7f8fa;
+            margin-bottom: 24px;
         }
 
-        .upload-area:hover {
-            border-color: #e11b22;
-            background: #fef9f7;
-        }
+        .upload-area:hover { border-color: #00B0F0; background: #f0f6ff; }
+        .upload-area.dragover { border-color: #00B0F0; background: rgba(0,176,240,0.05); }
 
-        .upload-area.dragover {
-            border-color: #e11b22;
-            background: rgba(225, 27, 34, 0.05);
-        }
+        .upload-icon { font-size: 40px; margin-bottom: 12px; }
+        .upload-text { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+        .upload-subtext { font-size: 13px; color: #999; }
 
-        .upload-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
+        #photoUpload { display: none; }
 
-        .upload-text {
-            font-size: 16px;
-            font-weight: 600;
-            color: #0d2130;
-            margin-bottom: 4px;
-        }
-
-        .upload-subtext {
-            font-size: 14px;
-            color: #666;
-        }
-
-        #photoUpload {
-            display: none;
-        }
-
-        #uploadedFiles {
-            display: grid;
-            gap: 12px;
-            margin-bottom: 28px;
-        }
+        #uploadedFiles { display: grid; gap: 8px; margin-bottom: 24px; }
 
         .uploaded-file {
-            background: #f0f4f8;
-            border-left: 4px solid #10b981;
-            border-radius: 8px;
-            padding: 14px 16px;
+            background: #f7f8fa;
+            border-left: 3px solid #2ecc71;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .uploaded-file-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #0d2130;
-        }
+        .uploaded-file-name { font-size: 13px; font-weight: 700; color: #1a1a2e; }
 
         .remove-file {
             background: none;
             border: none;
             color: #999;
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
-            transition: color 0.2s ease;
         }
 
-        .remove-file:hover {
-            color: #e11b22;
-        }
+        .remove-file:hover { color: #e74c3c; }
 
         /* Radio Options */
         .radio-group {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin: 16px 0 28px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 12px 0 24px;
         }
 
         .radio-option {
             position: relative;
             display: block;
-            padding: 18px;
-            border: 2px solid #e8ecf1;
-            border-radius: 8px;
+            padding: 16px;
+            border: 1px solid #d0d4da;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             background: white;
         }
 
-        .radio-option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-        }
+        .radio-option input[type="radio"] { position: absolute; opacity: 0; }
 
         .radio-option span {
             display: block;
-            font-weight: 600;
-            font-size: 14px;
-            color: #0d2130;
+            font-weight: 700;
+            font-size: 13px;
+            color: #1a1a2e;
         }
 
-        .radio-option:hover {
-            border-color: #3e769b;
-            background: #f9fafb;
-        }
+        .radio-option:hover { border-color: #00B0F0; background: #f0f6ff; }
 
         .radio-option.selected {
-            border-color: #e11b22;
-            background: rgba(225, 27, 34, 0.05);
+            border-color: #00B0F0;
+            background: rgba(0,176,240,0.05);
         }
 
-        .radio-option.selected span {
-            color: #e11b22;
-        }
+        .radio-option.selected span { color: #00B0F0; }
 
         /* Form Navigation */
         .form-navigation {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-            margin-top: 50px;
-            padding-top: 40px;
-            border-top: 1px solid #e8ecf1;
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid #e8eaed;
         }
 
         /* Buttons */
         .btn {
-            padding: 16px 40px;
+            padding: 16px 36px;
             border: none;
-            border-radius: 100px;
-            font-size: 15px;
-            font-weight: 700;
+            border-radius: 0;
+            font-size: 13px;
+            font-weight: 800;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+            font-family: 'Montserrat', sans-serif;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .btn-primary {
-            background: #e11b22;
+            background: #00B0F0;
             color: white;
-            box-shadow: 0 4px 16px rgba(225, 27, 34, 0.25);
         }
 
-        .btn-primary:hover:not(:disabled) {
-            background: #c4181c;
-            box-shadow: 0 6px 20px rgba(225, 27, 34, 0.35);
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+        .btn-primary:hover:not(:disabled) { background: #009dd6; }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
         .btn-secondary {
             background: white;
-            color: #0d2130;
-            border: 2px solid #e8ecf1;
+            color: #1a1a2e;
+            border: 1px solid #d0d4da;
         }
 
-        .btn-secondary:hover:not(:disabled) {
-            border-color: #e11b22;
-            color: #e11b22;
-            background: #fef9f7;
-        }
+        .btn-secondary:hover:not(:disabled) { border-color: #00B0F0; color: #00B0F0; }
+        .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .btn-secondary:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .btn-scroll {
-            padding: 14px 28px;
-            font-size: 14px;
-            background: white;
-            color: #0d2130;
-            border: 2px solid white;
-        }
-
-        .btn-scroll:hover {
-            background: transparent;
+        .btn-orange {
+            background: #EC671A;
             color: white;
         }
 
+        .btn-orange:hover:not(:disabled) { background: #d45a15; }
+
         /* Review Section */
         .review-section {
-            background: #f9fafb;
-            border-radius: 12px;
-            padding: 28px;
-            margin-bottom: 24px;
-            border: 1px solid #e8ecf1;
+            background: #f7f8fa;
+            padding: 24px;
+            margin-bottom: 20px;
+            border-left: 3px solid #00B0F0;
         }
 
         .review-section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid #e8ecf1;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e8eaed;
         }
 
         .review-section-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #0d2130;
+            font-size: 16px;
+            font-weight: 900;
+            color: #1a1a2e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .review-edit-btn {
             background: none;
             border: none;
-            color: #e11b22;
-            font-weight: 700;
+            color: #00B0F0;
+            font-weight: 800;
             cursor: pointer;
-            font-size: 14px;
-            transition: color 0.2s ease;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .review-edit-btn:hover {
-            color: #c4181c;
-        }
+        .review-edit-btn:hover { color: #EC671A; }
 
         .review-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
         }
 
-        .review-item {
-            display: flex;
-            flex-direction: column;
-        }
+        .review-item { display: flex; flex-direction: column; }
 
         .review-item-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: #666;
+            font-size: 11px;
+            font-weight: 800;
+            color: #999;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
         }
 
         .review-item-value {
             font-size: 15px;
-            font-weight: 600;
-            color: #0d2130;
+            font-weight: 700;
+            color: #1a1a2e;
         }
 
         /* Success Container */
-        .success-container {
-            display: none;
-            text-align: center;
-            padding: 60px 40px;
-            background: #fcf9f7;
-        }
-
-        .success-container.active {
-            display: block;
-        }
+        .success-container { display: none; text-align: center; padding: 60px 40px; }
+        .success-container.active { display: block; }
 
         .success-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #10b981;
+            width: 72px;
+            height: 72px;
+            background: #2ecc71;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
-            margin: 0 auto 24px;
-            animation: scaleIn 0.5s ease;
+            font-size: 40px;
+            margin: 0 auto 20px;
+            animation: scaleIn 0.4s ease;
         }
 
         @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        .success-title {
-            font-size: 32px;
-            font-weight: 800;
-            color: #0d2130;
-            margin-bottom: 12px;
-        }
-
-        .success-message {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 24px;
-            line-height: 1.6;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+        .success-title { font-size: 28px; font-weight: 900; color: #1a1a2e; margin-bottom: 8px; }
+        .success-message { font-size: 15px; color: #666; margin-bottom: 24px; line-height: 1.6; max-width: 480px; margin-left: auto; margin-right: auto; }
 
         /* ===== FOOTER ===== */
         footer {
-            background: #0d2130;
+            background: #0b1929;
             color: white;
-            padding: 40px;
+            padding: 48px;
             text-align: center;
-            border-top: 1px solid rgba(225, 27, 34, 0.2);
         }
 
-        footer p {
-            font-size: 14px;
-            opacity: 0.8;
-        }
+        footer p { font-size: 13px; opacity: 0.6; }
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            nav {
-                padding: 16px 20px;
-            }
-
-            .logo {
-                font-size: 20px;
-            }
-
-            .hero h1 {
-                font-size: 36px;
-            }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .hero-content {
-                padding: 20px;
-            }
-
-            .form-container {
-                padding: 40px 24px;
-            }
-
-            .progress-steps {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .step-title {
-                font-size: 24px;
-            }
-
-            .radio-group {
-                grid-template-columns: 1fr;
-            }
-
-            .form-navigation {
-                grid-template-columns: 1fr;
-            }
-
-            .website-input-group {
-                grid-template-columns: 1fr;
-            }
-
-            .review-content {
-                grid-template-columns: 1fr;
-            }
-
-            .trust-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 24px;
-            }
+            nav { padding: 0 20px; height: 60px; }
+            .logo { font-size: 18px; }
+            .nav-cta { display: none; }
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .hero-content { padding: 100px 24px 60px; }
+            .hero-actions { flex-direction: column; align-items: flex-start; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .stats-bar { padding: 32px 24px; }
+            .how-section { padding: 48px 24px; }
+            .steps-grid { grid-template-columns: 1fr; gap: 20px; }
+            .form-section { padding: 48px 20px; }
+            .form-container { padding: 32px 24px; }
+            .progress-steps { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .step-title { font-size: 22px; }
+            .radio-group { grid-template-columns: 1fr; }
+            .form-navigation { grid-template-columns: 1fr; }
+            .website-input-group { grid-template-columns: 1fr; }
+            .review-content { grid-template-columns: 1fr; }
+            .section-title { font-size: 28px; }
         }
 
         @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 28px;
-            }
-
-            .hero p {
-                font-size: 16px;
-            }
-
-            .form-container {
-                padding: 32px 16px;
-            }
-
-            .progress-steps {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
-
-            .progress-step-label {
-                font-size: 12px;
-            }
-
-            .step-title {
-                font-size: 20px;
-            }
-
-            .btn {
-                padding: 14px 24px;
-                font-size: 14px;
-            }
-
-            .trust-grid {
-                grid-template-columns: 1fr;
-            }
+            .hero h1 { font-size: 26px; }
+            .hero-content { padding: 90px 16px 48px; }
+            .form-container { padding: 24px 16px; }
+            .progress-steps { grid-template-columns: 1fr; }
+            .step-title { font-size: 20px; }
+            .btn { padding: 14px 24px; font-size: 12px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stat-number { font-size: 28px; }
         }
     </style>
 </head>
@@ -997,80 +861,104 @@
                 <button class="lang-btn active" data-lang-btn="de" onclick="switchLanguage('de')">DE</button>
                 <button class="lang-btn" data-lang-btn="en" onclick="switchLanguage('en')">EN</button>
             </div>
+            <button class="nav-cta" onclick="scrollToForm()" data-lang="de">Anfrage starten</button>
+            <button class="nav-cta" onclick="scrollToForm()" data-lang="en" style="display:none;">Get Started</button>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-bg" id="heroBg">
-            <!-- Video 1: Roboterarm Fertigung -->
-            <iframe class="active-video"
-                src="https://www.youtube.com/embed/fn3KWM1kuAw?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=fn3KWM1kuAw"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen="">
-            </iframe>
-            <!-- Video 2: Universal Robots Cobot -->
-            <iframe
-                src="https://www.youtube.com/embed/2VMQM5eCnaA?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=2VMQM5eCnaA"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen="">
-            </iframe>
-            <!-- Video 3: KUKA Roboter in Aktion -->
-            <iframe
-                src="https://www.youtube.com/embed/VFnaMr-6SIs?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=VFnaMr-6SIs"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen="">
-            </iframe>
+            <div class="hero-bg-fallback"></div>
+            <video class="active-video" autoplay muted loop playsinline src="videos/cobot-welding.mp4"></video>
+            <video autoplay muted loop playsinline src="videos/cobot-palletizing.mp4"></video>
+            <video autoplay muted loop playsinline src="videos/cobot-machine-tending.mp4"></video>
         </div>
         <div class="hero-overlay"></div>
 
         <div class="hero-content">
-            <div class="hero-badge" data-lang="de">KI-gestützte Vermittlung</div>
-            <div class="hero-badge" data-lang="en" style="display:none;">AI-Powered Matching</div>
+            <div class="hero-label" data-lang="de">KI-gestützter Robotik-Marktplatz</div>
+            <div class="hero-label" data-lang="en" style="display:none;">AI-Powered Robotics Marketplace</div>
 
-            <h1 data-lang="de">Finden Sie Ihren Robotik-Partner in 2 Minuten</h1>
-            <h1 data-lang="en" style="display:none;">Find Your Robotics Partner in 2 Minutes</h1>
+            <h1 data-lang="de">Finden Sie Ihren <span>Robotik-Integrator</span> in 2 Minuten</h1>
+            <h1 data-lang="en" style="display:none;">Find Your <span>Robotics Integrator</span> in 2 Minutes</h1>
 
-            <p data-lang="de">KI-gestützte Vermittlung zwischen Fertigungsunternehmen und Integratoren</p>
-            <p data-lang="en" style="display:none;">AI-powered matching between manufacturers and integrators</p>
+            <p data-lang="de">Unsere KI analysiert Ihren Betrieb und verbindet Sie mit dem passenden Automatisierungspartner — kostenlos und unverbindlich.</p>
+            <p data-lang="en" style="display:none;">Our AI analyzes your operations and connects you with the right automation partner — free and non-binding.</p>
 
-            <button class="btn btn-scroll" onclick="scrollToForm()" data-lang="de">Jetzt starten</button>
-            <button class="btn btn-scroll" onclick="scrollToForm()" data-lang="en" style="display:none;">Get Started</button>
-        </div>
-
-        <div class="hero-scroll-btn" onclick="scrollToForm()">
-            <div class="scroll-arrow"></div>
-        </div>
-    </section>
-
-    <!-- Trust Indicators -->
-    <section class="trust-section">
-        <div class="trust-grid">
-            <div class="trust-item">
-                <div class="trust-number">20.000+</div>
-                <div class="trust-label" data-lang="de">KMU Partner</div>
-                <div class="trust-label" data-lang="en" style="display:none;">SME Partners</div>
-            </div>
-            <div class="trust-item">
-                <div class="trust-number">500+</div>
-                <div class="trust-label" data-lang="de">Integratoren</div>
-                <div class="trust-label" data-lang="en" style="display:none;">Integrators</div>
-            </div>
-            <div class="trust-item">
-                <div class="trust-number">2 Min.</div>
-                <div class="trust-label" data-lang="de">Analyse</div>
-                <div class="trust-label" data-lang="en" style="display:none;">Analysis</div>
-            </div>
-            <div class="trust-item">
-                <div class="trust-number">100%</div>
-                <div class="trust-label" data-lang="de">Kostenlos</div>
-                <div class="trust-label" data-lang="en" style="display:none;">Free</div>
+            <div class="hero-actions">
+                <button class="btn-hero-primary" onclick="scrollToForm()" data-lang="de">Kostenlos starten</button>
+                <button class="btn-hero-primary" onclick="scrollToForm()" data-lang="en" style="display:none;">Start Free</button>
+                <button class="btn-hero-secondary" onclick="scrollToHow()" data-lang="de">So funktioniert's</button>
+                <button class="btn-hero-secondary" onclick="scrollToHow()" data-lang="en" style="display:none;">How It Works</button>
             </div>
         </div>
     </section>
 
-    <!-- Main Form Section -->
-    <section class="form-section">
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">20.000+</div>
+                <div class="stat-label" data-lang="de">KMU im Markt</div>
+                <div class="stat-label" data-lang="en" style="display:none;">SMEs in Market</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label" data-lang="de">Integratoren</div>
+                <div class="stat-label" data-lang="en" style="display:none;">Integrators</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2 Min.</div>
+                <div class="stat-label" data-lang="de">KI-Analyse</div>
+                <div class="stat-label" data-lang="en" style="display:none;">AI Analysis</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label" data-lang="de">Kostenlos</div>
+                <div class="stat-label" data-lang="en" style="display:none;">Free</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section" id="howSection">
+        <div class="section-label" data-lang="de">So funktioniert's</div>
+        <div class="section-label" data-lang="en" style="display:none;">How It Works</div>
+
+        <h2 class="section-title" data-lang="de">In 3 Schritten zum Integrator</h2>
+        <h2 class="section-title" data-lang="en" style="display:none;">3 Steps to Your Integrator</h2>
+
+        <p class="section-subtitle" data-lang="de">Kein langes Suchen, keine Kaltakquise. Unsere KI übernimmt den Matching-Prozess.</p>
+        <p class="section-subtitle" data-lang="en" style="display:none;">No long searches, no cold calls. Our AI handles the matching process.</p>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">01</div>
+                <h3 data-lang="de">Betrieb beschreiben</h3>
+                <h3 data-lang="en" style="display:none;">Describe Your Operations</h3>
+                <p data-lang="de">Website eingeben oder Fotos hochladen — unsere KI extrahiert alle relevanten Daten automatisch.</p>
+                <p data-lang="en" style="display:none;">Enter your website or upload photos — our AI extracts all relevant data automatically.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">02</div>
+                <h3 data-lang="de">KI-Matching</h3>
+                <h3 data-lang="en" style="display:none;">AI Matching</h3>
+                <p data-lang="de">Unser Algorithmus bewertet Ihren Bedarf und findet die besten Integratoren für Ihr Projekt.</p>
+                <p data-lang="en" style="display:none;">Our algorithm evaluates your needs and finds the best integrators for your project.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">03</div>
+                <h3 data-lang="de">Angebote erhalten</h3>
+                <h3 data-lang="en" style="display:none;">Receive Proposals</h3>
+                <p data-lang="de">Qualifizierte Integratoren kontaktieren Sie direkt mit passenden Lösungsvorschlägen.</p>
+                <p data-lang="en" style="display:none;">Qualified integrators contact you directly with tailored solution proposals.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section" id="formSection">
         <div class="form-container">
             <!-- Progress -->
             <div class="progress-container">
@@ -1095,8 +983,8 @@
                     </div>
                     <div class="progress-step" data-step="4">
                         <div class="progress-step-circle">4</div>
-                        <div class="progress-step-label" data-lang="de">Überprüfung</div>
-                        <div class="progress-step-label" data-lang="en" style="display:none;">Review</div>
+                        <div class="progress-step-label" data-lang="de">Senden</div>
+                        <div class="progress-step-label" data-lang="en" style="display:none;">Submit</div>
                     </div>
                 </div>
             </div>
@@ -1108,17 +996,14 @@
                     <h2 class="step-title" data-lang="de">Erzählen Sie uns von Ihrer Firma</h2>
                     <h2 class="step-title" data-lang="en" style="display:none;">Tell Us About Your Company</h2>
 
-                    <p class="step-description" data-lang="de">Wir werden Ihre Website analysieren, um die wichtigsten Informationen zu extrahieren.</p>
+                    <p class="step-description" data-lang="de">Wir analysieren Ihre Website, um die wichtigsten Informationen zu extrahieren.</p>
                     <p class="step-description" data-lang="en" style="display:none;">We'll analyze your website to extract key information about your company.</p>
 
                     <div class="form-group">
                         <label class="form-label" data-lang="de">Website-URL</label>
                         <label class="form-label" data-lang="en" style="display:none;">Website URL</label>
                         <div class="website-input-group">
-                            <input
-                                type="url"
-                                class="form-input"
-                                id="websiteUrl"
+                            <input type="url" class="form-input" id="websiteUrl"
                                 data-placeholder-de="z.B. https://example.com"
                                 data-placeholder-en="e.g. https://example.com"
                                 placeholder="z.B. https://example.com">
@@ -1167,19 +1052,16 @@
                             <label class="form-label" data-lang="en" style="display:none;">Company Name <span class="required">*</span></label>
                             <input type="text" class="form-input" id="company-name-manual" required>
                         </div>
-
                         <div class="form-group">
                             <label class="form-label" data-lang="de">Branche</label>
                             <label class="form-label" data-lang="en" style="display:none;">Industry</label>
                             <input type="text" class="form-input" id="industry-manual">
                         </div>
-
                         <div class="form-group">
                             <label class="form-label" data-lang="de">Standort</label>
                             <label class="form-label" data-lang="en" style="display:none;">Location</label>
                             <input type="text" class="form-input" id="location-manual">
                         </div>
-
                         <div class="form-group">
                             <label class="form-label" data-lang="de">Größe</label>
                             <label class="form-label" data-lang="en" style="display:none;">Company Size</label>
@@ -1203,7 +1085,7 @@
                     <p class="step-description" data-lang="en" style="display:none;">Upload up to 5 photos of your facility for AI analysis.</p>
 
                     <div class="upload-area" id="uploadArea">
-                        <div class="upload-icon">📷</div>
+                        <div class="upload-icon">&#128247;</div>
                         <div class="upload-text" data-lang="de">Fotos hier ablegen</div>
                         <div class="upload-text" data-lang="en" style="display:none;">Drop photos here</div>
                         <div class="upload-subtext" data-lang="de">oder klicken zum Durchsuchen</div>
@@ -1293,11 +1175,11 @@
                         <select class="form-select" id="budget-range">
                             <option value="" data-lang="de">Wählen Sie...</option>
                             <option value="" data-lang="en" style="display:none;">Select...</option>
-                            <option value="0-50k">€0 - €50.000</option>
-                            <option value="50k-100k">€50.000 - €100.000</option>
-                            <option value="100k-250k">€100.000 - €250.000</option>
-                            <option value="250k-500k">€250.000 - €500.000</option>
-                            <option value="500k+">€500.000+</option>
+                            <option value="0-50k">&euro;0 - &euro;50.000</option>
+                            <option value="50k-100k">&euro;50.000 - &euro;100.000</option>
+                            <option value="100k-250k">&euro;100.000 - &euro;250.000</option>
+                            <option value="250k-500k">&euro;250.000 - &euro;500.000</option>
+                            <option value="500k+">&euro;500.000+</option>
                         </select>
                     </div>
 
@@ -1384,22 +1266,20 @@
                     <p class="step-description" data-lang="de">Stellen Sie sicher, dass alle Informationen korrekt sind, bevor wir Sie mit Integratoren verbinden.</p>
                     <p class="step-description" data-lang="en" style="display:none;">Make sure all information is correct before we match you with integrators.</p>
 
-                    <div id="reviewContent">
-                        <!-- Review sections will be generated dynamically -->
-                    </div>
+                    <div id="reviewContent"></div>
 
                     <div class="form-navigation">
                         <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="de">Zurück</button>
                         <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="en" style="display:none;">Back</button>
-                        <button type="submit" class="btn btn-primary" id="submitBtn" data-lang="de">Partner finden</button>
-                        <button type="submit" class="btn btn-primary" id="submitBtn" data-lang="en" style="display:none;">Get My Matches</button>
+                        <button type="submit" class="btn btn-orange" id="submitBtn" data-lang="de">Partner finden</button>
+                        <button type="submit" class="btn btn-orange" id="submitBtn" data-lang="en" style="display:none;">Get My Matches</button>
                     </div>
                 </div>
             </form>
 
             <!-- Success Message + Profile Builder -->
             <div class="success-container" id="successContainer">
-                <div class="success-icon">✓</div>
+                <div class="success-icon">&#10003;</div>
                 <div class="success-title" data-lang="de">Vielen Dank!</div>
                 <div class="success-title" data-lang="en" style="display:none;">Thank You!</div>
                 <div class="success-message" data-lang="de">
@@ -1410,40 +1290,40 @@
                 </div>
 
                 <!-- Profile Builder -->
-                <div style="background:#f0f4f8;border-radius:16px;padding:35px;margin-top:30px;text-align:left;max-width:500px;margin-left:auto;margin-right:auto;">
-                    <h3 style="font-size:20px;color:#0d2130;margin-bottom:6px;font-weight:800;">
+                <div style="background:#f7f8fa;padding:32px;margin-top:28px;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
+                    <h3 style="font-size:18px;color:#1a1a2e;margin-bottom:6px;font-weight:900;">
                         <span data-lang="de">Ihr Kundenprofil erstellen</span>
                         <span data-lang="en" style="display:none;">Create Your Profile</span>
                     </h3>
-                    <p style="font-size:14px;color:#666;margin-bottom:24px;">
+                    <p style="font-size:13px;color:#666;margin-bottom:24px;">
                         <span data-lang="de">Erstellen Sie Ihr Profil, um den Status Ihres Gesuchs live zu verfolgen.</span>
                         <span data-lang="en" style="display:none;">Set up your profile to track your request status in real time.</span>
                     </p>
 
                     <div style="margin-bottom:16px;">
-                        <label style="display:block;font-weight:700;color:#0d2130;margin-bottom:6px;font-size:13px;">
+                        <label style="display:block;font-weight:800;color:#1a1a2e;margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">
                             <span data-lang="de">Ihr Name</span>
                             <span data-lang="en" style="display:none;">Your Name</span>
                         </label>
-                        <input type="text" id="profile-name" style="width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:inherit;">
+                        <input type="text" id="profile-name" style="width:100%;padding:12px 16px;border:1px solid #d0d4da;font-size:15px;font-family:'Montserrat',sans-serif;">
                     </div>
 
                     <div style="margin-bottom:16px;">
-                        <label style="display:block;font-weight:700;color:#0d2130;margin-bottom:6px;font-size:13px;">
+                        <label style="display:block;font-weight:800;color:#1a1a2e;margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">
                             <span data-lang="de">Firma</span>
                             <span data-lang="en" style="display:none;">Company</span>
                         </label>
-                        <input type="text" id="profile-company" style="width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:inherit;background:#e8ecf1;color:#4a5568;" readonly>
+                        <input type="text" id="profile-company" style="width:100%;padding:12px 16px;border:1px solid #d0d4da;font-size:15px;font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#666;" readonly>
                     </div>
 
                     <div style="margin-bottom:24px;">
-                        <label style="display:block;font-weight:700;color:#0d2130;margin-bottom:6px;font-size:13px;">Email</label>
-                        <input type="email" id="profile-email" style="width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:inherit;">
+                        <label style="display:block;font-weight:800;color:#1a1a2e;margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Email</label>
+                        <input type="email" id="profile-email" style="width:100%;padding:12px 16px;border:1px solid #d0d4da;font-size:15px;font-family:'Montserrat',sans-serif;">
                     </div>
 
-                    <button type="button" id="goToPortalBtn" onclick="goToPortal()" style="width:100%;padding:16px;background:#e11b22;color:white;border:none;border-radius:100px;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.3s;">
-                        <span data-lang="de">Zum Kundenportal →</span>
-                        <span data-lang="en" style="display:none;">Go to My Portal →</span>
+                    <button type="button" id="goToPortalBtn" onclick="goToPortal()" style="width:100%;padding:16px;background:#EC671A;color:white;border:none;font-size:13px;font-weight:800;cursor:pointer;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1px;transition:background 0.2s;">
+                        <span data-lang="de">Zum Kundenportal &rarr;</span>
+                        <span data-lang="en" style="display:none;">Go to My Portal &rarr;</span>
                     </button>
                 </div>
             </div>
@@ -1456,22 +1336,26 @@
     </footer>
 
     <script>
-        // Scroll to form
+        // Scroll functions
         function scrollToForm() {
-            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Update nav on scroll
+        function scrollToHow() {
+            document.getElementById('howSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Nav scroll effect
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('mainNav');
-            if (window.scrollY > 100) {
+            if (window.scrollY > 80) {
                 nav.classList.add('scrolled');
             } else {
                 nav.classList.remove('scrolled');
             }
         });
 
-        // API Configuration — auto-detects local vs production
+        // API Configuration
         const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:5001'
             : 'https://robofolio-api.onrender.com';
@@ -1487,12 +1371,8 @@
         function switchLanguage(lang) {
             document.documentElement.lang = lang;
             localStorage.setItem('preferredLanguage', lang);
-
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector(`[data-lang-btn="${lang}"]`).classList.add('active');
-
             updatePlaceholders(lang);
         }
 
@@ -1510,14 +1390,10 @@
 
         function nextStep() {
             if (formData.currentStep < 4) {
-                if (!validateStep(formData.currentStep)) {
-                    return;
-                }
+                if (!validateStep(formData.currentStep)) return;
                 formData.currentStep++;
                 updateSteps();
-                if (formData.currentStep === 4) {
-                    generateReview();
-                }
+                if (formData.currentStep === 4) generateReview();
             }
         }
 
@@ -1532,31 +1408,23 @@
             document.querySelectorAll('.progress-step').forEach(step => {
                 const stepNum = parseInt(step.dataset.step);
                 step.classList.remove('active', 'completed');
-                if (stepNum === formData.currentStep) {
-                    step.classList.add('active');
-                } else if (stepNum < formData.currentStep) {
-                    step.classList.add('completed');
-                }
+                if (stepNum === formData.currentStep) step.classList.add('active');
+                else if (stepNum < formData.currentStep) step.classList.add('completed');
             });
             const progress = ((formData.currentStep - 1) / 3) * 100;
             document.getElementById('progressBarFill').style.width = progress + '%';
-            document.querySelectorAll('.form-step').forEach(step => {
-                step.classList.remove('active');
-            });
+            document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
             document.querySelector(`.form-step[data-step="${formData.currentStep}"]`).classList.add('active');
-            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function validateStep(step) {
-            return true;
-        }
+        function validateStep(step) { return true; }
 
+        // Website analysis
         document.getElementById('analyzeWebsiteBtn').addEventListener('click', async function() {
             const url = document.getElementById('websiteUrl').value;
             if (!url) {
-                alert(document.documentElement.lang === 'de' ?
-                    'Bitte geben Sie eine Website-URL ein' :
-                    'Please enter a website URL');
+                alert(document.documentElement.lang === 'de' ? 'Bitte geben Sie eine Website-URL ein' : 'Please enter a website URL');
                 return;
             }
             document.getElementById('websiteLoading').classList.add('active');
@@ -1568,9 +1436,7 @@
                     body: JSON.stringify({ url: url })
                 });
                 const result = await response.json();
-                if (!response.ok || !result.success) {
-                    throw new Error(result.error || `Server error (${response.status})`);
-                }
+                if (!response.ok || !result.success) throw new Error(result.error || `Server error (${response.status})`);
                 const extracted = {
                     companyName: result.data.company_name || 'Unknown',
                     industry: result.data.industry || 'Unknown',
@@ -1609,28 +1475,16 @@
             document.getElementById('analyzeWebsiteBtn').disabled = true;
         }
 
+        // Photo upload
         const uploadArea = document.getElementById('uploadArea');
         const photoUpload = document.getElementById('photoUpload');
         let uploadedPhotos = [];
 
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
-
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            handleFiles(e.dataTransfer.files);
-        });
-
-        photoUpload.addEventListener('change', (e) => {
-            handleFiles(e.target.files);
-        });
+        uploadArea.addEventListener('click', () => photoUpload.click());
+        uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', (e) => { e.preventDefault(); uploadArea.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
+        photoUpload.addEventListener('change', (e) => handleFiles(e.target.files));
 
         async function handleFiles(files) {
             const fileArray = Array.from(files).slice(0, 5);
@@ -1640,15 +1494,10 @@
             uploadedPhotos.forEach((file, index) => {
                 const fileDiv = document.createElement('div');
                 fileDiv.className = 'uploaded-file';
-                fileDiv.innerHTML = `
-                    <span class="uploaded-file-name">${file.name}</span>
-                    <button type="button" class="remove-file" onclick="removeFile(${index})">×</button>
-                `;
+                fileDiv.innerHTML = `<span class="uploaded-file-name">${file.name}</span><button type="button" class="remove-file" onclick="removeFile(${index})">&times;</button>`;
                 container.appendChild(fileDiv);
             });
-            if (uploadedPhotos.length > 0) {
-                await analyzePhotos();
-            }
+            if (uploadedPhotos.length > 0) await analyzePhotos();
         }
 
         function removeFile(index) {
@@ -1661,10 +1510,7 @@
             try {
                 const photoFormData = new FormData();
                 uploadedPhotos.forEach(file => photoFormData.append('photos', file));
-                const response = await fetch(`${API_BASE_URL}/api/analyze-photos`, {
-                    method: 'POST',
-                    body: photoFormData
-                });
+                const response = await fetch(`${API_BASE_URL}/api/analyze-photos`, { method: 'POST', body: photoFormData });
                 if (!response.ok) throw new Error('Photo analysis failed');
                 const result = await response.json();
                 if (!result.success) throw new Error(result.error || 'Analysis failed');
@@ -1685,17 +1531,17 @@
             }
         }
 
+        // Radio options
         document.querySelectorAll('.radio-option').forEach(option => {
             option.addEventListener('click', function() {
                 const radio = this.querySelector('input[type="radio"]');
                 radio.checked = true;
-                this.parentElement.querySelectorAll('.radio-option').forEach(opt => {
-                    opt.classList.remove('selected');
-                });
+                this.parentElement.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
                 this.classList.add('selected');
             });
         });
 
+        // Review generation
         function generateReview() {
             const reviewContent = document.getElementById('reviewContent');
             const lang = document.documentElement.lang;
@@ -1718,18 +1564,9 @@
                         <button type="button" class="review-edit-btn" onclick="editStep(1)">${lang === 'de' ? 'Bearbeiten' : 'Edit'}</button>
                     </div>
                     <div class="review-content">
-                        <div class="review-item">
-                            <div class="review-item-label">${lang === 'de' ? 'Firmenname' : 'Company Name'}</div>
-                            <div class="review-item-value">${allData.companyName || '—'}</div>
-                        </div>
-                        <div class="review-item">
-                            <div class="review-item-label">${lang === 'de' ? 'Branche' : 'Industry'}</div>
-                            <div class="review-item-value">${allData.industry || '—'}</div>
-                        </div>
-                        <div class="review-item">
-                            <div class="review-item-label">${lang === 'de' ? 'Standort' : 'Location'}</div>
-                            <div class="review-item-value">${allData.location || '—'}</div>
-                        </div>
+                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Firmenname' : 'Company Name'}</div><div class="review-item-value">${allData.companyName || '\u2014'}</div></div>
+                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Branche' : 'Industry'}</div><div class="review-item-value">${allData.industry || '\u2014'}</div></div>
+                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Standort' : 'Location'}</div><div class="review-item-value">${allData.location || '\u2014'}</div></div>
                     </div>
                 </div>
                 <div class="review-section">
@@ -1738,22 +1575,10 @@
                         <button type="button" class="review-edit-btn" onclick="editStep(3)">${lang === 'de' ? 'Bearbeiten' : 'Edit'}</button>
                     </div>
                     <div class="review-content">
-                        <div class="review-item">
-                            <div class="review-item-label">${lang === 'de' ? 'Hauptziel' : 'Primary Goal'}</div>
-                            <div class="review-item-value">${allData.primaryGoal || '—'}</div>
-                        </div>
-                        <div class="review-item">
-                            <div class="review-item-label">${lang === 'de' ? 'Zeitrahmen' : 'Timeline'}</div>
-                            <div class="review-item-value">${allData.timeline || '—'}</div>
-                        </div>
-                        <div class="review-item">
-                            <div class="review-item-label">${lang === 'de' ? 'Budget' : 'Budget'}</div>
-                            <div class="review-item-value">${allData.budgetRange || '—'} (${allData.budgetStatus || '—'})</div>
-                        </div>
-                        <div class="review-item">
-                            <div class="review-item-label">${lang === 'de' ? 'Entscheidungsträger' : 'Decision Maker'}</div>
-                            <div class="review-item-value">${allData.authority || '—'}</div>
-                        </div>
+                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Hauptziel' : 'Primary Goal'}</div><div class="review-item-value">${allData.primaryGoal || '\u2014'}</div></div>
+                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Zeitrahmen' : 'Timeline'}</div><div class="review-item-value">${allData.timeline || '\u2014'}</div></div>
+                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Budget' : 'Budget'}</div><div class="review-item-value">${allData.budgetRange || '\u2014'} (${allData.budgetStatus || '\u2014'})</div></div>
+                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Entscheidungsträger' : 'Decision Maker'}</div><div class="review-item-value">${allData.authority || '\u2014'}</div></div>
                     </div>
                 </div>
                 <div class="review-section">
@@ -1762,18 +1587,9 @@
                         <button type="button" class="review-edit-btn" onclick="editStep(3)">${lang === 'de' ? 'Bearbeiten' : 'Edit'}</button>
                     </div>
                     <div class="review-content">
-                        <div class="review-item">
-                            <div class="review-item-label">${lang === 'de' ? 'Name' : 'Name'}</div>
-                            <div class="review-item-value">${allData.contactName || '—'} (${allData.contactTitle || '—'})</div>
-                        </div>
-                        <div class="review-item">
-                            <div class="review-item-label">Email</div>
-                            <div class="review-item-value">${allData.contactEmail || '—'}</div>
-                        </div>
-                        <div class="review-item">
-                            <div class="review-item-label">${lang === 'de' ? 'Telefon' : 'Phone'}</div>
-                            <div class="review-item-value">${allData.contactPhone || '—'}</div>
-                        </div>
+                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Name' : 'Name'}</div><div class="review-item-value">${allData.contactName || '\u2014'} (${allData.contactTitle || '\u2014'})</div></div>
+                        <div class="review-item"><div class="review-item-label">Email</div><div class="review-item-value">${allData.contactEmail || '\u2014'}</div></div>
+                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Telefon' : 'Phone'}</div><div class="review-item-value">${allData.contactPhone || '\u2014'}</div></div>
                     </div>
                 </div>
             `;
@@ -1784,6 +1600,7 @@
             updateSteps();
         }
 
+        // Form submission
         document.getElementById('leadForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const submitBtn = document.getElementById('submitBtn');
@@ -1810,7 +1627,6 @@
                     contact_phone: document.getElementById('contact-phone').value || '',
                     language: document.documentElement.lang
                 };
-                console.log('Submitting lead data:', leadData);
                 const response = await fetch(`${API_BASE_URL}/api/submit-lead`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1819,7 +1635,6 @@
                 if (!response.ok) throw new Error('Submission failed');
                 const result = await response.json();
                 if (!result.success) throw new Error(result.error || 'Submission failed');
-                console.log('Lead submitted:', result.lead_id, 'Score:', result.lead_score);
                 const portalData = {
                     lead_id: result.lead_id,
                     lead_score: result.lead_score,
@@ -1836,9 +1651,7 @@
                 document.getElementById('successContainer').classList.add('active');
             } catch (error) {
                 console.error('Error submitting form:', error);
-                alert(document.documentElement.lang === 'de' ?
-                    'Fehler beim Senden. Bitte versuchen Sie es erneut.' :
-                    'Error submitting. Please try again.');
+                alert(document.documentElement.lang === 'de' ? 'Fehler beim Senden. Bitte versuchen Sie es erneut.' : 'Error submitting. Please try again.');
                 submitBtn.disabled = false;
             }
         });
@@ -1847,9 +1660,7 @@
             const name = document.getElementById('profile-name').value.trim();
             const email = document.getElementById('profile-email').value.trim();
             if (!name || !email) {
-                alert(document.documentElement.lang === 'de'
-                    ? 'Bitte füllen Sie Name und Email aus.'
-                    : 'Please fill in your name and email.');
+                alert(document.documentElement.lang === 'de' ? 'Bitte füllen Sie Name und Email aus.' : 'Please fill in your name and email.');
                 return;
             }
             const lead = JSON.parse(localStorage.getItem('robofolio_lead') || '{}');
@@ -1860,9 +1671,9 @@
             window.location.href = 'portal.html';
         }
 
-        // Hero video rotation — cycles through background videos every 12 seconds
+        // Hero video rotation (activate when MP4 videos are added)
         (function() {
-            const videos = document.querySelectorAll('#heroBg iframe');
+            const videos = document.querySelectorAll('#heroBg video');
             if (videos.length <= 1) return;
             let current = 0;
             setInterval(() => {
