@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: robofolio-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn backend_api:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: JINA_API_KEY
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: GOOGLE_SHEETS_WEBHOOK
+        sync: false
+      - key: INTEGRATOR_EMAILS
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: PDF_OUTPUT_DIR
+        value: /tmp/robofolio_leads
+    plan: free
+    region: frankfurt

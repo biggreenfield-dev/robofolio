@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+*.env
+.DS_Store
+/tmp/
+*.pdf
+!Lead_Deck_Example.pdf
+!Lead_Klebebandapplikation_Anonymized.pdf
+node_modules/
+.vscode/
+"API KEY Anthropic.docx"

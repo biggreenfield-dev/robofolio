@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robofolio – Partner Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1a365d; --navy-light: #2d5a87; --navy-dark: #0f2440;
+            --green: #48bb78; --green-hover: #38a169; --green-light: #c6f6d5;
+            --bg: #f7fafc; --card: #ffffff; --border: #e2e8f0;
+            --text: #2d3748; --text-light: #718096; --text-muted: #a0aec0;
+            --gold: #d69e2e; --gold-light: #fefcbf; --gold-bg: #fffff0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
+        .sidebar { width: 260px; background: linear-gradient(180deg, var(--navy) 0%, var(--navy-dark) 100%); min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; }
+        .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-logo h1 { color: white; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+        .sidebar-logo span { color: var(--green); }
+        .sidebar-logo p { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 2px; }
+        .sidebar-nav { padding: 16px 12px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; color: rgba(255,255,255,0.65); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; margin-bottom: 4px; }
+        .nav-item:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+        .nav-item.active { background: rgba(72,187,120,0.15); color: white; }
+        .nav-item.active .nav-icon { color: var(--green); }
+        .nav-icon { width: 20px; height: 20px; flex-shrink: 0; }
+        .nav-badge { margin-left: auto; background: var(--green); color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+        .main { margin-left: 260px; min-height: 100vh; }
+        .topbar { background: white; border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 30; }
+        .topbar h2 { font-size: 20px; font-weight: 700; color: var(--navy); }
+        .content { padding: 28px 32px; }
+        .card { background: white; border-radius: 14px; border: 1px solid var(--border); padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .card-title { font-size: 16px; font-weight: 700; color: var(--navy); }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+        .btn-primary { background: var(--green); color: white; }
+        .btn-primary:hover { background: var(--green-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(72,187,120,0.3); }
+        .btn-secondary { background: white; color: var(--navy); border: 1.5px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--navy-light); background: #f7fafc; }
+        .btn-navy { background: var(--navy); color: white; }
+        .btn-navy:hover { background: var(--navy-light); }
+        .btn-sm { padding: 7px 14px; font-size: 13px; }
+        .btn-danger { background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; }
+        .btn-danger:hover { background: #fed7d7; }
+        .btn-gold { background: linear-gradient(135deg, #d69e2e, #ecc94b); color: white; }
+        .btn-gold:hover { box-shadow: 0 4px 16px rgba(214,158,46,0.4); transform: translateY(-1px); }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+        .form-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; transition: border-color 0.2s; outline: none; background: white; }
+        .form-input:focus { border-color: var(--navy-light); box-shadow: 0 0 0 3px rgba(45,90,135,0.1); }
+        .form-input::placeholder { color: var(--text-muted); }
+        textarea.form-input { min-height: 100px; resize: vertical; }
+        .form-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: white; border-radius: 14px; border: 1px solid var(--border); padding: 20px; }
+        .stat-value { font-size: 28px; font-weight: 800; color: var(--navy); }
+        .stat-label { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+        .stat-change { font-size: 12px; font-weight: 600; margin-top: 8px; }
+        .stat-change.up { color: var(--green); }
+        .lead-card { background: white; border: 1.5px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 14px; transition: all 0.2s; cursor: pointer; position: relative; overflow: hidden; }
+        .lead-card:hover { border-color: var(--navy-light); box-shadow: 0 4px 16px rgba(0,0,0,0.06); transform: translateY(-1px); }
+        .lead-card.locked { cursor: default; }
+        .lead-card.locked:hover { transform: none; box-shadow: none; border-color: var(--border); }
+        .lead-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
+        .lead-company { font-size: 16px; font-weight: 700; color: var(--navy); }
+        .lead-location { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+        .match-badge { padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+        .match-high { background: #c6f6d5; color: #276749; }
+        .match-medium { background: #fefcbf; color: #975a16; }
+        .match-low { background: #fed7d7; color: #9b2c2c; }
+        .lead-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+        .lead-tag { padding: 3px 10px; background: #edf2f7; border-radius: 6px; font-size: 12px; color: var(--text-light); font-weight: 500; }
+        .lead-meta { display: flex; gap: 16px; margin-top: 12px; font-size: 13px; color: var(--text-light); }
+        .logo-upload { width: 120px; height: 120px; border: 2px dashed var(--border); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; background: #f7fafc; }
+        .logo-upload:hover { border-color: var(--navy-light); background: #edf2f7; }
+        .logo-upload img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .upload-zone { border: 2px dashed var(--border); border-radius: 14px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.2s; background: #f7fafc; }
+        .upload-zone:hover { border-color: var(--green); background: #f0fff4; }
+        .upload-zone.dragover { border-color: var(--green); background: #f0fff4; }
+        .doc-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: #f7fafc; border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border); }
+        .doc-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .doc-icon.pdf { background: #fff5f5; color: #e53e3e; }
+        .doc-icon.doc { background: #ebf8ff; color: #3182ce; }
+        .doc-icon.img { background: #f0fff4; color: #38a169; }
+        .doc-name { font-size: 14px; font-weight: 600; color: var(--text); }
+        .doc-size { font-size: 12px; color: var(--text-muted); }
+        .ai-box { background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%); border-radius: 16px; padding: 28px; color: white; margin-bottom: 24px; }
+        .ai-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .ai-box p { font-size: 14px; opacity: 0.8; margin-bottom: 20px; }
+        .ai-input-row { display: flex; gap: 12px; }
+        .ai-input { flex: 1; padding: 12px 16px; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 14px; font-family: inherit; outline: none; }
+        .ai-input::placeholder { color: rgba(255,255,255,0.5); }
+        .ai-input:focus { border-color: var(--green); }
+        .btn-ai { background: var(--green); color: white; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .btn-ai:hover { background: var(--green-hover); }
+        .ai-status { margin-top: 16px; padding: 12px 16px; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 13px; }
+        .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .progress-bar { width: 100%; height: 6px; background: #edf2f7; border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width 0.5s ease; }
+        .tags-container { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 10px; min-height: 44px; align-items: center; cursor: text; }
+        .tags-container:focus-within { border-color: var(--navy-light); box-shadow: 0 0 0 3px rgba(45,90,135,0.1); }
+        .tag-pill { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: #edf2f7; border-radius: 6px; font-size: 13px; font-weight: 500; }
+        .tag-remove { cursor: pointer; opacity: 0.5; font-size: 16px; line-height: 1; }
+        .tag-remove:hover { opacity: 1; color: #e53e3e; }
+        .tag-input { border: none; outline: none; font-size: 14px; font-family: inherit; min-width: 120px; flex: 1; padding: 2px; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+        .modal { background: white; border-radius: 16px; width: 100%; max-width: 700px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .modal-body { padding: 24px; }
+        .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+        .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-block; }
+        .status-new { background: #ebf8ff; color: #2b6cb0; }
+        .status-contacted { background: #fefcbf; color: #975a16; }
+        .status-qualified { background: #c6f6d5; color: #276749; }
+        .toast { position: fixed; bottom: 24px; right: 24px; background: var(--navy); color: white; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px; z-index: 100; box-shadow: 0 8px 30px rgba(0,0,0,0.2); animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .toast-success { background: var(--green); }
+        .empty-state { text-align: center; padding: 48px 24px; }
+        .empty-state h3 { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .empty-state p { font-size: 14px; color: var(--text-light); max-width: 400px; margin: 0 auto 20px; }
+        .settings-section { padding: 20px 0; border-bottom: 1px solid var(--border); }
+        .settings-section:last-child { border-bottom: none; }
+        .toggle { position: relative; width: 44px; height: 24px; }
+        .toggle input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; inset: 0; background: #cbd5e0; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .toggle-slider:before { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.2s; }
+        .toggle input:checked + .toggle-slider { background: var(--green); }
+        .toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+        /* ── BLUR EFFECTS ── */
+        .blurred { filter: blur(7px); user-select: none; pointer-events: none; }
+        .blurred-light { filter: blur(5px); user-select: none; pointer-events: none; }
+        .lock-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.6); backdrop-filter: blur(2px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; border-radius: 13px; }
+        .lock-icon { width: 48px; height: 48px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+
+        /* ── PRICING CARDS ── */
+        .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+        .pricing-card { border: 2px solid var(--border); border-radius: 16px; padding: 28px; text-align: center; transition: all 0.3s; position: relative; background: white; }
+        .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+        .pricing-card.featured { border-color: var(--green); box-shadow: 0 8px 30px rgba(72,187,120,0.15); }
+        .pricing-card.active-plan { border-color: var(--green); background: #f0fff4; }
+        .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--green); color: white; padding: 4px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .pricing-tier { font-size: 14px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+        .pricing-name { font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
+        .pricing-price { font-size: 36px; font-weight: 800; color: var(--navy); margin: 16px 0 4px; }
+        .pricing-price span { font-size: 16px; font-weight: 500; color: var(--text-light); }
+        .pricing-desc { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+        .pricing-features { list-style: none; text-align: left; margin-bottom: 24px; }
+        .pricing-features li { padding: 8px 0; font-size: 14px; color: var(--text); display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid #f7fafc; }
+        .pricing-features li:last-child { border-bottom: none; }
+        .pricing-check { color: var(--green); flex-shrink: 0; margin-top: 2px; }
+
+        /* ── CONTRACT MODAL ── */
+        .contract-text { background: #f7fafc; border: 1px solid var(--border); border-radius: 10px; padding: 20px; max-height: 400px; overflow-y: auto; font-size: 13px; line-height: 1.8; color: var(--text); margin-bottom: 16px; }
+        .contract-text h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin: 16px 0 8px; }
+        .contract-text h4:first-child { margin-top: 0; }
+        .contract-text p { margin-bottom: 8px; }
+        .contract-checkbox { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; background: var(--gold-bg); border: 1.5px solid var(--gold); border-radius: 10px; cursor: pointer; }
+        .contract-checkbox input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--green); }
+        .contract-checkbox label { font-size: 14px; font-weight: 500; cursor: pointer; }
+
+        /* ── TIER BADGE IN SIDEBAR ── */
+        .tier-badge { padding: 6px 12px; background: linear-gradient(135deg, rgba(72,187,120,0.15), rgba(72,187,120,0.05)); border: 1px solid rgba(72,187,120,0.3); border-radius: 8px; display: flex; align-items: center; gap: 8px; margin: 12px 12px 4px; }
+        .tier-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+        .tier-badge-text { font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 600; }
+
+        /* ── UNLOCK BUTTON ── */
+        .unlock-btn { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .unlock-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(26,54,93,0.3); }
+
+        .fade-in { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 3px; }
+
+        @media (max-width: 900px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
+            .profile-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, createContext, useContext } = React;
+
+// ─── ICONS ──────────────────────────────────────────────────────────────────
+const Icons = {
+    Dashboard: () => <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>,
+    Profile: () => <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+    Leads: () => <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+    Documents: () => <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>,
+    Pricing: () => <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>,
+    Settings: () => <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
+    Search: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+    Upload: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
+    Clock: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+    MapPin: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>,
+    Euro: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="4" y1="10" x2="16" y2="10"/><line x1="4" y1="14" x2="16" y2="14"/><path d="M17 4a7.5 7.5 0 0 1 0 16"/></svg>,
+    AI: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2a4 4 0 0 1 4 4v1h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2V6a4 4 0 0 1 4-4z"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M10 17h4"/></svg>,
+    Trash: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
+    Check: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
+    X: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
+    Lock: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
+    Unlock: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>,
+    Sparkles: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>,
+    TrendUp: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>,
+    Building: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>,
+    Mail: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
+    Shield: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+    Crown: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 20h20l-2-14-5 6-3-8-3 8-5-6-2 14z"/></svg>,
+    Zap: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+    FileText: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>,
+};
+
+// ─── MOCK DATA ──────────────────────────────────────────────────────────────
+const MOCK_LEADS = [
+    { id: 1, company: 'Müller Maschinenbau GmbH', city: 'Stuttgart', industry: 'Automotive', needs: ['Schweißroboter', 'Pick & Place', 'Qualitätskontrolle'], budget: '€150.000 – €250.000', budgetNum: 200000, employees: '120', match: 92, status: 'new', date: '2026-02-08', description: 'Sucht Automatisierung für Schweißprozesse in der Automobilzulieferkette. Aktuell 3 manuelle Schweißstationen.', urgency: 'Hoch', timeline: 'Q2 2026' },
+    { id: 2, company: 'Fischer Metallverarbeitung AG', city: 'München', industry: 'Metallverarbeitung', needs: ['CNC-Bestückung', 'Palettierung'], budget: '€80.000 – €150.000', budgetNum: 115000, employees: '85', match: 87, status: 'contacted', date: '2026-02-07', description: 'Benötigt Roboterautomatisierung für CNC-Maschinenbestückung und Palettierung am Linienende.', urgency: 'Mittel', timeline: 'Q3 2026' },
+    { id: 3, company: 'Weber Kunststofftechnik', city: 'Nürnberg', industry: 'Kunststoff', needs: ['Spritzguss-Entnahme', 'Montage'], budget: '€50.000 – €100.000', budgetNum: 75000, employees: '45', match: 78, status: 'new', date: '2026-02-06', description: 'Spritzgussfertigung mit Bedarf an automatisierter Teileentnahme und nachgelagerter Montage.', urgency: 'Mittel', timeline: 'Q2 2026' },
+    { id: 4, company: 'Schneider Logistik GmbH', city: 'Hamburg', industry: 'Logistik', needs: ['AMR/AGV', 'Kommissionierung'], budget: '€200.000 – €400.000', budgetNum: 300000, employees: '200', match: 71, status: 'qualified', date: '2026-02-05', description: 'Großes Lagerhaus sucht autonome mobile Roboter für Kommissionierung und innerbetrieblichen Transport.', urgency: 'Hoch', timeline: 'Q1 2026' },
+    { id: 5, company: 'Braun Elektronik OHG', city: 'Berlin', industry: 'Elektronik', needs: ['Löten', 'Inspektion', 'Testautomation'], budget: '€100.000 – €180.000', budgetNum: 140000, employees: '60', match: 65, status: 'new', date: '2026-02-04', description: 'Elektronikfertigung benötigt Automatisierung für Lötprozesse und optische Inspektion.', urgency: 'Niedrig', timeline: 'Q4 2026' },
+    { id: 6, company: 'Hoffmann Verpackung KG', city: 'Frankfurt', industry: 'Verpackung', needs: ['Palettierung', 'Verpackung'], budget: '€60.000 – €90.000', budgetNum: 75000, employees: '35', match: 58, status: 'contacted', date: '2026-02-03', description: 'End-of-Line Verpackung und Palettierung für Lebensmittelprodukte. Benötigt Hygienestandards.', urgency: 'Mittel', timeline: 'Q3 2026' },
+];
+
+const SERVICE_OPTIONS = [
+    'Schweißroboter', 'Pick & Place', 'Palettierung', 'CNC-Bestückung',
+    'Montage', 'Qualitätskontrolle', 'Spritzguss-Entnahme', 'AMR/AGV',
+    'Kommissionierung', 'Löten', 'Inspektion', 'Testautomation',
+    'Verpackung', 'Lackieren', 'Schleifen', 'Entgraten',
+    'Bin Picking', 'Schrauben', 'Kleben', 'Machine Tending'
+];
+
+const TIERS = {
+    R0: { name: 'Starter', price: 'Kostenlos', priceNum: 0, period: '', leadsPerWeek: 0, leadsPerMonth: 1, unlimited: false, desc: '1 Probe-Lead pro Monat', color: '#718096' },
+    R1: { name: 'Professional', price: '149', priceNum: 149, period: '/ Monat', leadsPerWeek: 3, leadsPerMonth: 12, unlimited: false, desc: '3 Leads pro Woche freischalten', color: '#2d5a87' },
+    R2: { name: 'Enterprise', price: '399', priceNum: 399, period: '/ Monat', leadsPerWeek: 999, leadsPerMonth: 999, unlimited: true, desc: 'Unbegrenzter Zugang zu allen Leads', color: '#276749' },
+};
+
+// ─── CONTEXT ────────────────────────────────────────────────────────────────
+const AppContext = createContext();
+
+// ─── TOAST ──────────────────────────────────────────────────────────────────
+function Toast({ message, type, onClose }) {
+    useEffect(() => { const t = setTimeout(onClose, 3000); return () => clearTimeout(t); }, []);
+    return <div className={`toast ${type === 'success' ? 'toast-success' : ''}`}>
+        {type === 'success' && <Icons.Check />} {message}
+    </div>;
+}
+
+// ─── MAKLERVERTRAG (BROKER CONTRACT) ────────────────────────────────────────
+function ContractModal({ lead, onAccept, onClose, profile }) {
+    const [accepted, setAccepted] = useState(false);
+    const today = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const partnerName = profile.companyName || '[Partnerfirma]';
+
+    return <div className="modal-overlay" onClick={onClose}>
+        <div className="modal" style={{ maxWidth: 750 }} onClick={e => e.stopPropagation()}>
+            <div className="modal-header" style={{ background: 'linear-gradient(135deg, #1a365d, #2d5a87)', borderRadius: '16px 16px 0 0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <Icons.Shield />
+                    <div>
+                        <h3 style={{ color: 'white', fontWeight: 700, fontSize: 18 }}>Vermittlungsvertrag</h3>
+                        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13 }}>Bitte lesen und akzeptieren Sie den Vertrag, um diesen Lead freizuschalten</p>
+                    </div>
+                </div>
+                <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.6)' }}><Icons.X /></button>
+            </div>
+            <div className="modal-body">
+                <div className="contract-text">
+                    <h4>VERMITTLUNGSVERTRAG</h4>
+                    <p>zwischen</p>
+                    <p><strong>Robofolio GmbH</strong>, nachfolgend „Robofolio" oder „Vermittler" genannt,</p>
+                    <p>und</p>
+                    <p><strong>{partnerName}</strong>, nachfolgend „Partner" oder „Integrator" genannt.</p>
+
+                    <h4>§ 1 Vertragsgegenstand</h4>
+                    <p>(1) Robofolio betreibt eine digitale Plattform zur Vermittlung von Anfragen (nachfolgend „Leads") von Unternehmen, die Automatisierungs- und Robotiklösungen suchen (nachfolgend „Auftraggeber"), an qualifizierte Systemintegratoren und Automatisierungspartner.</p>
+                    <p>(2) Gegenstand dieses Vertrages ist die Vermittlung des Leads <strong>„{lead.company}"</strong> (Lead-ID: RF-{lead.id.toString().padStart(5, '0')}) an den Partner, sowie die daraus resultierende Provisionsverpflichtung bei erfolgreichem Geschäftsabschluss.</p>
+                    <p>(3) Der Partner erhält durch Annahme dieses Vertrages Zugang zu den vollständigen Kontaktdaten und Projektinformationen des oben genannten Leads.</p>
+
+                    <h4>§ 2 Provisionspflicht</h4>
+                    <p>(1) Kommt zwischen dem Partner und dem Auftraggeber ein Vertrag zustande, der auf die Vermittlung durch Robofolio zurückzuführen ist, verpflichtet sich der Partner, Robofolio eine Vermittlungsprovision in Höhe von <strong>5 % (fünf Prozent) des Gesamtnettoauftragswertes</strong> zu zahlen.</p>
+                    <p>(2) Der Gesamtnettoauftragswert umfasst sämtliche Leistungen, die im Zusammenhang mit dem vermittelten Projekt erbracht werden, einschließlich, aber nicht beschränkt auf: Hardware (Roboter, Peripherie, Sensorik), Software und Programmierung, Installation und Inbetriebnahme, Schulung und Dokumentation, sowie Wartungs- und Serviceverträge für die ersten 12 Monate.</p>
+                    <p>(3) Die Provision wird fällig innerhalb von 30 Tagen nach Rechnungsstellung durch Robofolio. Robofolio stellt die Rechnung nach Eingang der schriftlichen Auftragsbestätigung zwischen Partner und Auftraggeber aus.</p>
+                    <p>(4) Der Partner verpflichtet sich, Robofolio unverzüglich, spätestens jedoch innerhalb von 14 Tagen, über einen Vertragsabschluss mit dem vermittelten Lead zu informieren und den Gesamtnettoauftragswert mitzuteilen.</p>
+
+                    <h4>§ 3 Kausalität und Zurechnung</h4>
+                    <p>(1) Die Provisionspflicht besteht, wenn der Vertragsabschluss zwischen Partner und Auftraggeber ursächlich auf die Vermittlung durch Robofolio zurückzuführen ist. Dies wird vermutet, wenn der Vertragsabschluss innerhalb von 12 Monaten nach Freischaltung des Leads erfolgt.</p>
+                    <p>(2) Der Partner kann die Vermutung widerlegen, wenn er nachweist, dass der Kontakt zum Auftraggeber unabhängig von der Vermittlung durch Robofolio bereits vor dem Zeitpunkt der Lead-Freischaltung bestand und das konkrete Projekt bereits Gegenstand einer unabhängigen Geschäftsbeziehung war.</p>
+
+                    <h4>§ 4 Vertraulichkeit</h4>
+                    <p>(1) Der Partner verpflichtet sich, die durch Robofolio übermittelten Lead-Informationen streng vertraulich zu behandeln und nicht an Dritte weiterzugeben.</p>
+                    <p>(2) Die Lead-Daten dürfen ausschließlich zum Zwecke der direkten Geschäftsanbahnung mit dem jeweiligen Auftraggeber verwendet werden.</p>
+                    <p>(3) Eine Weitergabe der Lead-Informationen an verbundene Unternehmen, Subunternehmer oder sonstige Dritte bedarf der vorherigen schriftlichen Zustimmung von Robofolio.</p>
+
+                    <h4>§ 5 Meldepflicht und Transparenz</h4>
+                    <p>(1) Der Partner verpflichtet sich, Robofolio quartalsweise über den Status der Geschäftsanbahnung mit dem vermittelten Lead zu informieren (z.B. „in Bearbeitung", „Angebot erstellt", „Auftrag erhalten", „kein Interesse").</p>
+                    <p>(2) Robofolio hat das Recht, im Falle eines begründeten Verdachts der Nichtmeldung eines Vertragsabschlusses, die relevanten Geschäftsunterlagen durch einen unabhängigen Wirtschaftsprüfer prüfen zu lassen. Die Kosten der Prüfung trägt der Partner, sofern sich der Verdacht bestätigt.</p>
+
+                    <h4>§ 6 Vertragsstrafe</h4>
+                    <p>(1) Verletzt der Partner schuldhaft seine Meldepflicht gemäß § 5 oder seine Provisionspflicht gemäß § 2, ist Robofolio berechtigt, eine Vertragsstrafe in Höhe des doppelten Provisionsbetrages zu verlangen.</p>
+                    <p>(2) Die Geltendmachung weitergehender Schadensersatzansprüche bleibt hiervon unberührt.</p>
+
+                    <h4>§ 7 Laufzeit und Kündigung</h4>
+                    <p>(1) Dieser Vermittlungsvertrag tritt mit Akzeptanz durch den Partner in Kraft und gilt für den spezifisch bezeichneten Lead.</p>
+                    <p>(2) Die Provisionspflicht überdauert eine etwaige Beendigung der Plattformnutzung, sofern der Vertragsabschluss innerhalb der in § 3 genannten Frist von 12 Monaten erfolgt.</p>
+
+                    <h4>§ 8 Schlussbestimmungen</h4>
+                    <p>(1) Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand ist der Sitz von Robofolio.</p>
+                    <p>(2) Änderungen und Ergänzungen dieses Vertrages bedürfen der Schriftform. Dies gilt auch für die Abbedingung dieses Schriftformerfordernisses.</p>
+                    <p>(3) Sollten einzelne Bestimmungen dieses Vertrages unwirksam sein oder werden, so wird hierdurch die Wirksamkeit der übrigen Bestimmungen nicht berührt.</p>
+
+                    <p style={{ marginTop: 20, fontSize: 12, color: 'var(--text-muted)' }}>Stand: {today} | Vertrag-ID: RF-V-{lead.id.toString().padStart(5, '0')}-{Date.now().toString(36).toUpperCase()}</p>
+                </div>
+
+                <div className="contract-checkbox" onClick={() => setAccepted(!accepted)}>
+                    <input type="checkbox" checked={accepted} onChange={() => setAccepted(!accepted)} />
+                    <label>Ich habe den Vermittlungsvertrag gelesen und akzeptiere die Bedingungen. Ich bestätige, dass ich bevollmächtigt bin, im Namen von <strong>{partnerName}</strong> rechtsverbindliche Vereinbarungen einzugehen. Mir ist bewusst, dass bei Vertragsabschluss mit dem vermittelten Lead eine Provision von 5% des Gesamtnettoauftragswertes an Robofolio fällig wird.</label>
+                </div>
+            </div>
+            <div className="modal-footer" style={{ background: '#f7fafc' }}>
+                <button className="btn btn-secondary" onClick={onClose}>Abbrechen</button>
+                <button className="btn btn-primary" disabled={!accepted} style={{ opacity: accepted ? 1 : 0.5 }} onClick={() => accepted && onAccept()}>
+                    <Icons.Unlock /> Lead freischalten & Vertrag akzeptieren
+                </button>
+            </div>
+        </div>
+    </div>;
+}
+
+// ─── SIDEBAR ────────────────────────────────────────────────────────────────
+function Sidebar({ page, setPage, leadCount, tier, unlockedCount }) {
+    const tierInfo = TIERS[tier];
+    const items = [
+        { id: 'dashboard', label: 'Dashboard', icon: Icons.Dashboard },
+        { id: 'profile', label: 'Firmenprofil', icon: Icons.Profile },
+        { id: 'leads', label: 'Passende Leads', icon: Icons.Leads, badge: leadCount },
+        { id: 'documents', label: 'Dokumente', icon: Icons.Documents },
+        { id: 'pricing', label: 'Abo & Preise', icon: Icons.Pricing },
+        { id: 'settings', label: 'Einstellungen', icon: Icons.Settings },
+    ];
+    return <div className="sidebar">
+        <div className="sidebar-logo">
+            <h1>Robo<span>folio</span></h1>
+            <p>Partner Portal</p>
+        </div>
+        <div className="tier-badge">
+            <div className="tier-badge-dot" style={{ background: tierInfo.color }}></div>
+            <div className="tier-badge-text">{tier} – {tierInfo.name}</div>
+        </div>
+        <nav className="sidebar-nav">
+            {items.map(item => (
+                <div key={item.id} className={`nav-item ${page === item.id ? 'active' : ''}`} onClick={() => setPage(item.id)}>
+                    <item.icon />
+                    {item.label}
+                    {item.badge ? <span className="nav-badge">{item.badge}</span> : null}
+                </div>
+            ))}
+        </nav>
+        <div style={{ position: 'absolute', bottom: 20, left: 12, right: 12 }}>
+            <div style={{ padding: '14px', background: 'rgba(255,255,255,0.05)', borderRadius: 12, fontSize: 13 }}>
+                <div style={{ color: 'rgba(255,255,255,0.5)', marginBottom: 6 }}>Freigeschaltete Leads</div>
+                <div style={{ color: 'white', fontSize: 20, fontWeight: 800 }}>{unlockedCount} <span style={{ fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>/ {tier === 'R2' ? '∞' : tier === 'R1' ? '3 pro Woche' : '1 pro Monat'}</span></div>
+            </div>
+        </div>
+    </div>;
+}
+
+// ─── DASHBOARD PAGE ─────────────────────────────────────────────────────────
+function DashboardPage({ leads, profile, tier, unlockedLeads }) {
+    const { setPage } = useContext(AppContext);
+    const newLeads = leads.filter(l => l.status === 'new').length;
+    const avgMatch = leads.length ? Math.round(leads.reduce((a, l) => a + l.match, 0) / leads.length) : 0;
+
+    return <div className="fade-in">
+        {tier === 'R0' && <div style={{ background: 'linear-gradient(135deg, #fffff0, #fefcbf)', border: '1.5px solid #d69e2e', borderRadius: 14, padding: 20, marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <Icons.Crown />
+                <div>
+                    <div style={{ fontWeight: 700, fontSize: 15, color: '#744210' }}>Upgraden Sie Ihr Abo</div>
+                    <div style={{ fontSize: 13, color: '#975a16' }}>Sie nutzen den kostenlosen Tarif. Schalten Sie mehr Leads frei mit R1 oder R2.</div>
+                </div>
+            </div>
+            <button className="btn btn-gold" onClick={() => setPage('pricing')}>Jetzt upgraden</button>
+        </div>}
+
+        <div className="stat-grid">
+            <div className="stat-card"><div className="stat-value">{leads.length}</div><div className="stat-label">Passende Leads</div><div className="stat-change up"><Icons.TrendUp /> +3 diese Woche</div></div>
+            <div className="stat-card"><div className="stat-value">{newLeads}</div><div className="stat-label">Neue Leads</div><div className="stat-change up"><Icons.TrendUp /> +2 heute</div></div>
+            <div className="stat-card"><div className="stat-value">{unlockedLeads.length}</div><div className="stat-label">Freigeschaltet</div><div className="stat-change up">{tier === 'R2' ? 'Unbegrenzt' : tier === 'R1' ? '3/Woche' : '1/Monat'}</div></div>
+            <div className="stat-card"><div className="stat-value">{avgMatch}%</div><div className="stat-label">Ø Match-Score</div><div className="stat-change up"><Icons.TrendUp /> +5% vs. letzte Woche</div></div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+            <div className="card">
+                <div className="card-header"><div className="card-title">Neueste Leads</div><button className="btn btn-sm btn-secondary" onClick={() => setPage('leads')}>Alle anzeigen →</button></div>
+                {leads.filter(l => l.status === 'new').slice(0, 3).map(lead => {
+                    const isUnlocked = unlockedLeads.includes(lead.id);
+                    return <div key={lead.id} className="lead-card" onClick={() => setPage('leads')}>
+                        <div className="lead-header">
+                            <div>
+                                <div className="lead-company" style={!isUnlocked ? { filter: 'blur(6px)', userSelect: 'none' } : {}}>{lead.company}</div>
+                                <div className="lead-location" style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Icons.MapPin /> {lead.city} · {lead.industry}</div>
+                            </div>
+                            <span className={`match-badge ${lead.match >= 80 ? 'match-high' : lead.match >= 60 ? 'match-medium' : 'match-low'}`}>{lead.match}% Match</span>
+                        </div>
+                    </div>;
+                })}
+            </div>
+            <div>
+                <div className="card">
+                    <div className="card-header"><div className="card-title">Ihr Profil</div><button className="btn btn-sm btn-secondary" onClick={() => setPage('profile')}>Bearbeiten →</button></div>
+                    <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 16 }}>
+                        <div style={{ width: 56, height: 56, borderRadius: 12, background: 'linear-gradient(135deg, #1a365d, #2d5a87)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 20, fontWeight: 700 }}>{profile.companyName ? profile.companyName[0] : 'P'}</div>
+                        <div><div style={{ fontWeight: 700, fontSize: 16 }}>{profile.companyName || 'Ihr Unternehmen'}</div><div style={{ fontSize: 13, color: 'var(--text-light)' }}>{profile.city || 'Stadt hinzufügen'} · {profile.services.length} Services</div></div>
+                    </div>
+                    <div className="lead-tags">{profile.services.map(s => <span key={s} className="lead-tag">{s}</span>)}</div>
+                </div>
+                <div className="card">
+                    <div className="card-header"><div className="card-title">Quick Actions</div></div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        <button className="btn btn-primary" style={{ justifyContent: 'center' }} onClick={() => setPage('profile')}><Icons.Sparkles /> AI Profil vervollständigen</button>
+                        <button className="btn btn-secondary" style={{ justifyContent: 'center' }} onClick={() => setPage('documents')}><Icons.Upload /> Dokumente hochladen</button>
+                        {tier !== 'R2' && <button className="btn btn-gold" style={{ justifyContent: 'center' }} onClick={() => setPage('pricing')}><Icons.Crown /> Abo upgraden</button>}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>;
+}
+
+// ─── PROFILE PAGE ───────────────────────────────────────────────────────────
+function ProfilePage({ profile, setProfile, setToast }) {
+    const [aiUrl, setAiUrl] = useState('');
+    const [aiLoading, setAiLoading] = useState(false);
+    const [aiStatus, setAiStatus] = useState('');
+    const [tagInput, setTagInput] = useState('');
+    const [logoPreview, setLogoPreview] = useState(profile.logo || null);
+    const fileRef = useRef();
+
+    const handleAiFill = async () => {
+        if (!aiUrl.trim()) return;
+        setAiLoading(true);
+        setAiStatus('Website wird analysiert...');
+        await new Promise(r => setTimeout(r, 1500));
+        setAiStatus('KI extrahiert Unternehmensdaten...');
+        await new Promise(r => setTimeout(r, 2000));
+        setAiStatus('Profil wird ausgefüllt...');
+        await new Promise(r => setTimeout(r, 1000));
+        const domain = aiUrl.replace(/https?:\/\//, '').replace(/www\./, '').split('/')[0].split('.')[0];
+        setProfile(prev => ({
+            ...prev,
+            companyName: domain.charAt(0).toUpperCase() + domain.slice(1) + ' Robotics GmbH',
+            city: ['Stuttgart', 'München', 'Hamburg', 'Berlin', 'Frankfurt'][Math.floor(Math.random() * 5)],
+            street: 'Industriestraße ' + Math.floor(Math.random() * 100 + 1),
+            zip: String(Math.floor(Math.random() * 90000 + 10000)),
+            country: 'Deutschland',
+            phone: '+49 ' + Math.floor(Math.random() * 900 + 100) + ' ' + Math.floor(Math.random() * 9000000 + 1000000),
+            email: 'info@' + domain + '.de', website: aiUrl,
+            description: `${domain.charAt(0).toUpperCase() + domain.slice(1)} Robotics ist ein führender Systemintegrator für industrielle Automatisierung mit Schwerpunkt auf Schweißtechnik, Montage und Qualitätskontrolle.`,
+            services: ['Schweißroboter', 'Pick & Place', 'Qualitätskontrolle', 'Montage'],
+        }));
+        setAiLoading(false); setAiStatus('');
+        setToast({ message: 'Profil erfolgreich mit KI ausgefüllt!', type: 'success' });
+    };
+
+    const handleLogoChange = (e) => { const f = e.target.files[0]; if (f) { const r = new FileReader(); r.onload = (ev) => { setLogoPreview(ev.target.result); setProfile(prev => ({ ...prev, logo: ev.target.result })); }; r.readAsDataURL(f); } };
+    const addService = (s) => { if (!profile.services.includes(s)) setProfile(prev => ({ ...prev, services: [...prev.services, s] })); };
+    const removeService = (s) => setProfile(prev => ({ ...prev, services: prev.services.filter(x => x !== s) }));
+
+    return <div className="fade-in">
+        <div className="ai-box">
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}><Icons.Sparkles /><h3>KI Profil-Assistent</h3></div>
+            <p>Geben Sie Ihre Website ein und unsere KI füllt Ihr Profil automatisch aus.</p>
+            <div className="ai-input-row">
+                <input className="ai-input" placeholder="https://www.ihre-firma.de" value={aiUrl} onChange={e => setAiUrl(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleAiFill()} />
+                <button className="btn-ai" onClick={handleAiFill} disabled={aiLoading}>{aiLoading ? <><div className="spinner"></div> Analysiert...</> : <><Icons.AI /> KI-Analyse starten</>}</button>
+            </div>
+            {aiStatus && <div className="ai-status">{aiStatus}</div>}
+        </div>
+        <div className="card">
+            <div className="card-header"><div className="card-title">Firmenprofil</div><button className="btn btn-primary" onClick={() => setToast({ message: 'Profil gespeichert!', type: 'success' })}><Icons.Check /> Speichern</button></div>
+            <div style={{ display: 'flex', gap: 32, marginBottom: 24 }}>
+                <div><div className="form-label" style={{ marginBottom: 8 }}>Firmenlogo</div><div className="logo-upload" onClick={() => fileRef.current.click()}>{logoPreview ? <img src={logoPreview} alt="Logo" /> : <><Icons.Upload /><span style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 8 }}>Logo hochladen</span></>}</div><input type="file" ref={fileRef} style={{ display: 'none' }} accept="image/*" onChange={handleLogoChange} /></div>
+                <div style={{ flex: 1 }}><div className="profile-grid">
+                    <div className="form-group"><label className="form-label">Firmenname *</label><input className="form-input" placeholder="z.B. Müller Robotics GmbH" value={profile.companyName} onChange={e => setProfile(p => ({...p, companyName: e.target.value}))} /></div>
+                    <div className="form-group"><label className="form-label">Branche</label><select className="form-input" value={profile.industry || ''} onChange={e => setProfile(p => ({...p, industry: e.target.value}))}><option value="">Branche wählen...</option><option>Systemintegrator</option><option>Roboterhersteller</option><option>Maschinenbauer</option><option>Automatisierungsberater</option><option>Software & Vision</option></select></div>
+                </div></div>
+            </div>
+            <div className="profile-grid">
+                <div className="form-group"><label className="form-label">Straße</label><input className="form-input" placeholder="Industriestraße 42" value={profile.street || ''} onChange={e => setProfile(p => ({...p, street: e.target.value}))} /></div>
+                <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 12 }}><div className="form-group"><label className="form-label">PLZ</label><input className="form-input" placeholder="70173" value={profile.zip || ''} onChange={e => setProfile(p => ({...p, zip: e.target.value}))} /></div><div className="form-group"><label className="form-label">Stadt *</label><input className="form-input" placeholder="Stuttgart" value={profile.city || ''} onChange={e => setProfile(p => ({...p, city: e.target.value}))} /></div></div>
+                <div className="form-group"><label className="form-label">Land</label><input className="form-input" placeholder="Deutschland" value={profile.country || ''} onChange={e => setProfile(p => ({...p, country: e.target.value}))} /></div>
+                <div className="form-group"><label className="form-label">Telefon</label><input className="form-input" placeholder="+49 123 456789" value={profile.phone || ''} onChange={e => setProfile(p => ({...p, phone: e.target.value}))} /></div>
+                <div className="form-group"><label className="form-label">E-Mail</label><input className="form-input" type="email" placeholder="info@firma.de" value={profile.email || ''} onChange={e => setProfile(p => ({...p, email: e.target.value}))} /></div>
+                <div className="form-group"><label className="form-label">Website</label><input className="form-input" placeholder="https://www.firma.de" value={profile.website || ''} onChange={e => setProfile(p => ({...p, website: e.target.value}))} /></div>
+            </div>
+            <div className="form-group"><label className="form-label">Über Ihr Unternehmen</label><textarea className="form-input" placeholder="Beschreiben Sie Ihr Unternehmen..." value={profile.description || ''} onChange={e => setProfile(p => ({...p, description: e.target.value}))} /></div>
+        </div>
+        <div className="card">
+            <div className="card-header"><div className="card-title">Services & Kompetenzen</div></div>
+            <p style={{ fontSize: 14, color: 'var(--text-light)', marginBottom: 16 }}>Diese Services werden für das Lead-Matching verwendet.</p>
+            <div className="tags-container">
+                {profile.services.map(s => <span key={s} className="tag-pill">{s} <span className="tag-remove" onClick={() => removeService(s)}>×</span></span>)}
+                <input className="tag-input" placeholder="Service hinzufügen..." value={tagInput} onChange={e => setTagInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && tagInput.trim()) { addService(tagInput.trim()); setTagInput(''); } }} />
+            </div>
+            <div style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {SERVICE_OPTIONS.filter(s => !profile.services.includes(s)).slice(0, 12).map(s => <button key={s} className="btn btn-sm btn-secondary" style={{ borderRadius: 20, fontSize: 12, padding: '5px 12px' }} onClick={() => addService(s)}>+ {s}</button>)}
+            </div>
+        </div>
+    </div>;
+}
+
+// ─── LEADS PAGE (WITH BLUR + CONTRACT) ──────────────────────────────────────
+function LeadsPage({ leads, profile, tier, unlockedLeads, onUnlockLead, canUnlockMore }) {
+    const { setPage } = useContext(AppContext);
+    const [filter, setFilter] = useState('all');
+    const [search, setSearch] = useState('');
+    const [selectedLead, setSelectedLead] = useState(null);
+    const [contractLead, setContractLead] = useState(null);
+    const [sortBy, setSortBy] = useState('match');
+
+    let filtered = [...leads];
+    if (filter === 'unlocked') filtered = filtered.filter(l => unlockedLeads.includes(l.id));
+    else if (filter === 'locked') filtered = filtered.filter(l => !unlockedLeads.includes(l.id));
+    else if (filter !== 'all') filtered = filtered.filter(l => l.status === filter);
+    if (search) filtered = filtered.filter(l => l.city.toLowerCase().includes(search.toLowerCase()) || l.industry.toLowerCase().includes(search.toLowerCase()) || l.needs.some(n => n.toLowerCase().includes(search.toLowerCase())));
+    if (sortBy === 'match') filtered.sort((a, b) => b.match - a.match);
+    if (sortBy === 'date') filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    const handleLeadClick = (lead) => {
+        const isUnlocked = unlockedLeads.includes(lead.id);
+        if (isUnlocked) { setSelectedLead(lead); }
+        else if (canUnlockMore) { setContractLead(lead); }
+    };
+
+    const handleContractAccept = () => {
+        onUnlockLead(contractLead.id);
+        setSelectedLead(contractLead);
+        setContractLead(null);
+    };
+
+    const tierInfo = TIERS[tier];
+
+    return <div className="fade-in">
+        {/* Tier info banner */}
+        <div style={{ background: 'white', border: '1.5px solid var(--border)', borderRadius: 14, padding: 16, marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 40, height: 40, borderRadius: 10, background: tier === 'R2' ? '#c6f6d5' : tier === 'R1' ? '#ebf8ff' : '#edf2f7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {tier === 'R2' ? <Icons.Crown /> : <Icons.Lock />}
+                </div>
+                <div>
+                    <div style={{ fontWeight: 700, fontSize: 14 }}>Ihr Tarif: {tier} {tierInfo.name}</div>
+                    <div style={{ fontSize: 13, color: 'var(--text-light)' }}>
+                        {tier === 'R2' ? 'Alle Leads sind für Sie sichtbar' : tier === 'R1' ? `${3 - Math.min(unlockedLeads.length, 3)} von 3 Freischaltungen diese Woche verfügbar` : `${1 - Math.min(unlockedLeads.length, 1)} von 1 Freischaltung diesen Monat verfügbar`}
+                    </div>
+                </div>
+            </div>
+            {tier !== 'R2' && <button className="btn btn-gold btn-sm" onClick={() => setPage('pricing')}><Icons.Zap /> Mehr Leads freischalten</button>}
+        </div>
+
+        <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ position: 'relative', flex: 1, minWidth: 250 }}>
+                <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }}><Icons.Search /></span>
+                <input className="form-input" style={{ paddingLeft: 38 }} placeholder="Leads durchsuchen (Stadt, Branche, Service)..." value={search} onChange={e => setSearch(e.target.value)} />
+            </div>
+            <div style={{ display: 'flex', gap: 6 }}>
+                {[{id:'all',label:'Alle'},{id:'unlocked',label:'Freigeschaltet'},{id:'locked',label:'Verschleiert'},{id:'new',label:'Neu'}].map(f =>
+                    <button key={f.id} className={`btn btn-sm ${filter === f.id ? 'btn-navy' : 'btn-secondary'}`} onClick={() => setFilter(f.id)}>{f.label}</button>
+                )}
+            </div>
+            <select className="form-input" style={{ width: 'auto', minWidth: 160 }} value={sortBy} onChange={e => setSortBy(e.target.value)}>
+                <option value="match">Sortierung: Match-Score</option>
+                <option value="date">Sortierung: Neueste zuerst</option>
+            </select>
+        </div>
+
+        {filtered.map(lead => {
+            const isUnlocked = unlockedLeads.includes(lead.id);
+            return <div key={lead.id} className={`lead-card ${!isUnlocked ? 'locked' : ''}`} style={{ position: 'relative' }} onClick={() => handleLeadClick(lead)}>
+                <div className="lead-header">
+                    <div>
+                        <div className="lead-company" style={!isUnlocked ? { filter: 'blur(7px)', userSelect: 'none' } : {}}>{lead.company}</div>
+                        <div className="lead-location" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                            <Icons.MapPin /> {lead.city} · {lead.industry} · <span style={!isUnlocked ? { filter: 'blur(5px)', userSelect: 'none' } : {}}>{lead.employees} Mitarbeiter</span>
+                        </div>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        {!isUnlocked && <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: 'var(--text-muted)', background: '#edf2f7', padding: '4px 10px', borderRadius: 6, fontWeight: 600 }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Verschleiert</span>}
+                        {isUnlocked && <span className="status-badge status-qualified" style={{ fontSize: 11 }}>Freigeschaltet</span>}
+                        <span className={`match-badge ${lead.match >= 80 ? 'match-high' : lead.match >= 60 ? 'match-medium' : 'match-low'}`}>{lead.match}% Match</span>
+                    </div>
+                </div>
+                <p style={{ fontSize: 14, color: 'var(--text-light)', marginBottom: 12, lineHeight: 1.5, ...(isUnlocked ? {} : { filter: 'blur(6px)', userSelect: 'none' }) }}>{lead.description}</p>
+                <div className="lead-tags">
+                    {lead.needs.map(n => <span key={n} className="lead-tag" style={!isUnlocked ? { filter: 'blur(5px)', userSelect: 'none' } : {}}>{n}</span>)}
+                </div>
+                <div className="lead-meta">
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Icons.Euro /> {lead.budget}</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4, ...(isUnlocked ? {} : { filter: 'blur(5px)', userSelect: 'none' }) }}><Icons.Clock /> {lead.timeline}</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4, ...(isUnlocked ? {} : { filter: 'blur(5px)', userSelect: 'none' }) }}><Icons.Building /> Dringlichkeit: {lead.urgency}</span>
+                </div>
+                {!isUnlocked && <div style={{ position: 'absolute', right: 20, bottom: 20 }}>
+                    {canUnlockMore ? <button className="unlock-btn" onClick={e => { e.stopPropagation(); setContractLead(lead); }}><Icons.Unlock /> Lead freischalten</button>
+                    : <button className="btn btn-gold btn-sm" onClick={e => { e.stopPropagation(); setPage('pricing'); }}><Icons.Crown /> Upgrade nötig</button>}
+                </div>}
+            </div>;
+        })}
+
+        {/* Contract Modal */}
+        {contractLead && <ContractModal lead={contractLead} profile={profile} onAccept={handleContractAccept} onClose={() => setContractLead(null)} />}
+
+        {/* Lead Detail Modal (only for unlocked) */}
+        {selectedLead && <div className="modal-overlay" onClick={() => setSelectedLead(null)}>
+            <div className="modal" onClick={e => e.stopPropagation()}>
+                <div className="modal-header">
+                    <div><h3 style={{ fontWeight: 700, fontSize: 18 }}>{selectedLead.company}</h3><p style={{ fontSize: 13, color: 'var(--text-light)' }}>{selectedLead.city} · {selectedLead.industry}</p></div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span className="status-badge status-qualified">Freigeschaltet</span>
+                        <span className={`match-badge ${selectedLead.match >= 80 ? 'match-high' : selectedLead.match >= 60 ? 'match-medium' : 'match-low'}`}>{selectedLead.match}% Match</span>
+                        <button onClick={() => setSelectedLead(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}><Icons.X /></button>
+                    </div>
+                </div>
+                <div className="modal-body">
+                    <div style={{ marginBottom: 20 }}><div className="form-label" style={{ marginBottom: 6 }}>Beschreibung</div><p style={{ fontSize: 14, lineHeight: 1.6 }}>{selectedLead.description}</p></div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 20 }}>
+                        <div><div className="form-label">Budget</div><p style={{ fontSize: 14 }}>{selectedLead.budget}</p></div>
+                        <div><div className="form-label">Timeline</div><p style={{ fontSize: 14 }}>{selectedLead.timeline}</p></div>
+                        <div><div className="form-label">Mitarbeiter</div><p style={{ fontSize: 14 }}>{selectedLead.employees}</p></div>
+                        <div><div className="form-label">Dringlichkeit</div><p style={{ fontSize: 14 }}>{selectedLead.urgency}</p></div>
+                    </div>
+                    <div><div className="form-label" style={{ marginBottom: 8 }}>Gesuchte Services</div>
+                        <div className="lead-tags">{selectedLead.needs.map(n => {
+                            const isMatch = profile.services.includes(n);
+                            return <span key={n} className="lead-tag" style={isMatch ? { background: '#c6f6d5', color: '#276749' } : {}}>{isMatch ? '✓ ' : ''}{n}</span>;
+                        })}</div>
+                    </div>
+                    <div style={{ marginTop: 16, padding: 12, background: '#f0fff4', borderRadius: 10, fontSize: 13, border: '1px solid #c6f6d5' }}>
+                        <strong>Vermittlungsvertrag aktiv</strong> — Bei Vertragsabschluss mit diesem Lead wird eine Provision von 5% des Gesamtnettoauftragswertes fällig. <span style={{ color: 'var(--text-light)' }}>Vertrag-ID: RF-V-{selectedLead.id.toString().padStart(5, '0')}</span>
+                    </div>
+                </div>
+                <div className="modal-footer">
+                    <button className="btn btn-secondary" onClick={() => setSelectedLead(null)}>Schließen</button>
+                    <button className="btn btn-primary"><Icons.Mail /> Kontaktieren</button>
+                </div>
+            </div>
+        </div>}
+    </div>;
+}
+
+// ─── DOCUMENTS PAGE ─────────────────────────────────────────────────────────
+function DocumentsPage({ documents, setDocuments, setToast }) {
+    const [dragover, setDragover] = useState(false);
+    const fileRef = useRef();
+    const handleFiles = (files) => {
+        const newDocs = Array.from(files).map(f => ({ id: Date.now() + Math.random(), name: f.name, size: f.size, type: f.name.split('.').pop().toLowerCase(), uploadDate: new Date().toISOString().split('T')[0], status: 'processing' }));
+        setDocuments(prev => [...prev, ...newDocs]);
+        setTimeout(() => { setDocuments(prev => prev.map(d => newDocs.find(nd => nd.id === d.id) ? { ...d, status: 'analyzed' } : d)); setToast({ message: `${newDocs.length} Dokument(e) hochgeladen & analysiert!`, type: 'success' }); }, 2000);
+    };
+    const formatSize = (b) => b < 1024 ? b + ' B' : b < 1048576 ? (b / 1024).toFixed(1) + ' KB' : (b / 1048576).toFixed(1) + ' MB';
+    const getDocIcon = (t) => ['pdf'].includes(t) ? 'pdf' : ['doc','docx'].includes(t) ? 'doc' : 'img';
+
+    return <div className="fade-in">
+        <div className="card">
+            <div className="card-header"><div className="card-title">Dokumente hochladen</div></div>
+            <p style={{ fontSize: 14, color: 'var(--text-light)', marginBottom: 20 }}>Laden Sie Produktkataloge, Service-Beschreibungen und technische Spezifikationen hoch. Robofolio analysiert diese Dokumente um Ihnen noch passendere Leads zu liefern.</p>
+            <div className={`upload-zone ${dragover ? 'dragover' : ''}`} onDragOver={e => { e.preventDefault(); setDragover(true); }} onDragLeave={() => setDragover(false)} onDrop={e => { e.preventDefault(); setDragover(false); handleFiles(e.dataTransfer.files); }} onClick={() => fileRef.current.click()}>
+                <Icons.Upload /><p style={{ fontSize: 16, fontWeight: 600, marginTop: 12 }}>Dateien hierhin ziehen</p><p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>oder klicken zum Durchsuchen</p><p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 12 }}>PDF, Word, Excel, Bilder · Max. 25 MB</p>
+            </div>
+            <input type="file" ref={fileRef} style={{ display: 'none' }} multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg" onChange={e => handleFiles(e.target.files)} />
+        </div>
+        <div className="card">
+            <div className="card-header"><div className="card-title">Hochgeladene Dokumente ({documents.length})</div></div>
+            {documents.length === 0 ? <div className="empty-state"><h3>Noch keine Dokumente</h3><p>Laden Sie Produktbeschreibungen hoch, um das Matching zu verbessern.</p></div> :
+            <div>{documents.map(doc => <div key={doc.id} className="doc-item">
+                <div className={`doc-icon ${getDocIcon(doc.type)}`}>{doc.type === 'pdf' ? '📄' : '📝'}</div>
+                <div><div className="doc-name">{doc.name}</div><div className="doc-size">{formatSize(doc.size)} · {doc.uploadDate}</div></div>
+                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span className={`status-badge ${doc.status === 'analyzed' ? 'status-qualified' : 'status-contacted'}`}>{doc.status === 'analyzed' ? '✓ Analysiert' : '⏳ Verarbeitung...'}</span>
+                    <button className="btn btn-sm btn-danger" onClick={() => setDocuments(prev => prev.filter(d => d.id !== doc.id))}><Icons.Trash /></button>
+                </div>
+            </div>)}</div>}
+        </div>
+    </div>;
+}
+
+// ─── PRICING PAGE ───────────────────────────────────────────────────────────
+function PricingPage({ tier, setTier, setToast }) {
+    const { setPage } = useContext(AppContext);
+    const plans = [
+        { id: 'R0', ...TIERS.R0, features: ['1 Probe-Lead pro Monat', 'Firmenprofil erstellen', 'Dokumente hochladen für besseres Matching', 'KI Website-Analyse', 'Match-Score Einsicht'], cta: tier === 'R0' ? 'Aktueller Plan' : 'Kostenlos starten' },
+        { id: 'R1', ...TIERS.R1, features: ['3 Leads pro Woche freischalten', 'Sukzessive Freischaltung', 'Nicht freigeschaltete Leads bleiben verschleiert', 'Alle R0 Features', 'Prioritäts-Support', 'Erweiterte Match-Analyse'], cta: tier === 'R1' ? 'Aktueller Plan' : 'Jetzt upgraden', featured: true },
+        { id: 'R2', ...TIERS.R2, features: ['Unbegrenzter Zugang zu allen Leads', 'Sofortige Freischaltung aller Leads', 'Keine Verschleierung', 'Alle R1 Features', 'Dedizierter Account Manager', 'Exklusive Leads (48h Vorsprung)'], cta: tier === 'R2' ? 'Aktueller Plan' : 'Enterprise wählen' },
+    ];
+
+    const handleSelect = (planId) => {
+        if (planId === tier) return;
+        setTier(planId);
+        setToast({ message: `Abo erfolgreich auf ${planId} ${TIERS[planId].name} geändert!`, type: 'success' });
+    };
+
+    return <div className="fade-in">
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+            <h2 style={{ fontSize: 28, fontWeight: 800, color: 'var(--navy)', marginBottom: 8 }}>Wählen Sie Ihren Plan</h2>
+            <p style={{ fontSize: 16, color: 'var(--text-light)', maxWidth: 500, margin: '0 auto' }}>Schalten Sie mehr Leads frei und finden Sie schneller die passenden Projekte für Ihr Unternehmen.</p>
+        </div>
+
+        <div className="pricing-grid">
+            {plans.map(plan => (
+                <div key={plan.id} className={`pricing-card ${plan.featured ? 'featured' : ''} ${tier === plan.id ? 'active-plan' : ''}`}>
+                    {plan.featured && <div className="pricing-badge">Beliebteste Wahl</div>}
+                    {tier === plan.id && <div className="pricing-badge" style={{ background: 'var(--navy)' }}>Ihr Plan</div>}
+                    <div className="pricing-tier">{plan.id}</div>
+                    <div className="pricing-name">{plan.name}</div>
+                    <div className="pricing-desc">{plan.desc}</div>
+                    <div className="pricing-price">
+                        {plan.priceNum === 0 ? 'Kostenlos' : <>{plan.price}€ <span>{plan.period}</span></>}
+                    </div>
+                    <ul className="pricing-features">
+                        {plan.features.map((f, i) => <li key={i}>
+                            <span className="pricing-check"><Icons.Check /></span> {f}
+                        </li>)}
+                    </ul>
+                    <button className={`btn ${tier === plan.id ? 'btn-secondary' : plan.featured ? 'btn-primary' : 'btn-navy'}`} style={{ width: '100%', justifyContent: 'center' }} onClick={() => handleSelect(plan.id)} disabled={tier === plan.id}>
+                        {plan.cta}
+                    </button>
+                </div>
+            ))}
+        </div>
+
+        <div className="card" style={{ marginTop: 32 }}>
+            <div className="card-header"><div className="card-title">Häufige Fragen</div></div>
+            {[
+                ['Was passiert bei der Freischaltung eines Leads?', 'Beim Freischalten eines Leads akzeptieren Sie unseren Vermittlungsvertrag. Dieser sichert Robofolio eine Provision von 5% des Gesamtnettoauftragswertes zu, falls es zu einem Vertragsabschluss kommt.'],
+                ['Kann ich meinen Plan jederzeit wechseln?', 'Ja, Sie können jederzeit upgraden oder downgraden. Bei einem Upgrade werden Ihnen sofort die zusätzlichen Freischaltungen gutgeschrieben.'],
+                ['Was bedeutet "verschleiert"?', 'Verschleierte Leads zeigen Ihnen Branche, Stadt und Auftragsvolumen — der Firmenname und Detailinformationen sind unkenntlich gemacht, bis Sie den Lead freischalten.'],
+                ['Wie funktioniert die 5% Provision?', 'Die Provision wird nur fällig, wenn Sie tatsächlich einen Auftrag mit dem vermittelten Lead abschließen. Sie bezieht sich auf den Gesamtnettoauftragswert inkl. Hardware, Software, Installation und Service.'],
+            ].map(([q, a], i) => <div key={i} className="settings-section">
+                <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 6 }}>{q}</div>
+                <div style={{ fontSize: 14, color: 'var(--text-light)', lineHeight: 1.6 }}>{a}</div>
+            </div>)}
+        </div>
+    </div>;
+}
+
+// ─── SETTINGS PAGE ──────────────────────────────────────────────────────────
+function SettingsPage({ settings, setSettings, setToast }) {
+    return <div className="fade-in">
+        <div className="card">
+            <div className="card-header"><div className="card-title">Benachrichtigungen</div><button className="btn btn-primary btn-sm" onClick={() => setToast({ message: 'Einstellungen gespeichert!', type: 'success' })}><Icons.Check /> Speichern</button></div>
+            {[['E-Mail Benachrichtigungen', 'Erhalten Sie E-Mails bei neuen passenden Leads', 'emailNotifications'], ['Sofort-Benachrichtigungen', 'Sofortige Benachrichtigung bei Leads mit 80%+ Match', 'instantNotifications'], ['Wöchentlicher Report', 'Zusammenfassung der Leads und Aktivitäten', 'weeklyReport']].map(([title, desc, key]) =>
+                <div key={key} className="settings-section"><div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div><div style={{ fontWeight: 600, fontSize: 14 }}>{title}</div><div style={{ fontSize: 13, color: 'var(--text-light)', marginTop: 2 }}>{desc}</div></div>
+                    <label className="toggle"><input type="checkbox" checked={settings[key]} onChange={e => setSettings(s => ({...s, [key]: e.target.checked}))} /><span className="toggle-slider"></span></label>
+                </div></div>
+            )}
+        </div>
+        <div className="card">
+            <div className="card-header"><div className="card-title">Matching-Einstellungen</div></div>
+            <div className="settings-section"><div className="form-group"><label className="form-label">Mindest-Match-Score</label><div style={{ display: 'flex', alignItems: 'center', gap: 16 }}><input type="range" min="30" max="95" value={settings.minMatchScore} onChange={e => setSettings(s => ({...s, minMatchScore: parseInt(e.target.value)}))} style={{ flex: 1 }} /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--navy)', minWidth: 50 }}>{settings.minMatchScore}%</span></div></div></div>
+            <div className="settings-section"><div className="form-group"><label className="form-label">Bevorzugte Region</label><select className="form-input" value={settings.preferredRegion} onChange={e => setSettings(s => ({...s, preferredRegion: e.target.value}))}><option value="all">Ganz Deutschland</option><option value="south">Süddeutschland</option><option value="north">Norddeutschland</option><option value="west">Westdeutschland</option><option value="east">Ostdeutschland</option></select></div></div>
+        </div>
+        <div className="card">
+            <div className="card-header"><div className="card-title">API-Konfiguration</div></div>
+            <div className="form-group"><label className="form-label">Anthropic API Key</label><input className="form-input" type="password" placeholder="sk-ant-..." value={settings.apiKey || ''} onChange={e => setSettings(s => ({...s, apiKey: e.target.value}))} /><div className="form-hint">Für die automatische Website-Analyse benötigt</div></div>
+        </div>
+    </div>;
+}
+
+// ─── MAIN APP ───────────────────────────────────────────────────────────────
+function App() {
+    const [page, setPage] = useState('dashboard');
+    const [toast, setToast] = useState(null);
+    const [tier, setTier] = useState('R0');
+    const [unlockedLeads, setUnlockedLeads] = useState([]);
+    const [profile, setProfile] = useState({ companyName: '', city: '', street: '', zip: '', country: 'Deutschland', phone: '', email: '', website: '', description: '', industry: '', logo: null, services: ['Schweißroboter', 'Pick & Place', 'Montage'] });
+    const [documents, setDocuments] = useState([
+        { id: 1, name: 'Produktkatalog_2026.pdf', size: 4521984, type: 'pdf', uploadDate: '2026-02-01', status: 'analyzed' },
+        { id: 2, name: 'Service_Übersicht.docx', size: 1245184, type: 'docx', uploadDate: '2026-01-28', status: 'analyzed' },
+    ]);
+    const [settings, setSettings] = useState({ emailNotifications: true, instantNotifications: true, weeklyReport: false, minMatchScore: 50, preferredRegion: 'all', apiKey: '' });
+
+    const leads = MOCK_LEADS.filter(l => l.match >= settings.minMatchScore);
+
+    // R2 = all unlocked automatically
+    const effectiveUnlocked = tier === 'R2' ? leads.map(l => l.id) : unlockedLeads;
+
+    // Check if can unlock more
+    const tierLimits = { R0: 1, R1: 3, R2: 999 };
+    const canUnlockMore = unlockedLeads.length < tierLimits[tier];
+
+    const handleUnlockLead = (leadId) => {
+        if (!effectiveUnlocked.includes(leadId) && canUnlockMore) {
+            setUnlockedLeads(prev => [...prev, leadId]);
+            setToast({ message: 'Lead erfolgreich freigeschaltet! Vermittlungsvertrag akzeptiert.', type: 'success' });
+        }
+    };
+
+    const pageTitles = { dashboard: 'Dashboard', profile: 'Firmenprofil', leads: 'Passende Leads', documents: 'Dokumente', pricing: 'Abo & Preise', settings: 'Einstellungen' };
+
+    return <AppContext.Provider value={{ setPage }}>
+        <Sidebar page={page} setPage={setPage} leadCount={leads.filter(l => l.status === 'new').length} tier={tier} unlockedCount={effectiveUnlocked.length} />
+        <div className="main">
+            <div className="topbar">
+                <h2>{pageTitles[page]}</h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: TIERS[tier].color, background: tier === 'R2' ? '#c6f6d5' : tier === 'R1' ? '#ebf8ff' : '#edf2f7', padding: '4px 12px', borderRadius: 20 }}>{tier} {TIERS[tier].name}</span>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #1a365d, #2d5a87)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 14, fontWeight: 700 }}>{profile.companyName ? profile.companyName[0] : 'P'}</div>
+                </div>
+            </div>
+            <div className="content">
+                {page === 'dashboard' && <DashboardPage leads={leads} profile={profile} tier={tier} unlockedLeads={effectiveUnlocked} />}
+                {page === 'profile' && <ProfilePage profile={profile} setProfile={setProfile} setToast={setToast} />}
+                {page === 'leads' && <LeadsPage leads={leads} profile={profile} tier={tier} unlockedLeads={effectiveUnlocked} onUnlockLead={handleUnlockLead} canUnlockMore={canUnlockMore || tier === 'R2'} />}
+                {page === 'documents' && <DocumentsPage documents={documents} setDocuments={setDocuments} setToast={setToast} />}
+                {page === 'pricing' && <PricingPage tier={tier} setTier={setTier} setToast={setToast} />}
+                {page === 'settings' && <SettingsPage settings={settings} setSettings={setSettings} setToast={setToast} />}
+            </div>
+        </div>
+        {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+    </AppContext.Provider>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

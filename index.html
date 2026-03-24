@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Robofolio - Der kuratierte Marktplatz für Robotik-Integratoren in Deutschland und Europa">
+    <title>Robofolio - Finden Sie Ihren perfekten Robotik-Partner</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+            background: white;
+            padding: 5px;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+        .lang-btn.active {
+            background: #1a365d;
+            color: white;
+        }
+        .lang-btn:hover:not(.active) {
+            background: #f0f0f0;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%);
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+        nav a:hover {
+            opacity: 0.8;
+        }
+        .nav-cta {
+            background: #48bb78;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .nav-cta:hover {
+            background: #38a169;
+            opacity: 1;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #2d5a87 0%, #1a365d 100%);
+            color: white;
+            padding: 100px 40px 80px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 52px;
+            margin-bottom: 24px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .hero p {
+            font-size: 22px;
+            max-width: 750px;
+            margin: 0 auto 40px;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+        .hero-cta {
+            display: inline-block;
+            background: #48bb78;
+            color: white;
+            padding: 20px 45px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+        }
+        .hero-cta:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+        }
+        .hero-cta.secondary {
+            background: transparent;
+            border: 2px solid white;
+            box-shadow: none;
+        }
+        .hero-cta.secondary:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+        .stat { text-align: center; }
+        .stat-number {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            opacity: 0.85;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 40px;
+            background: white;
+            text-align: center;
+        }
+        .section-title {
+            font-size: 38px;
+            color: #1a365d;
+            margin-bottom: 60px;
+            font-weight: 800;
+        }
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            max-width: 1100px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        .step {
+            flex: 1;
+            min-width: 280px;
+            padding: 40px 30px;
+            background: #f8f9fa;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: #1a365d;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0 auto 24px;
+        }
+        .step h3 {
+            color: #1a365d;
+            margin-bottom: 12px;
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .step p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* For Buyers Section */
+        .for-buyers {
+            padding: 100px 40px;
+            background: #f8f9fa;
+        }
+        .two-col {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+            gap: 80px;
+            flex-wrap: wrap;
+        }
+        .two-col > div { flex: 1; min-width: 400px; }
+        .benefits-list {
+            list-style: none;
+        }
+        .benefits-list li {
+            padding: 18px 0 18px 45px;
+            position: relative;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+        .benefits-list li:last-child {
+            border-bottom: none;
+        }
+        .benefits-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .form-container {
+            background: white;
+            padding: 45px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        .form-container h3 {
+            color: #1a365d;
+            margin-bottom: 28px;
+            font-size: 26px;
+            font-weight: 700;
+        }
+        .form-field {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+        .form-field:focus {
+            outline: none;
+            border-color: #1a365d;
+        }
+        .form-field.textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        .form-btn {
+            width: 100%;
+            background: #1a365d;
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .form-btn:hover {
+            background: #2d5a87;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(26, 54, 93, 0.3);
+        }
+        .form-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .form-note {
+            font-size: 13px;
+            color: #888;
+            margin-top: 12px;
+            text-align: center;
+        }
+        .form-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+        .form-message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .form-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        /* Integrators Section */
+        .integrators {
+            padding: 100px 40px;
+            background: white;
+            text-align: center;
+        }
+        .integrator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+            max-width: 1100px;
+            margin: 0 auto 40px;
+        }
+        .integrator-card {
+            background: #f8f9fa;
+            padding: 35px;
+            border-radius: 16px;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+        .integrator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .integrator-logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f0f0f0 100%);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .integrator-card h4 {
+            color: #1a365d;
+            margin-bottom: 8px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .integrator-card .specialty {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+        .integrator-card .rating {
+            color: #f6ad55;
+            font-weight: 600;
+        }
+        .view-all-link {
+            color: #1a365d;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 17px;
+            transition: opacity 0.3s ease;
+        }
+        .view-all-link:hover {
+            opacity: 0.7;
+        }
+
+        /* Trust Section */
+        .trust {
+            padding: 80px 40px;
+            background: #1a365d;
+            color: white;
+            text-align: center;
+        }
+        .trust h2 {
+            margin-bottom: 50px;
+            font-size: 36px;
+            font-weight: 800;
+        }
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 70px;
+            flex-wrap: wrap;
+        }
+        .badge {
+            text-align: center;
+            max-width: 150px;
+        }
+        .badge-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+        .badge-label {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 100px 40px;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            text-align: center;
+        }
+        .final-cta h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+        .final-cta p {
+            font-size: 20px;
+            margin-bottom: 35px;
+            opacity: 0.95;
+        }
+        .final-cta a {
+            display: inline-block;
+            background: white;
+            color: #38a169;
+            padding: 20px 45px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .final-cta a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a365d;
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+        footer p {
+            opacity: 0.8;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 12px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        footer a:hover {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .hero p { font-size: 18px; }
+            .section-title { font-size: 30px; }
+            .steps { flex-direction: column; }
+            .two-col { flex-direction: column; gap: 40px; }
+            .two-col > div { min-width: 100%; }
+            .hero-stats { gap: 40px; }
+            .trust-badges { gap: 40px; }
+            nav { display: none; }
+            .mobile-menu-btn { display: block; }
+            header { padding: 15px 20px; }
+            .hero, .how-it-works, .for-buyers, .integrators, .final-cta {
+                padding: 60px 20px;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Hidden content for language switch */
+        [data-lang]:not([data-lang="de"]) {
+            display: none;
+        }
+        html[lang="en"] [data-lang]:not([data-lang="en"]) {
+            display: none;
+        }
+        html[lang="en"] [data-lang="en"] {
+            display: block;
+        }
+        html[lang="de"] [data-lang="de"] {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button class="lang-btn active" data-lang-btn="de" onclick="switchLanguage('de')">DE</button>
+        <button class="lang-btn" data-lang-btn="en" onclick="switchLanguage('en')">EN</button>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">ROBOFOLIO</div>
+        <nav>
+            <a href="#how-it-works" data-lang="de">Wie es funktioniert</a>
+            <a href="#how-it-works" data-lang="en">How It Works</a>
+
+            <a href="#for-integrators" data-lang="de">Für Integratoren</a>
+            <a href="#for-integrators" data-lang="en">For Integrators</a>
+
+            <a href="#about" data-lang="de">Über uns</a>
+            <a href="#about" data-lang="en">About</a>
+
+            <a href="#get-matched" class="nav-cta" data-lang="de">Kostenlos Partner finden</a>
+            <a href="#get-matched" class="nav-cta" data-lang="en">Get Matched Free</a>
+        </nav>
+        <button class="mobile-menu-btn">☰</button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 data-lang="de">Finden Sie Ihren perfekten Robotik-Partner</h1>
+        <h1 data-lang="en">Find Your Perfect Robotics Partner</h1>
+
+        <p data-lang="de">Lassen Sie sich mit geprüften Robotik-Integratoren verbinden, die auf Ihre Branche spezialisiert sind. Kostenlos für Käufer. Ohne Verpflichtung.</p>
+        <p data-lang="en">Get matched with vetted robotics integrators who specialize in your industry. Free for buyers. No obligation.</p>
+
+        <div>
+            <a href="#get-matched" class="hero-cta" data-lang="de">Jetzt Partner finden — Kostenlos</a>
+            <a href="#get-matched" class="hero-cta" data-lang="en">Get Matched — It's Free</a>
+
+            <a href="#for-integrators" class="hero-cta secondary" data-lang="de">Ich bin ein Integrator</a>
+            <a href="#for-integrators" class="hero-cta secondary" data-lang="en">I'm an Integrator</a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">50+</div>
+                <div class="stat-label" data-lang="de">Geprüfte Integratoren</div>
+                <div class="stat-label" data-lang="en">Vetted Integrators</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">2 Mio.€+</div>
+                <div class="stat-label" data-lang="de">Vermittelte Projekte</div>
+                <div class="stat-label" data-lang="en">Projects Matched</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">48 Std.</div>
+                <div class="stat-label" data-lang="de">Durchschn. Reaktionszeit</div>
+                <div class="stat-label" data-lang="en">Avg. Response Time</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <h2 class="section-title" data-lang="de">Wie es funktioniert</h2>
+        <h2 class="section-title" data-lang="en">How It Works</h2>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3 data-lang="de">Teilen Sie uns Ihre Anforderungen mit</h3>
+                <h3 data-lang="en">Tell Us Your Needs</h3>
+                <p data-lang="de">Beschreiben Sie in 2 Minuten Ihre Projektanforderungen, Zeitrahmen und Budgetrahmen.</p>
+                <p data-lang="en">Share your project requirements, timeline, and budget range in 2 minutes.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3 data-lang="de">Werden Sie gematcht</h3>
+                <h3 data-lang="en">Get Matched</h3>
+                <p data-lang="de">Wir wählen 2-3 geprüfte Integratoren aus, die auf Ihren Anwendungsfall spezialisiert sind.</p>
+                <p data-lang="en">We hand-select 2-3 vetted integrators who specialize in your exact use case.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3 data-lang="de">Vergleichen & Auswählen</h3>
+                <h3 data-lang="en">Compare & Choose</h3>
+                <p data-lang="de">Prüfen Sie Angebote, stellen Sie Fragen und wählen Sie Ihren Partner. Keine Gebühren, keine Verpflichtung.</p>
+                <p data-lang="en">Review proposals, ask questions, and pick your partner. No fees, no obligation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- For Buyers / Lead Capture -->
+    <section class="for-buyers" id="get-matched">
+        <div class="two-col">
+            <div>
+                <h2 class="section-title" style="text-align:left; margin-bottom: 30px;" data-lang="de">Warum Robofolio nutzen?</h2>
+                <h2 class="section-title" style="text-align:left; margin-bottom: 30px;" data-lang="en">Why Use Robofolio?</h2>
+
+                <ul class="benefits-list" data-lang="de">
+                    <li><strong>Sparen Sie 40+ Stunden</strong> Recherche bei der Suche nach qualifizierten Integratoren</li>
+                    <li><strong>Vorab geprüfte Partner</strong> mit nachgewiesener Erfahrung und Referenzen</li>
+                    <li><strong>Branchenspezialisten</strong> passend zu Ihrer spezifischen Anwendung</li>
+                    <li><strong>100% kostenlos für Käufer</strong> — Integratoren zahlen für qualifizierte Leads</li>
+                    <li><strong>Kein Spam, kein Druck</strong> — nur relevante Vermittlungen</li>
+                </ul>
+
+                <ul class="benefits-list" data-lang="en">
+                    <li><strong>Save 40+ hours</strong> of research finding qualified integrators</li>
+                    <li><strong>Pre-vetted partners</strong> with verified experience and references</li>
+                    <li><strong>Industry specialists</strong> matched to your specific application</li>
+                    <li><strong>100% free for buyers</strong> — integrators pay for qualified leads</li>
+                    <li><strong>No spam, no pressure</strong> — just relevant introductions</li>
+                </ul>
+            </div>
+
+            <div class="form-container">
+                <div class="form-message" id="formMessage"></div>
+
+                <h3 data-lang="de">Erhalten Sie Ihre kostenlosen Matches</h3>
+                <h3 data-lang="en">Get Your Free Matches</h3>
+
+                <form id="leadForm" onsubmit="return handleFormSubmit(event)">
+                    <input type="text" class="form-field" name="name" placeholder="Ihr Name / Your Name" required data-placeholder-de="Ihr Name" data-placeholder-en="Your Name">
+                    <input type="email" class="form-field" name="email" placeholder="Geschäftliche E-Mail / Work Email" required data-placeholder-de="Geschäftliche E-Mail" data-placeholder-en="Work Email">
+                    <input type="text" class="form-field" name="company" placeholder="Firmenname / Company Name" required data-placeholder-de="Firmenname" data-placeholder-en="Company Name">
+                    <input type="text" class="form-field" name="industry" placeholder="Branche / Anwendung / Industry / Application" required data-placeholder-de="Branche / Anwendung" data-placeholder-en="Industry / Application">
+                    <textarea class="form-field textarea" name="description" placeholder="Kurze Projektbeschreibung / Brief Project Description" required data-placeholder-de="Kurze Projektbeschreibung" data-placeholder-en="Brief Project Description"></textarea>
+                    <input type="hidden" name="language" id="languageField" value="de">
+                    <input type="hidden" name="timestamp" id="timestampField">
+
+                    <button type="submit" class="form-btn" id="submitBtn">
+                        <span data-lang="de">Partner finden — Kostenlos & Unverbindlich</span>
+                        <span data-lang="en">Get Matched — Free & No Obligation</span>
+                    </button>
+
+                    <p class="form-note" data-lang="de">Wir antworten innerhalb von 48 Stunden mit personalisierten Matches.</p>
+                    <p class="form-note" data-lang="en">We'll respond within 48 hours with personalized matches.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Integrators -->
+    <section class="integrators" id="integrators">
+        <h2 class="section-title" data-lang="de">Ausgewählte Integratoren</h2>
+        <h2 class="section-title" data-lang="en">Featured Integrators</h2>
+
+        <div class="integrator-grid">
+            <div class="integrator-card">
+                <div class="integrator-logo">LOGO</div>
+                <h4>Precision Robotics GmbH</h4>
+                <div class="specialty" data-lang="de">Lagerautomatisierung • Pick & Pack</div>
+                <div class="specialty" data-lang="en">Warehouse Automation • Pick & Pack</div>
+                <div class="rating">★★★★★ (12 <span data-lang="de">Projekte</span><span data-lang="en">projects</span>)</div>
+            </div>
+            <div class="integrator-card">
+                <div class="integrator-logo">LOGO</div>
+                <h4>AutoMate Solutions AG</h4>
+                <div class="specialty" data-lang="de">Lebensmittel & Getränke • Palettierung</div>
+                <div class="specialty" data-lang="en">Food & Beverage • Palletizing</div>
+                <div class="rating">★★★★★ (8 <span data-lang="de">Projekte</span><span data-lang="en">projects</span>)</div>
+            </div>
+            <div class="integrator-card">
+                <div class="integrator-logo">LOGO</div>
+                <h4>RoboWorks Systems</h4>
+                <div class="specialty" data-lang="de">Fertigung • Montagelinien</div>
+                <div class="specialty" data-lang="en">Manufacturing • Assembly Lines</div>
+                <div class="rating">★★★★☆ (15 <span data-lang="de">Projekte</span><span data-lang="en">projects</span>)</div>
+            </div>
+        </div>
+
+        <p style="margin-top: 35px; color: #666;">
+            <a href="#get-matched" class="view-all-link" data-lang="de">Alle 50+ Integratoren ansehen →</a>
+            <a href="#get-matched" class="view-all-link" data-lang="en">View All 50+ Integrators →</a>
+        </p>
+    </section>
+
+    <!-- Trust Signals -->
+    <section class="trust">
+        <h2 data-lang="de">Jeder Integrator wird geprüft</h2>
+        <h2 data-lang="en">Every Integrator is Vetted</h2>
+
+        <div class="trust-badges">
+            <div class="badge">
+                <div class="badge-icon">🔍</div>
+                <div class="badge-label" data-lang="de">Hintergrund verifiziert</div>
+                <div class="badge-label" data-lang="en">Background Verified</div>
+            </div>
+            <div class="badge">
+                <div class="badge-icon">📋</div>
+                <div class="badge-label" data-lang="de">Portfolio geprüft</div>
+                <div class="badge-label" data-lang="en">Portfolio Reviewed</div>
+            </div>
+            <div class="badge">
+                <div class="badge-icon">📞</div>
+                <div class="badge-label" data-lang="de">Referenzen überprüft</div>
+                <div class="badge-label" data-lang="en">References Checked</div>
+            </div>
+            <div class="badge">
+                <div class="badge-icon">🛡️</div>
+                <div class="badge-label" data-lang="de">Versicherung bestätigt</div>
+                <div class="badge-label" data-lang="en">Insurance Confirmed</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2 data-lang="de">Bereit, Ihren Robotik-Partner zu finden?</h2>
+        <h2 data-lang="en">Ready to Find Your Robotics Partner?</h2>
+
+        <p data-lang="de">Schließen Sie sich 200+ Unternehmen an, die ihren perfekten Integrator über Robofolio gefunden haben.</p>
+        <p data-lang="en">Join 200+ companies who found their perfect integrator through Robofolio.</p>
+
+        <a href="#get-matched" data-lang="de">Jetzt Partner finden — Kostenlos</a>
+        <a href="#get-matched" data-lang="en">Get Matched Now — It's Free</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p><strong>ROBOFOLIO</strong> — <span data-lang="de">Der kuratierte Robotik-Marktplatz</span><span data-lang="en">The Curated Robotics Marketplace</span></p>
+        <p style="margin-top: 18px;">
+            © 2026 Robofolio. <span data-lang="de">Alle Rechte vorbehalten.</span><span data-lang="en">All rights reserved.</span> |
+            <a href="#" data-lang="de">Datenschutz</a><a href="#" data-lang="en">Privacy</a> |
+            <a href="#" data-lang="de">AGB</a><a href="#" data-lang="en">Terms</a> |
+            <a href="#" data-lang="de">Kontakt</a><a href="#" data-lang="en">Contact</a>
+        </p>
+    </footer>
+
+    <script>
+        // Language switching functionality
+        function switchLanguage(lang) {
+            document.documentElement.lang = lang;
+            localStorage.setItem('preferredLanguage', lang);
+
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-lang-btn="${lang}"]`).classList.add('active');
+
+            // Update form placeholders
+            updatePlaceholders(lang);
+
+            // Update hidden language field
+            document.getElementById('languageField').value = lang;
+        }
+
+        function updatePlaceholders(lang) {
+            document.querySelectorAll('.form-field[data-placeholder-de]').forEach(field => {
+                const placeholder = field.getAttribute(`data-placeholder-${lang}`);
+                if (placeholder) {
+                    field.placeholder = placeholder;
+                }
+            });
+        }
+
+        // Load saved language preference
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferredLanguage') || 'de';
+            switchLanguage(savedLang);
+        });
+
+        // Form submission handler
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const submitBtn = document.getElementById('submitBtn');
+            const formMessage = document.getElementById('formMessage');
+            const currentLang = document.documentElement.lang;
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = currentLang === 'de' ? 'Wird gesendet...' : 'Submitting...';
+
+            // Add timestamp
+            document.getElementById('timestampField').value = new Date().toISOString();
+
+            // Get form data
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                // REPLACE THIS URL WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+                const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Success message
+                    formMessage.className = 'form-message success';
+                    formMessage.textContent = currentLang === 'de'
+                        ? '✓ Vielen Dank! Wir werden uns innerhalb von 48 Stunden bei Ihnen melden.'
+                        : '✓ Thank you! We\'ll get back to you within 48 hours.';
+
+                    // Reset form
+                    form.reset();
+
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        formMessage.className = 'form-message';
+                        formMessage.textContent = '';
+                    }, 5000);
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                // Error message
+                formMessage.className = 'form-message error';
+                formMessage.textContent = currentLang === 'de'
+                    ? '✗ Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'
+                    : '✗ An error occurred. Please try again.';
+
+                console.error('Form submission error:', error);
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = currentLang === 'de'
+                    ? '<span data-lang="de">Partner finden — Kostenlos & Unverbindlich</span><span data-lang="en">Get Matched — Free & No Obligation</span>'
+                    : '<span data-lang="de">Partner finden — Kostenlos & Unverbindlich</span><span data-lang="en">Get Matched — Free & No Obligation</span>';
+            }
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

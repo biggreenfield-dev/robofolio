@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robofolio — Liebherr Lead Kanban</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+
+  header { background: #1B3A5C; color: white; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; }
+  header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+  header .meta { font-size: 13px; opacity: 0.8; text-align: right; }
+  header .meta span { display: block; }
+  .badge { display: inline-block; background: #e94560; color: white; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 12px; margin-left: 12px; vertical-align: middle; }
+
+  .board { display: flex; gap: 16px; padding: 24px; overflow-x: auto; min-height: calc(100vh - 80px); align-items: flex-start; }
+
+  .column { background: #e8eaed; border-radius: 12px; min-width: 300px; max-width: 320px; flex-shrink: 0; display: flex; flex-direction: column; }
+  .column-header { padding: 16px 16px 12px; display: flex; align-items: center; gap: 8px; }
+  .column-header .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .column-header h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #555; }
+  .column-header .count { background: #d0d5dd; color: #555; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 10px; margin-left: auto; }
+
+  .column-body { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 10px; min-height: 60px; }
+
+  .card { background: white; border-radius: 8px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); cursor: grab; transition: box-shadow 0.2s, transform 0.15s; border-left: 3px solid transparent; }
+  .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); transform: translateY(-1px); }
+  .card:active { cursor: grabbing; opacity: 0.9; }
+  .card.dragging { opacity: 0.5; transform: rotate(2deg); }
+  .card .card-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; line-height: 1.35; }
+  .card .card-desc { font-size: 12px; color: #6B7280; line-height: 1.45; }
+  .card .card-tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .card .tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+
+  .tag-workshop { background: #dbeafe; color: #1e40af; }
+  .tag-requirements { background: #fef3c7; color: #92400e; }
+  .tag-engineering { background: #d1fae5; color: #065f46; }
+  .tag-validation { background: #ede9fe; color: #5b21b6; }
+  .tag-commercial { background: #fce7f3; color: #9d174d; }
+  .tag-blocker { background: #fee2e2; color: #991b1b; }
+
+  .col-backlog .dot { background: #9ca3af; }
+  .col-backlog .card { border-left-color: #9ca3af; }
+  .col-todo .dot { background: #3b82f6; }
+  .col-todo .card { border-left-color: #3b82f6; }
+  .col-progress .dot { background: #f59e0b; }
+  .col-progress .card { border-left-color: #f59e0b; }
+  .col-done .dot { background: #10b981; }
+  .col-done .card { border-left-color: #10b981; }
+
+  .drop-zone { border: 2px dashed #d0d5dd; border-radius: 8px; min-height: 50px; transition: background 0.2s, border-color 0.2s; }
+  .drop-zone.active { background: #dbeafe; border-color: #3b82f6; }
+
+  .add-card { padding: 10px 16px; font-size: 13px; color: #6B7280; cursor: pointer; display: flex; align-items: center; gap: 6px; border-radius: 8px; transition: background 0.15s; }
+  .add-card:hover { background: #d0d5dd; color: #374151; }
+
+  .card .assignee { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+  .card .avatar { width: 22px; height: 22px; border-radius: 50%; background: #1B3A5C; color: white; font-size: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+  .card .assignee-name { font-size: 11px; color: #9ca3af; }
+
+  @media (max-width: 768px) {
+    .board { padding: 12px; gap: 12px; }
+    .column { min-width: 260px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>ROBOFOLIO <span style="font-weight:400; opacity:0.7;">|</span> Liebherr — Adhesive Tape Application <span class="badge">RF-2026-002</span></h1>
+  </div>
+  <div class="meta">
+    <span>Lead Score: 60/100</span>
+    <span>Status: Exploratory</span>
+  </div>
+</header>
+
+<div class="board" id="board">
+
+  <!-- BACKLOG -->
+  <div class="column col-backlog" data-col="backlog">
+    <div class="column-header">
+      <div class="dot"></div>
+      <h2>Backlog</h2>
+      <span class="count" id="count-backlog">5</span>
+    </div>
+    <div class="column-body" id="backlog">
+      <div class="card" draggable="true" data-id="7">
+        <div class="card-title">Confirm cost target EUR 5/door</div>
+        <div class="card-desc">Validate whether the EUR 5 benchmark includes tape material or application only.</div>
+        <div class="card-tags"><span class="tag tag-commercial">Commercial</span></div>
+        <div class="assignee"><div class="avatar">MK</div><span class="assignee-name">Max</span></div>
+      </div>
+      <div class="card" draggable="true" data-id="8">
+        <div class="card-title">Determine production volumes</div>
+        <div class="card-desc">Get units per shift/day/year from Liebherr for ROI calculation.</div>
+        <div class="card-tags"><span class="tag tag-requirements">Requirements</span></div>
+        <div class="assignee"><div class="avatar">JF</div><span class="assignee-name">Josefine</span></div>
+      </div>
+      <div class="card" draggable="true" data-id="9">
+        <div class="card-title">Clarify variant detection method</div>
+        <div class="card-desc">Barcode, RFID, or MES integration for automatic variant changeover?</div>
+        <div class="card-tags"><span class="tag tag-engineering">Engineering</span></div>
+      </div>
+      <div class="card" draggable="true" data-id="10">
+        <div class="card-title">Assess floor space &amp; infrastructure</div>
+        <div class="card-desc">Available space next to conveyor, power, compressed air, network.</div>
+        <div class="card-tags"><span class="tag tag-requirements">Requirements</span></div>
+      </div>
+      <div class="card" draggable="true" data-id="11">
+        <div class="card-title">Prepare preliminary ROI analysis</div>
+        <div class="card-desc">Build ROI model based on labor savings, quality improvement, and throughput.</div>
+        <div class="card-tags"><span class="tag tag-commercial">Commercial</span></div>
+        <div class="assignee"><div class="avatar">MK</div><span class="assignee-name">Max</span></div>
+      </div>
+    </div>
+    <div class="add-card" onclick="addCard('backlog')">+ Add card</div>
+  </div>
+
+  <!-- TO DO -->
+  <div class="column col-todo" data-col="todo">
+    <div class="column-header">
+      <div class="dot"></div>
+      <h2>To Do</h2>
+      <span class="count" id="count-todo">4</span>
+    </div>
+    <div class="column-body" id="todo">
+      <div class="card" draggable="true" data-id="1">
+        <div class="card-title">Schedule technical workshop with Liebherr</div>
+        <div class="card-desc">Set up on-site or virtual workshop for detailed requirements gathering with Liebherr engineering team.</div>
+        <div class="card-tags"><span class="tag tag-workshop">Workshop</span></div>
+        <div class="assignee"><div class="avatar">JF</div><span class="assignee-name">Josefine</span></div>
+      </div>
+      <div class="card" draggable="true" data-id="2">
+        <div class="card-title">Gather tape specifications</div>
+        <div class="card-desc">Type, width, length, material, adhesion strength of the blue adhesive tape strips.</div>
+        <div class="card-tags"><span class="tag tag-requirements">Requirements</span><span class="tag tag-blocker">Blocker</span></div>
+      </div>
+      <div class="card" draggable="true" data-id="3">
+        <div class="card-title">Define exact tape positions &amp; tolerances</div>
+        <div class="card-desc">Precise placement of 3 strips per door across 20 variants. Tolerance requirements.</div>
+        <div class="card-tags"><span class="tag tag-requirements">Requirements</span><span class="tag tag-blocker">Blocker</span></div>
+      </div>
+      <div class="card" draggable="true" data-id="4">
+        <div class="card-title">Collect conveyor belt details</div>
+        <div class="card-desc">Cycle time, fixation method, positioning accuracy of existing conveyor system.</div>
+        <div class="card-tags"><span class="tag tag-requirements">Requirements</span></div>
+      </div>
+    </div>
+    <div class="add-card" onclick="addCard('todo')">+ Add card</div>
+  </div>
+
+  <!-- IN PROGRESS -->
+  <div class="column col-progress" data-col="progress">
+    <div class="column-header">
+      <div class="dot"></div>
+      <h2>In Progress</h2>
+      <span class="count" id="count-progress">1</span>
+    </div>
+    <div class="column-body" id="progress">
+      <div class="card" draggable="true" data-id="5">
+        <div class="card-title">Develop feasibility study &amp; solution concept</div>
+        <div class="card-desc">Cobot selection, end effector design, vision system, conveyor integration. Evaluate technical feasibility for 20 variants.</div>
+        <div class="card-tags"><span class="tag tag-engineering">Engineering</span></div>
+        <div class="assignee"><div class="avatar">MK</div><span class="assignee-name">Max</span></div>
+      </div>
+    </div>
+    <div class="add-card" onclick="addCard('progress')">+ Add card</div>
+  </div>
+
+  <!-- DONE -->
+  <div class="column col-done" data-col="done">
+    <div class="column-header">
+      <div class="dot"></div>
+      <h2>Done</h2>
+      <span class="count" id="count-done">2</span>
+    </div>
+    <div class="column-body" id="done">
+      <div class="card" draggable="true" data-id="6">
+        <div class="card-title">Initial discovery call completed</div>
+        <div class="card-desc">Key insights captured: 20 variants, 3 strips/door, ~75s cycle time, EUR 5 target, labor shortage driver.</div>
+        <div class="card-tags"><span class="tag tag-workshop">Workshop</span></div>
+        <div class="assignee"><div class="avatar">MK</div><span class="assignee-name">Max</span></div>
+      </div>
+      <div class="card" draggable="true" data-id="12">
+        <div class="card-title">Lead document created (RF-2026-002)</div>
+        <div class="card-desc">Full lead PDF with photos, technical specs, BANT qualification, and open questions.</div>
+        <div class="card-tags"><span class="tag tag-commercial">Commercial</span></div>
+        <div class="assignee"><div class="avatar">MK</div><span class="assignee-name">Max</span></div>
+      </div>
+    </div>
+    <div class="add-card" onclick="addCard('done')">+ Add card</div>
+  </div>
+
+</div>
+
+<script>
+  // Drag & Drop
+  let draggedCard = null;
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      draggedCard = card;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      document.querySelectorAll('.column-body').forEach(b => b.classList.remove('active', 'drop-zone'));
+      draggedCard = null;
+      updateCounts();
+    });
+  });
+
+  document.querySelectorAll('.column-body').forEach(body => {
+    body.addEventListener('dragover', e => {
+      e.preventDefault();
+      body.classList.add('drop-zone', 'active');
+      const afterEl = getDragAfterElement(body, e.clientY);
+      if (afterEl == null) {
+        body.appendChild(draggedCard);
+      } else {
+        body.insertBefore(draggedCard, afterEl);
+      }
+    });
+    body.addEventListener('dragleave', () => {
+      body.classList.remove('active', 'drop-zone');
+    });
+    body.addEventListener('drop', e => {
+      e.preventDefault();
+      body.classList.remove('active', 'drop-zone');
+      updateCounts();
+    });
+  });
+
+  function getDragAfterElement(container, y) {
+    const els = [...container.querySelectorAll('.card:not(.dragging)')];
+    return els.reduce((closest, child) => {
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+      if (offset < 0 && offset > closest.offset) {
+        return { offset, element: child };
+      }
+      return closest;
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+  }
+
+  function updateCounts() {
+    ['backlog', 'todo', 'progress', 'done'].forEach(col => {
+      const count = document.getElementById(col).querySelectorAll('.card').length;
+      document.getElementById('count-' + col).textContent = count;
+    });
+  }
+
+  // Add card
+  let cardIdCounter = 20;
+  function addCard(colId) {
+    const title = prompt('Card title:');
+    if (!title) return;
+    const desc = prompt('Description (optional):') || '';
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.draggable = true;
+    card.dataset.id = ++cardIdCounter;
+    card.innerHTML = `
+      <div class="card-title">${title}</div>
+      ${desc ? `<div class="card-desc">${desc}</div>` : ''}
+    `;
+    card.addEventListener('dragstart', e => {
+      draggedCard = card;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      document.querySelectorAll('.column-body').forEach(b => b.classList.remove('active', 'drop-zone'));
+      draggedCard = null;
+      updateCounts();
+    });
+    document.getElementById(colId).appendChild(card);
+    updateCounts();
+  }
+</script>
+</body>
+</html>

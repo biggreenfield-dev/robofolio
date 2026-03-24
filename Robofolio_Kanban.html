@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robofolio — Platform Development Kanban</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+
+header{background:#1e293b;border-bottom:1px solid #334155;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:12px}
+header h1{font-size:18px;font-weight:700;color:#f1f5f9}
+header h1 span{color:#3b82f6;font-weight:400}
+.header-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.filter-btn{background:#334155;border:1px solid #475569;color:#94a3b8;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .15s}
+.filter-btn:hover,.filter-btn.active{background:#3b82f6;color:white;border-color:#3b82f6}
+.progress-wrap{text-align:right}
+.progress-bar{width:180px;height:6px;background:#334155;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:3px;transition:width .5s}
+.progress-text{font-size:11px;color:#64748b;margin-top:2px}
+
+.swim-lane{border-bottom:1px solid #1e293b}
+.swim-lane-header{background:#1e293b;padding:12px 24px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.swim-lane-header:hover{background:#263548}
+.swim-lane-header .arrow{transition:transform .2s;color:#64748b;font-size:12px}
+.swim-lane-header.collapsed .arrow{transform:rotate(-90deg)}
+.swim-lane-header h3{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:#94a3b8}
+.swim-lane-header .lane-meta{margin-left:auto;display:flex;align-items:center;gap:8px}
+.swim-lane-header .lane-count{font-size:11px;color:#64748b}
+.lane-progress{width:80px;height:4px;background:#334155;border-radius:2px;overflow:hidden}
+.lane-fill{height:100%;border-radius:2px}
+
+.board{display:flex;gap:0;overflow-x:auto;min-height:80px}
+.board.hidden{display:none}
+.column{min-width:270px;flex:1;border-right:1px solid #1e293b;display:flex;flex-direction:column}
+.column:last-child{border-right:none}
+
+.col-headers{display:flex;gap:0;background:#1e293b;border-bottom:1px solid #334155}
+.col-header{min-width:270px;flex:1;padding:10px 16px;display:flex;align-items:center;gap:8px;border-right:1px solid #334155}
+.col-header:last-child{border-right:none}
+.col-header .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.col-header h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#64748b}
+.col-header .count{font-size:10px;color:#475569;margin-left:auto;background:#334155;padding:1px 7px;border-radius:8px}
+.dot-todo{background:#3b82f6}.dot-progress{background:#f59e0b}.dot-review{background:#a855f7}.dot-done{background:#10b981}
+
+.column-body{padding:8px;display:flex;flex-direction:column;gap:6px;min-height:40px}
+
+.card{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:12px;transition:all .15s;position:relative}
+.card:hover{border-color:#475569;background:#263548}
+.card .card-id{font-size:10px;color:#475569;font-family:monospace;margin-bottom:4px}
+.card .card-title{font-size:13px;font-weight:500;color:#e2e8f0;line-height:1.4;margin-bottom:6px}
+.card .card-desc{font-size:11px;color:#64748b;line-height:1.4;margin-bottom:8px}
+.card .card-footer{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.3px}
+.tag-frontend{background:#1e3a5f;color:#60a5fa}
+.tag-backend{background:#3b1f5e;color:#c084fc}
+.tag-ai{background:#1a3636;color:#34d399}
+.tag-infra{background:#3b2f1a;color:#fbbf24}
+.tag-biz{background:#3b1a2a;color:#f472b6}
+.tag-design{background:#1a2e3b;color:#67e8f9}
+.tag-blocker{background:#3b1a1a;color:#f87171}
+.tag-integration{background:#2a2a1a;color:#a3e635}
+.tag-docs{background:#2a2a3b;color:#a5b4fc}
+
+.card .assignee{margin-left:auto;display:flex;align-items:center;gap:4px}
+.avatar{width:20px;height:20px;border-radius:50%;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;border:1px solid #475569}
+.avatar-mk{background:#1e40af;color:#93c5fd}
+.avatar-jf{background:#7e22ce;color:#d8b4fe}
+
+.card .priority{position:absolute;top:0;right:12px;font-size:9px;padding:2px 6px;border-radius:0 0 4px 4px;font-weight:600}
+.priority-high{background:#dc2626;color:white}
+.priority-med{background:#d97706;color:white}
+.priority-low{background:#475569;color:#94a3b8}
+
+/* Move buttons */
+.card-actions{display:none;margin-top:8px;gap:4px;flex-wrap:wrap}
+.card:hover .card-actions{display:flex}
+.move-btn{font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid #475569;background:#334155;color:#94a3b8;cursor:pointer;transition:all .12s;white-space:nowrap}
+.move-btn:hover{background:#3b82f6;color:white;border-color:#3b82f6}
+.move-btn.move-done:hover{background:#10b981;border-color:#10b981}
+.move-btn.move-progress:hover{background:#f59e0b;border-color:#f59e0b}
+.move-btn.move-review:hover{background:#a855f7;border-color:#a855f7}
+.move-btn.move-todo:hover{background:#3b82f6;border-color:#3b82f6}
+
+.add-btn{padding:8px 12px;font-size:11px;color:#475569;cursor:pointer;display:flex;align-items:center;gap:4px;border-radius:6px;transition:all .15s;margin:4px 8px 8px}
+.add-btn:hover{background:#334155;color:#94a3b8}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:24px;width:400px;max-width:90vw}
+.modal h3{font-size:16px;margin-bottom:16px;color:#f1f5f9}
+.modal input,.modal textarea{width:100%;background:#0f172a;border:1px solid #334155;color:#e2e8f0;padding:10px 12px;border-radius:6px;font-size:13px;margin-bottom:12px;font-family:inherit}
+.modal input:focus,.modal textarea:focus{outline:none;border-color:#3b82f6}
+.modal textarea{min-height:60px;resize:vertical}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+.modal-btns button{padding:8px 16px;border-radius:6px;font-size:13px;cursor:pointer;border:none;font-weight:500}
+.btn-cancel{background:#334155;color:#94a3b8}
+.btn-cancel:hover{background:#475569}
+.btn-save{background:#3b82f6;color:white}
+.btn-save:hover{background:#2563eb}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ROBOFOLIO <span>| Platform Development</span></h1>
+  <div class="header-right">
+    <button class="filter-btn active" onclick="setFilter('all')">All</button>
+    <button class="filter-btn" onclick="setFilter('frontend')">Frontend</button>
+    <button class="filter-btn" onclick="setFilter('backend')">Backend</button>
+    <button class="filter-btn" onclick="setFilter('ai')">AI</button>
+    <button class="filter-btn" onclick="setFilter('biz')">Business</button>
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="globalProgress"></div></div>
+      <div class="progress-text"><span id="doneCount">0</span>/<span id="totalCount">0</span> tasks complete</div>
+    </div>
+  </div>
+</header>
+
+<div class="col-headers">
+  <div class="col-header"><div class="dot dot-todo"></div><h2>To Do</h2><span class="count" id="hc-todo">0</span></div>
+  <div class="col-header"><div class="dot dot-progress"></div><h2>In Progress</h2><span class="count" id="hc-progress">0</span></div>
+  <div class="col-header"><div class="dot dot-review"></div><h2>Review / Test</h2><span class="count" id="hc-review">0</span></div>
+  <div class="col-header"><div class="dot dot-done"></div><h2>Done</h2><span class="count" id="hc-done">0</span></div>
+</div>
+
+<div id="lanes"></div>
+
+<!-- Add Card Modal -->
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <h3>Add New Task</h3>
+    <input type="text" id="newTitle" placeholder="Task title..." autofocus>
+    <textarea id="newDesc" placeholder="Description (optional)..."></textarea>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveNewCard()">Add Task</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const COLS = ['todo','progress','review','done'];
+const COL_LABELS = {todo:'To Do',progress:'In Progress',review:'Review',done:'Done'};
+
+const DATA = [
+  { id:"infra", name:"Infrastructure & Deployment", color:"#f59e0b", cards:[
+    {col:"todo",id:"INF-01",title:"Deploy Flask backend to Railway/Heroku",desc:"Production deployment with env vars and HTTPS.",tags:["backend","infra"],priority:"high",assignee:"MK"},
+    {col:"todo",id:"INF-02",title:"Deploy frontend to Netlify",desc:"Connect index-ai-connected.html to live backend. Custom domain.",tags:["frontend","infra"],priority:"high",assignee:"MK"},
+    {col:"todo",id:"INF-03",title:"Set up .env and API key management",desc:"Configure ANTHROPIC_API_KEY and JINA_API_KEY for production.",tags:["infra"],priority:"high",assignee:"MK"},
+    {col:"todo",id:"INF-04",title:"Add monitoring & error tracking",desc:"Logging, uptime monitoring, error alerting for backend.",tags:["infra"],priority:"low"},
+    {col:"done",id:"INF-05",title:"Define tech stack & architecture",desc:"Flask + Netlify + Claude API + Google Sheets.",tags:["infra","docs"],assignee:"MK"},
+    {col:"done",id:"INF-06",title:"Create requirements.txt",desc:"All Python dependencies listed.",tags:["backend","infra"],assignee:"MK"},
+  ]},
+  { id:"frontend", name:"Frontend & UI", color:"#3b82f6", cards:[
+    {col:"done",id:"FE-01",title:"Connect index-ai.html to live backend",desc:"All 3 API calls connected: website analysis, photo analysis, form submission. Configurable API_BASE_URL.",tags:["frontend","integration"],priority:"high",assignee:"MK"},
+    {col:"todo",id:"FE-02",title:"Add analytics tracking",desc:"Conversion funnel: page views, form starts, step completions, submissions.",tags:["frontend","biz"],priority:"med"},
+    {col:"todo",id:"FE-03",title:"Polish partner portal UI",desc:"Complete integrator dashboard with lead pipeline management.",tags:["frontend"],priority:"med"},
+    {col:"todo",id:"FE-04",title:"Mobile responsiveness audit",desc:"Test all pages on mobile. Ensure photo upload works.",tags:["frontend","design"],priority:"med"},
+    {col:"done",id:"FE-05",title:"Basic landing page (index.html)",desc:"Bilingual DE/EN with form and Google Sheets integration.",tags:["frontend"],assignee:"MK"},
+    {col:"done",id:"FE-06",title:"AI-powered multi-step form",desc:"4-step progressive form: URL, photos, questionnaire, review.",tags:["frontend","ai"],assignee:"MK"},
+    {col:"done",id:"FE-07",title:"Partner portal prototype",desc:"Early-stage integrator dashboard with lead Kanban view.",tags:["frontend"],assignee:"MK"},
+    {col:"done",id:"FE-08",title:"Connected frontend variant",desc:"index-ai-connected.html ready for API integration.",tags:["frontend"],assignee:"MK"},
+  ]},
+  { id:"backend", name:"Backend & API", color:"#a855f7", cards:[
+    {col:"done",id:"BE-01",title:"Implement Google Sheets integration",desc:"save_to_google_sheets() — POSTs lead data to Apps Script webhook.",tags:["backend","integration"],priority:"high",assignee:"MK"},
+    {col:"done",id:"BE-02",title:"Implement PDF lead deck generation",desc:"generate_lead_deck_pdf() — Full ReportLab PDF matching Robofolio template.",tags:["backend"],priority:"high",assignee:"MK"},
+    {col:"done",id:"BE-03",title:"Implement email notifications",desc:"Bilingual DE/EN confirmation + integrator notifications with PDF attachment.",tags:["backend"],priority:"med",assignee:"MK"},
+    {col:"todo",id:"BE-04",title:"Build integrator matching algorithm",desc:"Match leads to best 3 integrators by region/industry/specialization.",tags:["backend","ai"],priority:"med"},
+    {col:"todo",id:"BE-05",title:"Add rate limiting & input validation",desc:"Protect API endpoints, validate all inputs server-side.",tags:["backend","infra"],priority:"low"},
+    {col:"done",id:"BE-06",title:"Website analysis endpoint",desc:"POST /api/analyze-website with Jina AI + Claude.",tags:["backend","ai"],assignee:"MK"},
+    {col:"done",id:"BE-07",title:"Photo analysis endpoint",desc:"POST /api/analyze-photos with Claude Vision.",tags:["backend","ai"],assignee:"MK"},
+    {col:"done",id:"BE-08",title:"Lead submission endpoint",desc:"POST /api/submit-lead with score calculation.",tags:["backend"],assignee:"MK"},
+    {col:"done",id:"BE-09",title:"Lead scoring algorithm (BANT)",desc:"0-100: Budget(30), Timeline(25), Authority(20), Tech(15), Fit(10).",tags:["backend","ai"],assignee:"MK"},
+  ]},
+  { id:"ai", name:"AI & Intelligence", color:"#10b981", cards:[
+    {col:"todo",id:"AI-01",title:"Test website extraction with 10 real sites",desc:"Validate company name, industry, location, size extraction accuracy.",tags:["ai"],priority:"high",assignee:"MK"},
+    {col:"todo",id:"AI-02",title:"Test photo analysis with real workspace images",desc:"Validate process type, dimensions, equipment extraction.",tags:["ai"],priority:"high"},
+    {col:"todo",id:"AI-03",title:"Refine AI prompts based on test results",desc:"Iterate on Claude prompts. Target >90% accuracy.",tags:["ai"],priority:"med"},
+    {col:"todo",id:"AI-04",title:"Add video analysis capability",desc:"Phase 2: accept video uploads, analyze production processes.",tags:["ai"],priority:"low"},
+    {col:"done",id:"AI-05",title:"Claude API integration (website)",desc:"Working text extraction integration.",tags:["ai","backend"],assignee:"MK"},
+    {col:"done",id:"AI-06",title:"Claude Vision integration (photos)",desc:"Working vision-capable model integration.",tags:["ai","backend"],assignee:"MK"},
+  ]},
+  { id:"biz", name:"Business & Go-to-Market", color:"#f472b6", cards:[
+    {col:"todo",id:"BIZ-01",title:"Recruit first 20 integrators",desc:"Outreach to German robotics integrators for lead commitments.",tags:["biz"],priority:"high",assignee:"JF"},
+    {col:"todo",id:"BIZ-02",title:"Beta test with 5-10 manufacturers",desc:"Real companies through full flow. Collect feedback.",tags:["biz"],priority:"high",assignee:"MK"},
+    {col:"todo",id:"BIZ-03",title:"Design email templates (DE/EN)",desc:"Manufacturer confirmation + integrator notification emails.",tags:["biz","design"],priority:"med",assignee:"JF"},
+    {col:"todo",id:"BIZ-04",title:"Set up payment processing",desc:"Integrator billing: EUR 10-15 per qualified lead.",tags:["biz","backend"],priority:"low"},
+    {col:"todo",id:"BIZ-05",title:"Build integrator database",desc:"Structured DB: regions, specializations, ratings.",tags:["biz","backend"],priority:"med"},
+    {col:"done",id:"BIZ-06",title:"Strategic plan & business model",desc:"EUR 10-15/lead, 98% margins. Documented.",tags:["biz"],assignee:"MK"},
+    {col:"done",id:"BIZ-07",title:"Competitive analysis",desc:"Benchmarked vs HowToRobot, Clutch, wlw.de.",tags:["biz"],assignee:"MK"},
+    {col:"done",id:"BIZ-08",title:"Lead capture strategy",desc:"Multi-step form, BANT framework, matching logic.",tags:["biz","docs"],assignee:"MK"},
+    {col:"done",id:"BIZ-09",title:"First real lead (Liebherr RF-2026-002)",desc:"Full lead PDF with photos, specs, BANT.",tags:["biz"],assignee:"MK"},
+  ]},
+  { id:"docs", name:"Documentation", color:"#6366f1", cards:[
+    {col:"done",id:"DOC-01",title:"Create API documentation",desc:"API_DOCUMENTATION.md — all endpoints, scoring, env vars, testing.",tags:["docs","backend"],priority:"low",assignee:"MK"},
+    {col:"done",id:"DOC-02",title:"Project summary",desc:"PROJECT_SUMMARY.md — system overview, business case.",tags:["docs"],assignee:"MK"},
+    {col:"done",id:"DOC-03",title:"AI lead capture guide",desc:"Extraction strategy, user flows, architecture.",tags:["docs","ai"],assignee:"MK"},
+    {col:"done",id:"DOC-04",title:"Implementation checklist",desc:"Step-by-step deployment, 2-3 hour timeline.",tags:["docs"],assignee:"MK"},
+    {col:"done",id:"DOC-05",title:"Setup guide & Quick start",desc:"Deployment + local dev instructions.",tags:["docs"],assignee:"MK"},
+    {col:"done",id:"DOC-06",title:"Google Sheets setup guide",desc:"Full Apps Script code and config.",tags:["docs","integration"],assignee:"MK"},
+    {col:"done",id:"DOC-07",title:"Frontend-backend connection guide",desc:"3-step guide with code examples.",tags:["docs"],assignee:"MK"},
+  ]}
+];
+
+let activeFilter = 'all';
+let addTarget = {lane:null, col:null};
+
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active',
+    (f==='all' && b.textContent==='All') || b.textContent.toLowerCase()===f));
+  render();
+}
+
+function moveCard(laneId, cardId, newCol) {
+  const lane = DATA.find(l => l.id === laneId);
+  const card = lane.cards.find(c => c.id === cardId);
+  if (card) card.col = newCol;
+  render();
+}
+
+function openAddModal(laneId, colId) {
+  addTarget = {lane: laneId, col: colId};
+  document.getElementById('addModal').classList.add('show');
+  document.getElementById('newTitle').value = '';
+  document.getElementById('newDesc').value = '';
+  setTimeout(() => document.getElementById('newTitle').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('addModal').classList.remove('show');
+}
+
+function saveNewCard() {
+  const title = document.getElementById('newTitle').value.trim();
+  if (!title) return;
+  const desc = document.getElementById('newDesc').value.trim();
+  const lane = DATA.find(l => l.id === addTarget.lane);
+  lane.cards.push({col: addTarget.col, id: 'NEW-' + Date.now(), title, desc, tags:[], priority:null});
+  closeModal();
+  render();
+}
+
+// Enter to save in modal
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Enter' && document.getElementById('addModal').classList.contains('show') && e.target.tagName !== 'TEXTAREA') saveNewCard();
+});
+
+function render() {
+  const lanesEl = document.getElementById('lanes');
+  lanesEl.innerHTML = '';
+  let gTodo=0, gProg=0, gRev=0, gDone=0, gTotal=0;
+
+  DATA.forEach(lane => {
+    const cols = {todo:[],progress:[],review:[],done:[]};
+    lane.cards.forEach(c => {
+      const visible = activeFilter === 'all' || (c.tags && c.tags.includes(activeFilter));
+      if (visible && cols[c.col]) cols[c.col].push(c);
+    });
+
+    const allCards = lane.cards;
+    const doneN = allCards.filter(c => c.col==='done').length;
+    const totalN = allCards.length;
+    const pct = totalN ? Math.round(doneN/totalN*100) : 0;
+
+    allCards.forEach(c => { gTotal++; if(c.col==='todo')gTodo++; else if(c.col==='progress')gProg++; else if(c.col==='review')gRev++; else if(c.col==='done')gDone++; });
+
+    let h = `<div class="swim-lane">
+      <div class="swim-lane-header" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('hidden')">
+        <span class="arrow">▼</span>
+        <h3>${lane.name}</h3>
+        <div class="lane-meta">
+          <span class="lane-count">${doneN}/${totalN}</span>
+          <div class="lane-progress"><div class="lane-fill" style="width:${pct}%;background:${lane.color}"></div></div>
+        </div>
+      </div>
+      <div class="board">`;
+
+    COLS.forEach(colId => {
+      h += `<div class="column"><div class="column-body">`;
+      cols[colId].forEach(card => {
+        const prioClass = card.priority==='high'?'priority-high':card.priority==='med'?'priority-med':card.priority?'priority-low':'';
+        const prioLabel = card.priority==='high'?'HIGH':card.priority==='med'?'MED':card.priority?'LOW':'';
+        const avClass = card.assignee==='MK'?'avatar-mk':card.assignee==='JF'?'avatar-jf':'';
+
+        // Move buttons — show options for OTHER columns
+        const moveBtns = COLS.filter(c => c !== colId).map(c => {
+          const cls = c==='done'?'move-done':c==='progress'?'move-progress':c==='review'?'move-review':'move-todo';
+          return `<button class="move-btn ${cls}" onclick="moveCard('${lane.id}','${card.id}','${c}')">${c==='todo'?'← To Do':c==='progress'?'→ In Progress':c==='review'?'→ Review':c==='done'?'✓ Done':c}</button>`;
+        }).join('');
+
+        h += `<div class="card">
+          ${prioLabel ? `<div class="priority ${prioClass}">${prioLabel}</div>` : ''}
+          <div class="card-id">${card.id}</div>
+          <div class="card-title">${card.title}</div>
+          ${card.desc ? `<div class="card-desc">${card.desc}</div>` : ''}
+          <div class="card-footer">
+            ${(card.tags||[]).map(t => `<span class="tag tag-${t}">${t}</span>`).join('')}
+            ${card.assignee ? `<div class="assignee"><div class="avatar ${avClass}">${card.assignee}</div></div>` : ''}
+          </div>
+          <div class="card-actions">${moveBtns}</div>
+        </div>`;
+      });
+      h += `</div><div class="add-btn" onclick="openAddModal('${lane.id}','${colId}')">+ Add task</div></div>`;
+    });
+
+    h += `</div></div>`;
+    lanesEl.innerHTML += h;
+  });
+
+  document.getElementById('hc-todo').textContent = gTodo;
+  document.getElementById('hc-progress').textContent = gProg;
+  document.getElementById('hc-review').textContent = gRev;
+  document.getElementById('hc-done').textContent = gDone;
+  document.getElementById('doneCount').textContent = gDone;
+  document.getElementById('totalCount').textContent = gTotal;
+  document.getElementById('globalProgress').style.width = (gTotal ? Math.round(gDone/gTotal*100) : 0) + '%';
+}
+
+render();
+</script>
+</body>
+</html>

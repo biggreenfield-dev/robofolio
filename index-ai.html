@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Robofolio - Find your perfect robotics partner in 2 minutes with AI">
+    <title>Robofolio - AI-Powered Robotics Marketplace</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+            background: white;
+            padding: 5px;
+            border-radius: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+        .lang-btn.active {
+            background: #1a365d;
+            color: white;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%);
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #2d5a87 0%, #1a365d 100%);
+            color: white;
+            padding: 80px 40px 60px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .hero .tagline {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+        .hero .ai-badge {
+            display: inline-block;
+            background: rgba(72, 187, 120, 0.2);
+            border: 2px solid #48bb78;
+            color: #48bb78;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* Process Flow Visualization */
+        .process-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin: 40px auto;
+            max-width: 800px;
+            flex-wrap: wrap;
+        }
+        .process-step {
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+        }
+        .process-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+        .process-arrow {
+            font-size: 32px;
+            opacity: 0.5;
+        }
+        .process-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .process-time {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        /* Form Container */
+        .form-section {
+            max-width: 900px;
+            margin: -40px auto 60px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            padding: 50px;
+            position: relative;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 40px;
+        }
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .progress-step-number {
+            width: 40px;
+            height: 40px;
+            background: #e0e0e0;
+            color: #999;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        .progress-step.active .progress-step-number {
+            background: #1a365d;
+            color: white;
+        }
+        .progress-step.completed .progress-step-number {
+            background: #48bb78;
+            color: white;
+        }
+        .progress-step.completed .progress-step-number::after {
+            content: "✓";
+        }
+        .progress-step-label {
+            font-size: 13px;
+            color: #666;
+            font-weight: 600;
+        }
+        .progress-bar {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: #48bb78;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 28px;
+            color: #1a365d;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+        .step-description {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* URL Input */
+        .url-input-container {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .url-input {
+            width: 100%;
+            padding: 18px 50px 18px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .url-input:focus {
+            outline: none;
+            border-color: #1a365d;
+            box-shadow: 0 0 0 4px rgba(26, 54, 93, 0.1);
+        }
+        .url-submit-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #1a365d;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .url-submit-btn:hover {
+            background: #2d5a87;
+        }
+        .url-submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Alternative Options */
+        .alternative-options {
+            text-align: center;
+            margin: 30px 0;
+            color: #999;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Manual Input Fallback */
+        .manual-input-toggle {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .manual-input-toggle button {
+            background: none;
+            border: none;
+            color: #1a365d;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* File Upload */
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .upload-area:hover {
+            border-color: #1a365d;
+            background: #f0f4f8;
+        }
+        .upload-area.dragover {
+            border-color: #48bb78;
+            background: #e6f4ea;
+        }
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        .upload-text {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .upload-hint {
+            font-size: 13px;
+            color: #999;
+        }
+        .uploaded-files {
+            margin-top: 20px;
+        }
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f0f4f8;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .uploaded-file-name {
+            font-weight: 600;
+            color: #1a365d;
+        }
+        .remove-file {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        /* Loading State */
+        .loading-container {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        .loading-container.active {
+            display: block;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #1a365d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-text {
+            font-size: 18px;
+            color: #1a365d;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .loading-subtext {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Extracted Data Display */
+        .extracted-data {
+            background: #e6f4ea;
+            border: 2px solid #48bb78;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .extracted-data-title {
+            font-size: 18px;
+            color: #155724;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .extracted-data-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(72, 187, 120, 0.2);
+        }
+        .extracted-data-item:last-child {
+            border-bottom: none;
+        }
+        .extracted-data-label {
+            font-size: 12px;
+            color: #155724;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+        .extracted-data-value {
+            font-size: 15px;
+            color: #1a365d;
+            font-weight: 600;
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 25px;
+        }
+        .form-label {
+            display: block;
+            font-weight: 700;
+            color: #1a365d;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .form-label .required {
+            color: #e53e3e;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #1a365d;
+            box-shadow: 0 0 0 4px rgba(26, 54, 93, 0.1);
+        }
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Radio/Checkbox Groups */
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .radio-option:hover, .checkbox-option:hover {
+            border-color: #1a365d;
+            background: #f8f9fa;
+        }
+        .radio-option input[type="radio"],
+        .checkbox-option input[type="checkbox"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .radio-option.selected, .checkbox-option.selected {
+            border-color: #1a365d;
+            background: #f0f4f8;
+        }
+
+        /* Navigation Buttons */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 15px;
+        }
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: #1a365d;
+            color: white;
+            flex: 1;
+        }
+        .btn-primary:hover {
+            background: #2d5a87;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(26, 54, 93, 0.3);
+        }
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: transparent;
+            color: #1a365d;
+            border: 2px solid #1a365d;
+        }
+        .btn-secondary:hover {
+            background: #f0f4f8;
+        }
+        .btn-skip {
+            background: none;
+            color: #999;
+            text-decoration: underline;
+            border: none;
+            padding: 16px;
+        }
+
+        /* Review Screen */
+        .review-section {
+            margin-bottom: 30px;
+        }
+        .review-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .review-section-title {
+            font-size: 20px;
+            color: #1a365d;
+            font-weight: 800;
+        }
+        .review-edit-btn {
+            background: none;
+            border: none;
+            color: #1a365d;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .review-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+        }
+        .review-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .review-item:last-child {
+            border-bottom: none;
+        }
+        .review-item-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 3px;
+        }
+        .review-item-value {
+            font-size: 15px;
+            color: #1a365d;
+            font-weight: 600;
+        }
+
+        /* Success Message */
+        .success-container {
+            display: none;
+            text-align: center;
+            padding: 60px 40px;
+        }
+        .success-container.active {
+            display: block;
+        }
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        .success-title {
+            font-size: 32px;
+            color: #1a365d;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+        .success-message {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .hero .tagline { font-size: 18px; }
+            .form-section { padding: 30px 20px; }
+            .process-flow { flex-direction: column; gap: 15px; }
+            .process-arrow { transform: rotate(90deg); }
+            .form-navigation { flex-direction: column; }
+            .btn { width: 100%; }
+        }
+
+        [data-lang]:not([data-lang="de"]) {
+            display: none;
+        }
+        html[lang="en"] [data-lang]:not([data-lang="en"]) {
+            display: none;
+        }
+        html[lang="en"] [data-lang="en"] {
+            display: block;
+        }
+        html[lang="de"] [data-lang="de"] {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Language Toggle -->
+    <div class="lang-toggle">
+        <button class="lang-btn active" data-lang-btn="de" onclick="switchLanguage('de')">DE</button>
+        <button class="lang-btn" data-lang-btn="en" onclick="switchLanguage('en')">EN</button>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">ROBOFOLIO</div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="ai-badge" data-lang="de">🤖 KI-gestützt</div>
+        <div class="ai-badge" data-lang="en">🤖 AI-Powered</div>
+
+        <h1 data-lang="de">Finden Sie Ihren perfekten Robotik-Partner<br>in 2 Minuten</h1>
+        <h1 data-lang="en">Find Your Perfect Robotics Partner<br>in 2 Minutes</h1>
+
+        <p class="tagline" data-lang="de">Zeigen Sie uns einfach Ihre Firma — unsere KI erledigt den Rest</p>
+        <p class="tagline" data-lang="en">Just show us your company — our AI handles the rest</p>
+
+        <div class="process-flow">
+            <div class="process-step">
+                <div class="process-icon">🌐</div>
+                <div class="process-label" data-lang="de">Website-URL</div>
+                <div class="process-label" data-lang="en">Website URL</div>
+                <div class="process-time" data-lang="de">10 Sekunden</div>
+                <div class="process-time" data-lang="en">10 seconds</div>
+            </div>
+            <div class="process-arrow">→</div>
+            <div class="process-step">
+                <div class="process-icon">🤖</div>
+                <div class="process-label" data-lang="de">KI-Analyse</div>
+                <div class="process-label" data-lang="en">AI Analysis</div>
+                <div class="process-time" data-lang="de">30 Sekunden</div>
+                <div class="process-time" data-lang="en">30 seconds</div>
+            </div>
+            <div class="process-arrow">→</div>
+            <div class="process-step">
+                <div class="process-icon">📄</div>
+                <div class="process-label" data-lang="de">Perfekte Matches</div>
+                <div class="process-label" data-lang="en">Perfect Matches</div>
+                <div class="process-time" data-lang="de">48 Stunden</div>
+                <div class="process-time" data-lang="en">48 hours</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-step active" data-step="1">
+                    <div class="progress-step-number">1</div>
+                    <div class="progress-step-label" data-lang="de">Firma</div>
+                    <div class="progress-step-label" data-lang="en">Company</div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="progress-step-number">2</div>
+                    <div class="progress-step-label" data-lang="de">Prozess</div>
+                    <div class="progress-step-label" data-lang="en">Process</div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="progress-step-number">3</div>
+                    <div class="progress-step-label" data-lang="de">Details</div>
+                    <div class="progress-step-label" data-lang="en">Details</div>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <div class="progress-step-number">4</div>
+                    <div class="progress-step-label" data-lang="de">Prüfen</div>
+                    <div class="progress-step-label" data-lang="en">Review</div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+        </div>
+
+        <!-- Form Steps -->
+        <form id="leadForm" novalidate>
+            <!-- Step 1: Company Website -->
+            <div class="form-step active" data-step="1">
+                <h2 class="step-title" data-lang="de">Erzählen Sie uns von Ihrer Firma</h2>
+                <h2 class="step-title" data-lang="en">Tell Us About Your Company</h2>
+
+                <p class="step-description" data-lang="de">Geben Sie einfach Ihre Firmen-Website ein — unsere KI extrahiert automatisch alle relevanten Informationen.</p>
+                <p class="step-description" data-lang="en">Simply enter your company website — our AI will automatically extract all relevant information.</p>
+
+                <div class="url-input-container">
+                    <input
+                        type="url"
+                        class="url-input"
+                        id="websiteUrl"
+                        placeholder="https://www.ihre-firma.de"
+                        data-placeholder-de="https://www.ihre-firma.de"
+                        data-placeholder-en="https://www.your-company.com"
+                    >
+                    <button type="button" class="url-submit-btn" id="analyzeWebsiteBtn" data-lang="de">Analysieren</button>
+                    <button type="button" class="url-submit-btn" id="analyzeWebsiteBtn" data-lang="en">Analyze</button>
+                </div>
+
+                <div class="loading-container" id="websiteLoading">
+                    <div class="spinner"></div>
+                    <div class="loading-text" data-lang="de">🤖 KI analysiert Ihre Website...</div>
+                    <div class="loading-text" data-lang="en">🤖 AI is analyzing your website...</div>
+                    <div class="loading-subtext" data-lang="de">Dies dauert ca. 30 Sekunden</div>
+                    <div class="loading-subtext" data-lang="en">This takes about 30 seconds</div>
+                </div>
+
+                <div class="extracted-data hidden" id="extractedCompanyData">
+                    <div class="extracted-data-title">
+                        <span>✓</span>
+                        <span data-lang="de">KI hat folgende Informationen extrahiert:</span>
+                        <span data-lang="en">AI extracted the following information:</span>
+                    </div>
+                    <div class="extracted-data-item">
+                        <div class="extracted-data-label" data-lang="de">Firmenname</div>
+                        <div class="extracted-data-label" data-lang="en">Company Name</div>
+                        <div class="extracted-data-value" id="extracted-company-name">—</div>
+                    </div>
+                    <div class="extracted-data-item">
+                        <div class="extracted-data-label" data-lang="de">Branche</div>
+                        <div class="extracted-data-label" data-lang="en">Industry</div>
+                        <div class="extracted-data-value" id="extracted-industry">—</div>
+                    </div>
+                    <div class="extracted-data-item">
+                        <div class="extracted-data-label" data-lang="de">Standort</div>
+                        <div class="extracted-data-label" data-lang="en">Location</div>
+                        <div class="extracted-data-value" id="extracted-location">—</div>
+                    </div>
+                    <div class="extracted-data-item">
+                        <div class="extracted-data-label" data-lang="de">Unternehmensgröße</div>
+                        <div class="extracted-data-label" data-lang="en">Company Size</div>
+                        <div class="extracted-data-value" id="extracted-size">—</div>
+                    </div>
+                </div>
+
+                <div class="alternative-options" data-lang="de">ODER</div>
+                <div class="alternative-options" data-lang="en">OR</div>
+
+                <div class="manual-input-toggle">
+                    <button type="button" onclick="showManualInput()" data-lang="de">Ich habe keine Website — Daten manuell eingeben</button>
+                    <button type="button" onclick="showManualInput()" data-lang="en">I don't have a website — Enter data manually</button>
+                </div>
+
+                <!-- Manual Input Fields (hidden by default) -->
+                <div id="manualInputFields" class="hidden" style="margin-top: 30px;">
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Firmenname <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en">Company Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="manual-company-name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Branche <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en">Industry <span class="required">*</span></label>
+                        <select class="form-select" id="manual-industry">
+                            <option value="" data-lang="de">Bitte wählen...</option>
+                            <option value="" data-lang="en">Please select...</option>
+                            <option value="automotive">Automotive</option>
+                            <option value="food-beverage" data-lang="de">Lebensmittel & Getränke</option>
+                            <option value="food-beverage" data-lang="en">Food & Beverage</option>
+                            <option value="logistics" data-lang="de">Logistik</option>
+                            <option value="logistics" data-lang="en">Logistics</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="pharmaceutical" data-lang="de">Pharmazie</option>
+                            <option value="pharmaceutical" data-lang="en">Pharmaceutical</option>
+                            <option value="machinery" data-lang="de">Maschinenbau</option>
+                            <option value="machinery" data-lang="en">Machinery</option>
+                            <option value="other" data-lang="de">Andere</option>
+                            <option value="other" data-lang="en">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Standort (Stadt, Region) <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en">Location (City, Region) <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="manual-location">
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-primary" onclick="nextStep()" id="step1NextBtn" data-lang="de">Weiter</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()" id="step1NextBtn" data-lang="en">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Process Photos -->
+            <div class="form-step" data-step="2">
+                <h2 class="step-title" data-lang="de">Zeigen Sie uns Ihren aktuellen Prozess</h2>
+                <h2 class="step-title" data-lang="en">Show Us Your Current Process</h2>
+
+                <p class="step-description" data-lang="de">Optional: Laden Sie 2-5 Fotos Ihres Arbeitsplatzes hoch, damit wir Ihre Anforderungen besser verstehen.</p>
+                <p class="step-description" data-lang="en">Optional: Upload 2-5 photos of your workspace so we can better understand your needs.</p>
+
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('photoUpload').click()">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text" data-lang="de">Fotos hochladen oder hierher ziehen</div>
+                    <div class="upload-text" data-lang="en">Upload photos or drag them here</div>
+                    <div class="upload-hint" data-lang="de">JPG, PNG, HEIC • Max. 10 MB pro Foto</div>
+                    <div class="upload-hint" data-lang="en">JPG, PNG, HEIC • Max. 10 MB per photo</div>
+                    <input type="file" id="photoUpload" accept="image/*" multiple style="display: none;">
+                </div>
+
+                <div class="uploaded-files" id="uploadedFiles"></div>
+
+                <div class="loading-container" id="photoLoading">
+                    <div class="spinner"></div>
+                    <div class="loading-text" data-lang="de">🤖 KI analysiert Ihre Fotos...</div>
+                    <div class="loading-text" data-lang="en">🤖 AI is analyzing your photos...</div>
+                    <div class="loading-subtext" data-lang="de">Dies kann bis zu 1 Minute dauern</div>
+                    <div class="loading-subtext" data-lang="en">This may take up to 1 minute</div>
+                </div>
+
+                <div class="extracted-data hidden" id="extractedPhotoData">
+                    <div class="extracted-data-title">
+                        <span>✓</span>
+                        <span data-lang="de">KI hat folgende Informationen extrahiert:</span>
+                        <span data-lang="en">AI extracted the following information:</span>
+                    </div>
+                    <div class="extracted-data-item">
+                        <div class="extracted-data-label" data-lang="de">Prozesstyp</div>
+                        <div class="extracted-data-label" data-lang="en">Process Type</div>
+                        <div class="extracted-data-value" id="extracted-process-type">—</div>
+                    </div>
+                    <div class="extracted-data-item">
+                        <div class="extracted-data-label" data-lang="de">Arbeitsbereich</div>
+                        <div class="extracted-data-label" data-lang="en">Workspace</div>
+                        <div class="extracted-data-value" id="extracted-workspace">—</div>
+                    </div>
+                    <div class="extracted-data-item">
+                        <div class="extracted-data-label" data-lang="de">Umgebung</div>
+                        <div class="extracted-data-label" data-lang="en">Environment</div>
+                        <div class="extracted-data-value" id="extracted-environment">—</div>
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="de">Zurück</button>
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="en">Back</button>
+                    <button type="button" class="btn btn-skip" onclick="nextStep()" data-lang="de">Überspringen</button>
+                    <button type="button" class="btn btn-skip" onclick="nextStep()" data-lang="en">Skip</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()" data-lang="de">Weiter</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()" data-lang="en">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Smart Questionnaire -->
+            <div class="form-step" data-step="3">
+                <h2 class="step-title" data-lang="de">Noch ein paar Details</h2>
+                <h2 class="step-title" data-lang="en">Just a Few More Details</h2>
+
+                <p class="step-description" data-lang="de">Beantworten Sie einige Fragen, die wir nicht automatisch ermitteln konnten.</p>
+                <p class="step-description" data-lang="en">Answer a few questions we couldn't determine automatically.</p>
+
+                <!-- Dynamic questions will be inserted here -->
+                <div id="dynamicQuestions">
+                    <!-- Project Goal -->
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Was ist Ihr Hauptziel mit diesem Projekt? <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en">What is your primary goal with this project? <span class="required">*</span></label>
+                        <select class="form-select" id="primary-goal" required>
+                            <option value="" data-lang="de">Bitte wählen...</option>
+                            <option value="" data-lang="en">Please select...</option>
+                            <option value="throughput" data-lang="de">Durchsatz erhöhen</option>
+                            <option value="throughput" data-lang="en">Increase throughput</option>
+                            <option value="quality" data-lang="de">Qualität verbessern</option>
+                            <option value="quality" data-lang="en">Improve quality</option>
+                            <option value="costs" data-lang="de">Arbeitskosten senken</option>
+                            <option value="costs" data-lang="en">Reduce labor costs</option>
+                            <option value="safety" data-lang="de">Sicherheit verbessern</option>
+                            <option value="safety" data-lang="en">Improve safety</option>
+                            <option value="consistency" data-lang="de">Konsistenz verbessern</option>
+                            <option value="consistency" data-lang="en">Improve consistency</option>
+                            <option value="other" data-lang="de">Andere</option>
+                            <option value="other" data-lang="en">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Wann möchten Sie dieses Projekt umsetzen? <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en">When do you want to implement this project? <span class="required">*</span></label>
+                        <div class="radio-group" id="timeline-group">
+                            <label class="radio-option">
+                                <input type="radio" name="timeline" value="0-3months">
+                                <span data-lang="de">Innerhalb 3 Monaten</span>
+                                <span data-lang="en">Within 3 months</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="timeline" value="3-6months">
+                                <span data-lang="de">3-6 Monate</span>
+                                <span data-lang="en">3-6 months</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="timeline" value="6-12months">
+                                <span data-lang="de">6-12 Monate</span>
+                                <span data-lang="en">6-12 months</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="timeline" value="12+months">
+                                <span data-lang="de">12+ Monate</span>
+                                <span data-lang="en">12+ months</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Budget -->
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Geschätzte Budgetspanne <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en">Estimated Budget Range <span class="required">*</span></label>
+                        <select class="form-select" id="budget-range" required>
+                            <option value="" data-lang="de">Bitte wählen...</option>
+                            <option value="" data-lang="en">Please select...</option>
+                            <option value="50-100k">€50K - €100K</option>
+                            <option value="100-250k">€100K - €250K</option>
+                            <option value="250-500k">€250K - €500K</option>
+                            <option value="500k+">€500K+</option>
+                            <option value="unsure" data-lang="de">Unsicher</option>
+                            <option value="unsure" data-lang="en">Unsure</option>
+                        </select>
+                    </div>
+
+                    <!-- Budget Status -->
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Budget-Status <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en">Budget Status <span class="required">*</span></label>
+                        <div class="radio-group" id="budget-status-group">
+                            <label class="radio-option">
+                                <input type="radio" name="budget-status" value="approved">
+                                <span data-lang="de">Budget genehmigt</span>
+                                <span data-lang="en">Budget approved</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="budget-status" value="in-process">
+                                <span data-lang="de">In Genehmigung</span>
+                                <span data-lang="en">In approval process</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="budget-status" value="need-roi">
+                                <span data-lang="de">Benötige ROI-Begründung</span>
+                                <span data-lang="en">Need ROI justification</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="budget-status" value="researching">
+                                <span data-lang="de">Recherchiere Kosten</span>
+                                <span data-lang="en">Researching costs</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Decision Authority -->
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Wer trifft die Entscheidung? <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en">Who makes the decision? <span class="required">*</span></label>
+                        <div class="radio-group" id="authority-group">
+                            <label class="radio-option">
+                                <input type="radio" name="authority" value="decision-maker">
+                                <span data-lang="de">Ich bin der Entscheidungsträger</span>
+                                <span data-lang="en">I'm the decision maker</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="authority" value="1-approval">
+                                <span data-lang="de">Benötige 1 Genehmigung</span>
+                                <span data-lang="en">Need 1 approval</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="authority" value="2+-approvals">
+                                <span data-lang="de">Benötige 2+ Genehmigungen</span>
+                                <span data-lang="en">Need 2+ approvals</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="authority" value="committee">
+                                <span data-lang="de">Komitee-Entscheidung</span>
+                                <span data-lang="en">Committee decision</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Ihr Name <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en">Your Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="contact-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Ihre Position <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en">Your Title <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="contact-title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email <span class="required">*</span></label>
+                        <input type="email" class="form-input" id="contact-email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Telefon</label>
+                        <label class="form-label" data-lang="en">Phone</label>
+                        <input type="tel" class="form-input" id="contact-phone">
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="de">Zurück</button>
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="en">Back</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()" data-lang="de">Weiter zur Überprüfung</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep()" data-lang="en">Continue to Review</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Review -->
+            <div class="form-step" data-step="4">
+                <h2 class="step-title" data-lang="de">Überprüfen Sie Ihr Projekt-Profil</h2>
+                <h2 class="step-title" data-lang="en">Review Your Project Profile</h2>
+
+                <p class="step-description" data-lang="de">Stellen Sie sicher, dass alle Informationen korrekt sind, bevor wir Sie mit Integratoren verbinden.</p>
+                <p class="step-description" data-lang="en">Make sure all information is correct before we match you with integrators.</p>
+
+                <div id="reviewContent">
+                    <!-- Review sections will be generated dynamically -->
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="de">Zurück</button>
+                    <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="en">Back</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn" data-lang="de">Partner finden</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn" data-lang="en">Get My Matches</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Success Message + Profile Builder -->
+        <div class="success-container" id="successContainer">
+            <div class="success-icon">✓</div>
+            <div class="success-title" data-lang="de">Vielen Dank!</div>
+            <div class="success-title" data-lang="en">Thank You!</div>
+            <div class="success-message" data-lang="de">
+                Wir haben Ihr Projekt erhalten und suchen jetzt nach passenden Integratoren.
+            </div>
+            <div class="success-message" data-lang="en">
+                We've received your project and are now searching for matching integrators.
+            </div>
+
+            <!-- Profile Builder -->
+            <div style="background:#f0f4f8;border-radius:16px;padding:35px;margin-top:30px;text-align:left;max-width:500px;margin-left:auto;margin-right:auto;">
+                <h3 style="font-size:20px;color:#1a365d;margin-bottom:6px;font-weight:800;">
+                    <span data-lang="de">Ihr Kundenprofil erstellen</span>
+                    <span data-lang="en">Create Your Profile</span>
+                </h3>
+                <p style="font-size:14px;color:#666;margin-bottom:24px;">
+                    <span data-lang="de">Erstellen Sie Ihr Profil, um den Status Ihres Gesuchs live zu verfolgen.</span>
+                    <span data-lang="en">Set up your profile to track your request status in real time.</span>
+                </p>
+
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;font-weight:700;color:#1a365d;margin-bottom:6px;font-size:13px;">
+                        <span data-lang="de">Ihr Name</span>
+                        <span data-lang="en">Your Name</span>
+                    </label>
+                    <input type="text" id="profile-name" style="width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:inherit;">
+                </div>
+
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;font-weight:700;color:#1a365d;margin-bottom:6px;font-size:13px;">
+                        <span data-lang="de">Firma</span>
+                        <span data-lang="en">Company</span>
+                    </label>
+                    <input type="text" id="profile-company" style="width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:inherit;background:#e8ecf1;color:#4a5568;" readonly>
+                </div>
+
+                <div style="margin-bottom:24px;">
+                    <label style="display:block;font-weight:700;color:#1a365d;margin-bottom:6px;font-size:13px;">Email</label>
+                    <input type="email" id="profile-email" style="width:100%;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;font-family:inherit;">
+                </div>
+
+                <button type="button" id="goToPortalBtn" onclick="goToPortal()" style="width:100%;padding:16px;background:#1a365d;color:white;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.3s;">
+                    <span data-lang="de">Zum Kundenportal →</span>
+                    <span data-lang="en">Go to My Portal →</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // API Configuration — auto-detects local vs production
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5001'
+            : 'https://robofolio-api.onrender.com';
+
+        // Global state
+        let formData = {
+            currentStep: 1,
+            extractedData: {},
+            userInputs: {}
+        };
+
+        // Language switching
+        function switchLanguage(lang) {
+            document.documentElement.lang = lang;
+            localStorage.setItem('preferredLanguage', lang);
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-lang-btn="${lang}"]`).classList.add('active');
+
+            updatePlaceholders(lang);
+        }
+
+        function updatePlaceholders(lang) {
+            document.querySelectorAll('[data-placeholder-de]').forEach(field => {
+                const placeholder = field.getAttribute(`data-placeholder-${lang}`);
+                if (placeholder) field.placeholder = placeholder;
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferredLanguage') || 'de';
+            switchLanguage(savedLang);
+        });
+
+        // Step navigation
+        function nextStep() {
+            if (formData.currentStep < 4) {
+                // Validate current step before proceeding
+                if (!validateStep(formData.currentStep)) {
+                    return;
+                }
+
+                formData.currentStep++;
+                updateSteps();
+
+                // Generate review if on step 4
+                if (formData.currentStep === 4) {
+                    generateReview();
+                }
+            }
+        }
+
+        function prevStep() {
+            if (formData.currentStep > 1) {
+                formData.currentStep--;
+                updateSteps();
+            }
+        }
+
+        function updateSteps() {
+            // Update progress steps
+            document.querySelectorAll('.progress-step').forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                step.classList.remove('active', 'completed');
+                if (stepNum === formData.currentStep) {
+                    step.classList.add('active');
+                } else if (stepNum < formData.currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+
+            // Update progress bar
+            const progress = ((formData.currentStep - 1) / 3) * 100;
+            document.getElementById('progressBarFill').style.width = progress + '%';
+
+            // Show/hide form steps
+            document.querySelectorAll('.form-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.querySelector(`.form-step[data-step="${formData.currentStep}"]`).classList.add('active');
+
+            // Scroll to top
+            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function validateStep(step) {
+            // Add validation logic for each step
+            // For now, just return true
+            return true;
+        }
+
+        // Website analysis
+        document.getElementById('analyzeWebsiteBtn').addEventListener('click', async function() {
+            const url = document.getElementById('websiteUrl').value;
+
+            if (!url) {
+                alert(document.documentElement.lang === 'de' ?
+                    'Bitte geben Sie eine Website-URL ein' :
+                    'Please enter a website URL');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('websiteLoading').classList.add('active');
+            this.disabled = true;
+
+            try {
+                // Real API call to backend
+                const response = await fetch(`${API_BASE_URL}/api/analyze-website`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+
+                const result = await response.json();
+                if (!response.ok || !result.success) {
+                    throw new Error(result.error || `Server error (${response.status})`);
+                }
+
+                const extracted = {
+                    companyName: result.data.company_name || 'Unknown',
+                    industry: result.data.industry || 'Unknown',
+                    location: result.data.location || 'Unknown',
+                    size: result.data.company_size || 'Unknown'
+                };
+
+                formData.extractedData = { ...formData.extractedData, ...extracted };
+
+                // Display extracted data
+                document.getElementById('extracted-company-name').textContent = extracted.companyName;
+                document.getElementById('extracted-industry').textContent = extracted.industry;
+                document.getElementById('extracted-location').textContent = extracted.location;
+                document.getElementById('extracted-size').textContent = extracted.size;
+
+                document.getElementById('extractedCompanyData').classList.remove('hidden');
+
+            } catch (error) {
+                console.error('Error analyzing website:', error);
+                const isConnectionError = error.message === 'Failed to fetch' || error.name === 'TypeError';
+                let errorMsg;
+                if (isConnectionError) {
+                    errorMsg = document.documentElement.lang === 'de'
+                        ? 'Verbindung zum Backend fehlgeschlagen.\n\nBitte stellen Sie sicher, dass der Server läuft:\npython backend_api.py'
+                        : 'Could not connect to backend.\n\nMake sure the server is running:\npython backend_api.py';
+                } else {
+                    errorMsg = document.documentElement.lang === 'de'
+                        ? `Fehler bei der Analyse:\n${error.message}`
+                        : `Analysis error:\n${error.message}`;
+                }
+                alert(errorMsg);
+            } finally {
+                document.getElementById('websiteLoading').classList.remove('active');
+                this.disabled = false;
+            }
+        });
+
+        // Manual input toggle
+        function showManualInput() {
+            document.getElementById('manualInputFields').classList.remove('hidden');
+            document.getElementById('websiteUrl').disabled = true;
+            document.getElementById('analyzeWebsiteBtn').disabled = true;
+        }
+
+        // Photo upload
+        const uploadArea = document.getElementById('uploadArea');
+        const photoUpload = document.getElementById('photoUpload');
+        let uploadedPhotos = [];
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        photoUpload.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        async function handleFiles(files) {
+            const fileArray = Array.from(files).slice(0, 5); // Max 5 photos
+            uploadedPhotos = uploadedPhotos.concat(fileArray);
+
+            // Display uploaded files
+            const container = document.getElementById('uploadedFiles');
+            container.innerHTML = '';
+
+            uploadedPhotos.forEach((file, index) => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'uploaded-file';
+                fileDiv.innerHTML = `
+                    <span class="uploaded-file-name">${file.name}</span>
+                    <button type="button" class="remove-file" onclick="removeFile(${index})">×</button>
+                `;
+                container.appendChild(fileDiv);
+            });
+
+            // Analyze photos with AI
+            if (uploadedPhotos.length > 0) {
+                await analyzePhotos();
+            }
+        }
+
+        function removeFile(index) {
+            uploadedPhotos.splice(index, 1);
+            handleFiles([]);
+        }
+
+        async function analyzePhotos() {
+            document.getElementById('photoLoading').classList.add('active');
+
+            try {
+                // Real API call to backend
+                const photoFormData = new FormData();
+                uploadedPhotos.forEach(file => photoFormData.append('photos', file));
+
+                const response = await fetch(`${API_BASE_URL}/api/analyze-photos`, {
+                    method: 'POST',
+                    body: photoFormData
+                });
+
+                if (!response.ok) throw new Error('Photo analysis failed');
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error || 'Analysis failed');
+
+                const extracted = {
+                    processType: result.data.process_type || 'Unknown',
+                    workspace: result.data.workspace_dimensions || 'Unknown',
+                    environment: result.data.environment_type || 'Unknown'
+                };
+
+                formData.extractedData = { ...formData.extractedData, ...extracted };
+
+                document.getElementById('extracted-process-type').textContent = extracted.processType;
+                document.getElementById('extracted-workspace').textContent = extracted.workspace;
+                document.getElementById('extracted-environment').textContent = extracted.environment;
+
+                document.getElementById('extractedPhotoData').classList.remove('hidden');
+
+            } catch (error) {
+                console.error('Error analyzing photos:', error);
+            } finally {
+                document.getElementById('photoLoading').classList.remove('active');
+            }
+        }
+
+        // Radio button selection styling
+        document.querySelectorAll('.radio-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+
+                // Remove selected class from siblings
+                this.parentElement.querySelectorAll('.radio-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+
+        // Generate review
+        function generateReview() {
+            const reviewContent = document.getElementById('reviewContent');
+            const lang = document.documentElement.lang;
+
+            // Collect all data
+            const allData = {
+                ...formData.extractedData,
+                primaryGoal: document.getElementById('primary-goal').value,
+                timeline: document.querySelector('input[name="timeline"]:checked')?.value,
+                budgetRange: document.getElementById('budget-range').value,
+                budgetStatus: document.querySelector('input[name="budget-status"]:checked')?.value,
+                authority: document.querySelector('input[name="authority"]:checked')?.value,
+                contactName: document.getElementById('contact-name').value,
+                contactTitle: document.getElementById('contact-title').value,
+                contactEmail: document.getElementById('contact-email').value,
+                contactPhone: document.getElementById('contact-phone').value
+            };
+
+            reviewContent.innerHTML = `
+                <div class="review-section">
+                    <div class="review-section-header">
+                        <h3 class="review-section-title">${lang === 'de' ? 'Firma' : 'Company'}</h3>
+                        <button type="button" class="review-edit-btn" onclick="editStep(1)">${lang === 'de' ? 'Bearbeiten' : 'Edit'}</button>
+                    </div>
+                    <div class="review-content">
+                        <div class="review-item">
+                            <div class="review-item-label">${lang === 'de' ? 'Firmenname' : 'Company Name'}</div>
+                            <div class="review-item-value">${allData.companyName || '—'}</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-item-label">${lang === 'de' ? 'Branche' : 'Industry'}</div>
+                            <div class="review-item-value">${allData.industry || '—'}</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-item-label">${lang === 'de' ? 'Standort' : 'Location'}</div>
+                            <div class="review-item-value">${allData.location || '—'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-section">
+                    <div class="review-section-header">
+                        <h3 class="review-section-title">${lang === 'de' ? 'Projekt' : 'Project'}</h3>
+                        <button type="button" class="review-edit-btn" onclick="editStep(3)">${lang === 'de' ? 'Bearbeiten' : 'Edit'}</button>
+                    </div>
+                    <div class="review-content">
+                        <div class="review-item">
+                            <div class="review-item-label">${lang === 'de' ? 'Hauptziel' : 'Primary Goal'}</div>
+                            <div class="review-item-value">${allData.primaryGoal || '—'}</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-item-label">${lang === 'de' ? 'Zeitrahmen' : 'Timeline'}</div>
+                            <div class="review-item-value">${allData.timeline || '—'}</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-item-label">${lang === 'de' ? 'Budget' : 'Budget'}</div>
+                            <div class="review-item-value">${allData.budgetRange || '—'} (${allData.budgetStatus || '—'})</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-item-label">${lang === 'de' ? 'Entscheidungsträger' : 'Decision Maker'}</div>
+                            <div class="review-item-value">${allData.authority || '—'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-section">
+                    <div class="review-section-header">
+                        <h3 class="review-section-title">${lang === 'de' ? 'Kontakt' : 'Contact'}</h3>
+                        <button type="button" class="review-edit-btn" onclick="editStep(3)">${lang === 'de' ? 'Bearbeiten' : 'Edit'}</button>
+                    </div>
+                    <div class="review-content">
+                        <div class="review-item">
+                            <div class="review-item-label">${lang === 'de' ? 'Name' : 'Name'}</div>
+                            <div class="review-item-value">${allData.contactName || '—'} (${allData.contactTitle || '—'})</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-item-label">Email</div>
+                            <div class="review-item-value">${allData.contactEmail || '—'}</div>
+                        </div>
+                        <div class="review-item">
+                            <div class="review-item-label">${lang === 'de' ? 'Telefon' : 'Phone'}</div>
+                            <div class="review-item-value">${allData.contactPhone || '—'}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function editStep(stepNum) {
+            formData.currentStep = stepNum;
+            updateSteps();
+        }
+
+        // Form submission
+        document.getElementById('leadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = document.documentElement.lang === 'de' ? 'Wird gesendet...' : 'Submitting...';
+
+            try {
+                // Collect all form data with correct field names for backend
+                const ext = formData.extractedData;
+                const leadData = {
+                    company_name: ext.companyName || '',
+                    industry: ext.industry || '',
+                    location: ext.location || '',
+                    company_size: ext.size || '',
+                    process_type: ext.processType || '',
+                    workspace_dimensions: ext.workspace || '',
+                    environment_type: ext.environment || '',
+                    primary_goal: document.getElementById('primary-goal').value || '',
+                    timeline: document.querySelector('input[name="timeline"]:checked')?.value || '',
+                    budget_range: document.getElementById('budget-range').value || '',
+                    budget_status: document.querySelector('input[name="budget-status"]:checked')?.value || '',
+                    authority: document.querySelector('input[name="authority"]:checked')?.value || '',
+                    contact_name: document.getElementById('contact-name').value || '',
+                    contact_title: document.getElementById('contact-title').value || '',
+                    contact_email: document.getElementById('contact-email').value || '',
+                    contact_phone: document.getElementById('contact-phone').value || '',
+                    language: document.documentElement.lang
+                };
+                console.log('Submitting lead data:', leadData);
+
+                // Real API call to backend
+                const response = await fetch(`${API_BASE_URL}/api/submit-lead`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(leadData)
+                });
+
+                if (!response.ok) throw new Error('Submission failed');
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error || 'Submission failed');
+
+                console.log('Lead submitted:', result.lead_id, 'Score:', result.lead_score);
+
+                // Store lead data for portal
+                const portalData = {
+                    lead_id: result.lead_id,
+                    lead_score: result.lead_score,
+                    ...leadData,
+                    status: 'searching',
+                    submitted_at: new Date().toISOString()
+                };
+                localStorage.setItem('robofolio_lead', JSON.stringify(portalData));
+
+                // Pre-fill profile form
+                document.getElementById('profile-name').value = leadData.contact_name || '';
+                document.getElementById('profile-company').value = leadData.company_name || '';
+                document.getElementById('profile-email').value = leadData.contact_email || '';
+
+                // Show success message + profile form
+                document.getElementById('leadForm').style.display = 'none';
+                document.querySelector('.progress-container').style.display = 'none';
+                document.getElementById('successContainer').classList.add('active');
+
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert(document.documentElement.lang === 'de' ?
+                    'Fehler beim Senden. Bitte versuchen Sie es erneut.' :
+                    'Error submitting. Please try again.');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Portal redirect
+        function goToPortal() {
+            const name = document.getElementById('profile-name').value.trim();
+            const email = document.getElementById('profile-email').value.trim();
+            if (!name || !email) {
+                alert(document.documentElement.lang === 'de'
+                    ? 'Bitte füllen Sie Name und Email aus.'
+                    : 'Please fill in your name and email.');
+                return;
+            }
+            // Update stored lead data with profile info
+            const lead = JSON.parse(localStorage.getItem('robofolio_lead') || '{}');
+            lead.profile_name = name;
+            lead.profile_email = email;
+            lead.profile_company = document.getElementById('profile-company').value;
+            localStorage.setItem('robofolio_lead', JSON.stringify(lead));
+            window.location.href = 'portal.html';
+        }
+    </script>
+</body>
+</html>
