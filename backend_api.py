@@ -858,14 +858,357 @@ Lead ID: {lead_id}
     return sent_count > 0
 
 
+# ---------------------------------------------------------------------------
+# Cobot Solution Database & Matching
+# ---------------------------------------------------------------------------
+
+def load_cobot_database():
+    """Load the cobot solution database from JSON file"""
+    db_path = os.path.join(os.path.dirname(__file__), 'cobot_database.json')
+    try:
+        with open(db_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error loading cobot database: {e}")
+        return None
+
+
+@app.route('/api/solutions/categories', methods=['GET'])
+def get_categories():
+    """Return available solution categories and matching fields"""
+    db = load_cobot_database()
+    if not db:
+        return jsonify({'success': False, 'error': 'Database not available'}), 500
+
+    # Build category summaries with counts and price ranges
+    category_info = {}
+    for sol in db['solutions']:
+        cat = sol.get('Kategorie', '')
+        if cat not in category_info:
+            category_info[cat] = {'count': 0, 'prices': [], 'providers': set()}
+        category_info[cat]['count'] += 1
+        price = sol.get('Preis ca. (EUR)')
+        if price:
+            try:
+                category_info[cat]['prices'].append(float(str(price).replace('.', '').replace(',', '.')))
+            except (ValueError, TypeError):
+                pass
+        provider = sol.get('Lösungsanbieter', '')
+        if provider:
+            category_info[cat]['providers'].add(provider)
+
+    categories = []
+    cat_labels_de = {
+        'Schweißen': {'icon': '🔥', 'label_en': 'Welding'},
+        'Palettierung': {'icon': '📦', 'label_en': 'Palletizing'},
+        'Maschinenbeschickung': {'icon': '⚙️', 'label_en': 'Machine Tending'},
+        'Kleben / Dosieren': {'icon': '💧', 'label_en': 'Gluing / Dispensing'},
+        'Verschrauben': {'icon': '🔩', 'label_en': 'Screw Driving'},
+        'Inspektion / Vision': {'icon': '👁️', 'label_en': 'Inspection / Vision'},
+        'Lackieren': {'icon': '🎨', 'label_en': 'Painting'},
+    }
+    for cat, info in category_info.items():
+        prices = info['prices']
+        meta = cat_labels_de.get(cat, {'icon': '🤖', 'label_en': cat})
+        categories.append({
+            'name': cat,
+            'name_en': meta['label_en'],
+            'icon': meta['icon'],
+            'solution_count': info['count'],
+            'provider_count': len(info['providers']),
+            'price_range': {
+                'min': int(min(prices)) if prices else None,
+                'max': int(max(prices)) if prices else None,
+            }
+        })
+
+    return jsonify({
+        'success': True,
+        'categories': sorted(categories, key=lambda x: x['solution_count'], reverse=True),
+        'matching_fields': db.get('matching_fields', []),
+        'total_solutions': len(db['solutions']),
+        'total_partners': len(db.get('german_partners', []))
+    })
+
+
+@app.route('/api/match-solutions', methods=['POST'])
+def match_solutions():
+    """
+    Direct Search: Match solutions based on user specifications.
+    Expects JSON with: category, max_weight, reach, precision, environment, budget, industry
+    """
+    try:
+        data = request.get_json()
+        category = data.get('category', '')
+        max_weight = data.get('max_weight')
+        budget_max = data.get('budget_max')
+        industry = data.get('industry', '')
+        region = data.get('region', 'Europa')
+
+        db = load_cobot_database()
+        if not db:
+            return jsonify({'success': False, 'error': 'Database not available'}), 500
+
+        # Filter solutions
+        matches = []
+        for sol in db['solutions']:
+            score = 0
+            reasons = []
+
+            # Category match (required)
+            if category and sol.get('Kategorie', '').lower() != category.lower():
+                continue
+            score += 40
+            reasons.append(f"Kategorie: {sol.get('Kategorie')}")
+
+            # Region preference
+            sol_region = sol.get('Region') or ''
+            if region and sol_region and sol_region.lower() == region.lower():
+                score += 10
+                reasons.append(f"Region: {sol_region}")
+
+            # Payload capacity check
+            sol_payload = sol.get('Max. Nutzlast (kg)')
+            if max_weight and sol_payload:
+                try:
+                    payload_val = float(str(sol_payload).replace(',', '.'))
+                    weight_val = float(max_weight)
+                    if payload_val >= weight_val:
+                        score += 20
+                        reasons.append(f"Nutzlast {payload_val} kg ≥ {weight_val} kg")
+                    else:
+                        score -= 10
+                        reasons.append(f"Nutzlast {payload_val} kg < {weight_val} kg (knapp)")
+                except (ValueError, TypeError):
+                    pass
+
+            # Budget check
+            sol_price = sol.get('Preis ca. (EUR)')
+            if budget_max and sol_price:
+                try:
+                    price_val = float(str(sol_price).replace('.', '').replace(',', '.'))
+                    budget_val = float(str(budget_max).replace('.', '').replace(',', '.'))
+                    if price_val <= budget_val:
+                        score += 20
+                        reasons.append(f"Preis €{int(price_val):,} im Budget")
+                    elif price_val <= budget_val * 1.2:
+                        score += 10
+                        reasons.append(f"Preis €{int(price_val):,} knapp über Budget")
+                    else:
+                        score -= 5
+                        reasons.append(f"Preis €{int(price_val):,} über Budget")
+                except (ValueError, TypeError):
+                    pass
+
+            # Industry fit
+            if industry and sol.get('Brancheneignung'):
+                eignung = (sol.get('Brancheneignung') or '').lower()
+                if industry.lower() in eignung or 'alle' in eignung or 'universal' in eignung:
+                    score += 10
+                    reasons.append("Branche passt")
+
+            matches.append({
+                'solution': {
+                    'id': sol.get('ID'),
+                    'name': sol.get('Lösungsname'),
+                    'provider': sol.get('Lösungsanbieter'),
+                    'category': sol.get('Kategorie'),
+                    'robot': sol.get('Roboter inklusive'),
+                    'manufacturer': sol.get('Cobot-Hersteller'),
+                    'payload_kg': sol.get('Max. Nutzlast (kg)'),
+                    'components': sol.get('Enthaltene Komponenten'),
+                    'software': sol.get('Software'),
+                    'price_eur': sol.get('Preis ca. (EUR)'),
+                    'setup_time': sol.get('Einrichtungszeit'),
+                    'roi_months': sol.get('ROI (Monate)'),
+                    'industries': sol.get('Brancheneignung'),
+                    'features': sol.get('Besondere Merkmale'),
+                    'website': sol.get('Website'),
+                },
+                'match_score': max(0, min(100, score)),
+                'match_reasons': reasons,
+            })
+
+        # Sort by score descending, return top 5
+        matches.sort(key=lambda x: x['match_score'], reverse=True)
+        top_matches = matches[:5]
+
+        # Find matching German partners for the category
+        partners = []
+        for p in db.get('german_partners', []):
+            branche = (p.get('Branche') or '').lower()
+            cat_lower = (category or '').lower()
+            if cat_lower in branche or 'robotik' in branche or 'automation' in branche:
+                partners.append({
+                    'name': p.get('Partner'),
+                    'region': p.get('Region'),
+                    'opportunities': p.get('Anz. Opportunities'),
+                    'rank': p.get('Rang'),
+                })
+            if len(partners) >= 3:
+                break
+
+        return jsonify({
+            'success': True,
+            'matches': top_matches,
+            'total_in_category': len([s for s in db['solutions'] if (s.get('Kategorie') or '').lower() == (category or '').lower()]),
+            'suggested_partners': partners,
+        })
+
+    except Exception as e:
+        print(f"Error in match-solutions: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/discovery-analysis', methods=['POST'])
+def discovery_analysis():
+    """
+    Discovery Path: AI analyzes company website/photos and identifies automation potential.
+    Uses Claude to map findings to solution categories from the database.
+    """
+    try:
+        data = request.get_json()
+        website_data = data.get('website_analysis', {})
+        photo_analysis = data.get('photo_analysis', '')
+        company_info = data.get('company_info', {})
+
+        if not ANTHROPIC_API_KEY:
+            return jsonify({'success': False, 'error': 'API key not configured'}), 500
+
+        db = load_cobot_database()
+        if not db:
+            return jsonify({'success': False, 'error': 'Database not available'}), 500
+
+        # Build context about available solutions
+        categories_summary = {}
+        for sol in db['solutions']:
+            cat = sol.get('Kategorie', '')
+            if cat not in categories_summary:
+                categories_summary[cat] = {
+                    'solutions': [],
+                    'price_range': [],
+                    'roi_range': [],
+                }
+            categories_summary[cat]['solutions'].append(sol.get('Lösungsname', ''))
+            price = sol.get('Preis ca. (EUR)')
+            if price:
+                try:
+                    categories_summary[cat]['price_range'].append(float(str(price).replace('.', '').replace(',', '.')))
+                except:
+                    pass
+            roi = sol.get('ROI (Monate)')
+            if roi:
+                categories_summary[cat]['roi_range'].append(str(roi))
+
+        cat_context = ""
+        for cat, info in categories_summary.items():
+            prices = info['price_range']
+            price_str = f"€{int(min(prices)):,} – €{int(max(prices)):,}" if prices else "auf Anfrage"
+            cat_context += f"\n- {cat}: {len(info['solutions'])} Lösungen, Preis {price_str}, ROI {', '.join(set(info['roi_range']))}"
+
+        discovery_prompt = f"""Du bist ein Automatisierungsberater für Robofolio, einen Marktplatz für Robotik-Komplettlösungen.
+
+Analysiere die folgenden Informationen über ein Unternehmen und identifiziere konkrete Automatisierungspotenziale.
+
+UNTERNEHMENSDATEN:
+- Branche: {company_info.get('industry', 'Unbekannt')}
+- Größe: {company_info.get('company_size', 'Unbekannt')}
+- Produkte: {company_info.get('main_products', 'Unbekannt')}
+- Aktueller Automatisierungsgrad: {company_info.get('automation_level', 'Unbekannt')}
+
+WEBSITE-ANALYSE:
+{json.dumps(website_data, ensure_ascii=False, indent=2)[:3000]}
+
+FOTO-ANALYSE:
+{photo_analysis[:3000] if photo_analysis else 'Keine Fotos analysiert'}
+
+VERFÜGBARE LÖSUNGSKATEGORIEN:{cat_context}
+
+Antworte als JSON mit folgendem Format:
+{{
+  "automation_potential": "high" | "medium" | "low",
+  "summary_de": "Kurze Zusammenfassung des Automatisierungspotenzials (2-3 Sätze, Deutsch)",
+  "summary_en": "Short summary of automation potential (2-3 sentences, English)",
+  "opportunities": [
+    {{
+      "category": "Exakte Kategorie aus der Liste oben",
+      "title_de": "Konkreter Anwendungsfall (Deutsch)",
+      "title_en": "Specific use case (English)",
+      "description_de": "Warum diese Automatisierung sinnvoll ist (Deutsch)",
+      "description_en": "Why this automation makes sense (English)",
+      "estimated_roi_months": "10-14",
+      "priority": "high" | "medium" | "low",
+      "estimated_savings_percent": 30
+    }}
+  ],
+  "recommended_next_steps_de": ["Schritt 1", "Schritt 2"],
+  "recommended_next_steps_en": ["Step 1", "Step 2"]
+}}
+
+Identifiziere 2-4 konkrete Automatisierungsmöglichkeiten basierend auf der Branche und den verfügbaren Daten. Sei realistisch und spezifisch."""
+
+        message = client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=3000,
+            messages=[{"role": "user", "content": discovery_prompt}]
+        )
+
+        response_text = message.content[0].text
+        if '```json' in response_text:
+            response_text = response_text.split('```json')[1].split('```')[0]
+        elif '```' in response_text:
+            response_text = response_text.split('```')[1].split('```')[0]
+
+        analysis = json.loads(response_text.strip())
+
+        # Enrich opportunities with solution data from DB
+        for opp in analysis.get('opportunities', []):
+            cat = opp.get('category', '')
+            matching_solutions = [s for s in db['solutions'] if s.get('Kategorie', '') == cat]
+            opp['available_solutions'] = len(matching_solutions)
+            if matching_solutions:
+                prices = []
+                for s in matching_solutions:
+                    p = s.get('Preis ca. (EUR)')
+                    if p:
+                        try:
+                            prices.append(float(str(p).replace('.', '').replace(',', '.')))
+                        except:
+                            pass
+                if prices:
+                    opp['price_range'] = {'min': int(min(prices)), 'max': int(max(prices))}
+                # Include top solution name
+                opp['top_solution'] = matching_solutions[0].get('Lösungsname', '')
+
+        return jsonify({
+            'success': True,
+            'analysis': analysis,
+            'database_info': {
+                'total_solutions': len(db['solutions']),
+                'total_categories': len(db['categories']),
+                'total_partners': len(db.get('german_partners', [])),
+            }
+        })
+
+    except json.JSONDecodeError as e:
+        print(f"JSON parse error in discovery: {e}")
+        return jsonify({'success': False, 'error': 'Could not parse AI response'}), 500
+    except Exception as e:
+        print(f"Error in discovery-analysis: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
 @app.route('/health', methods=['GET'])
 def health():
     """Health check endpoint"""
+    db = load_cobot_database()
     return jsonify({
         'status': 'healthy',
         'service': 'robofolio-api',
         'api_key_configured': bool(ANTHROPIC_API_KEY),
-        'environment': 'production' if IS_PRODUCTION else 'development'
+        'environment': 'production' if IS_PRODUCTION else 'development',
+        'database_loaded': db is not None,
+        'solutions_count': len(db['solutions']) if db else 0,
     })
 
 

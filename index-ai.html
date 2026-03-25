@@ -3,29 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Robofolio — Finden Sie den passenden Robotik-Integrator in 2 Minuten per KI-Matching">
-    <title>Robofolio — KI-gestützter Robotik-Marktplatz</title>
+    <meta name="description" content="Robofolio — Finden Sie den passenden Robotik-Integrator. Automatisierung beginnt hier.">
+    <title>Robofolio — Automatisierung beginnt hier.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        :root {
+            --primary: #0A2840;
+            --primary-light: #1E2F3A;
+            --accent: #009DDB;
+            --accent-hover: #0088c2;
+            --signal: #00B894;
+            --signal-hover: #00a07f;
+            --bg-white: #FFFFFF;
+            --bg-light: #F5F7F9;
+            --bg-muted: #E6EAEE;
+            --text-primary: #000000;
+            --text-secondary: #6F7C86;
+            --text-muted: #B8C7D3;
+            --border: #E6EAEE;
+        }
+
         body {
-            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #ffffff;
-            color: #1a1a2e;
+            font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+            background: var(--bg-white);
+            color: var(--text-primary);
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* ===== NAVIGATION ===== */
         nav {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             z-index: 1000;
-            background: transparent;
+            background: rgba(10, 40, 64, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             transition: all 0.3s ease;
             padding: 0 48px;
             height: 72px;
@@ -36,18 +53,35 @@
 
         nav.scrolled {
             background: rgba(255, 255, 255, 0.97);
-            box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+            box-shadow: 0 1px 0 var(--border);
         }
 
-        .logo {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: 1px;
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
             color: white;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 0.5px;
             transition: color 0.3s ease;
         }
 
-        nav.scrolled .logo { color: #1a1a2e; }
+        nav.scrolled .logo-text { color: var(--primary); }
 
         .nav-right {
             display: flex;
@@ -58,60 +92,55 @@
         .lang-toggle {
             display: flex;
             gap: 2px;
-            background: rgba(255,255,255,0.15);
-            padding: 4px;
-            border-radius: 4px;
+            background: rgba(255,255,255,0.12);
+            padding: 3px;
         }
 
-        nav.scrolled .lang-toggle { background: #f0f0f0; }
+        nav.scrolled .lang-toggle { background: var(--bg-muted); }
 
         .lang-btn {
-            padding: 6px 12px;
+            padding: 5px 10px;
             border: none;
             background: transparent;
             cursor: pointer;
-            border-radius: 3px;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 12px;
-            color: rgba(255,255,255,0.7);
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: rgba(255,255,255,0.6);
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.3px;
             transition: all 0.2s ease;
         }
 
-        nav.scrolled .lang-btn { color: #666; }
+        nav.scrolled .lang-btn { color: var(--text-secondary); }
 
         .lang-btn.active {
-            background: #00B0F0;
+            background: var(--accent);
             color: white;
         }
 
         .nav-cta {
             padding: 10px 24px;
-            background: #EC671A;
+            background: var(--signal);
             color: white;
             border: none;
-            border-radius: 0;
             font-weight: 700;
             font-size: 13px;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Inter', sans-serif;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             transition: background 0.2s ease;
         }
 
-        .nav-cta:hover { background: #d45a15; }
+        .nav-cta:hover { background: var(--signal-hover); }
 
-        /* ===== HERO SECTION ===== */
+        /* ===== HERO ===== */
         .hero {
             position: relative;
             min-height: 100vh;
             display: flex;
             align-items: center;
             overflow: hidden;
-            background: #0b1929;
+            background: var(--primary);
         }
 
         .hero-bg {
@@ -121,7 +150,6 @@
             overflow: hidden;
         }
 
-        /* Video background — replace src with your MP4 when ready */
         .hero-bg video {
             position: absolute;
             top: 50%; left: 50%;
@@ -134,26 +162,23 @@
 
         .hero-bg video.active-video { opacity: 1; }
 
-        /* Fallback gradient when no video loads */
         .hero-bg-fallback {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
             background:
-                radial-gradient(ellipse at 30% 50%, rgba(0,176,240,0.15) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 80%, rgba(236,103,26,0.1) 0%, transparent 50%),
-                linear-gradient(160deg, #0b1929 0%, #142d44 40%, #0f2236 100%);
+                radial-gradient(ellipse at 20% 50%, rgba(0,157,219,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(0,184,148,0.08) 0%, transparent 50%),
+                linear-gradient(160deg, #0A2840 0%, #132f47 40%, #0d2538 100%);
         }
 
-        /* Animated dots pattern overlay */
         .hero-bg-fallback::after {
             content: '';
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-image:
-                radial-gradient(circle, rgba(0,176,240,0.08) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-image: radial-gradient(circle, rgba(0,157,219,0.06) 1px, transparent 1px);
+            background-size: 48px 48px;
         }
 
         .hero-overlay {
@@ -162,9 +187,9 @@
             width: 100%; height: 100%;
             background: linear-gradient(
                 to right,
-                rgba(11,25,41,0.85) 0%,
-                rgba(11,25,41,0.6) 50%,
-                rgba(11,25,41,0.4) 100%
+                rgba(10,40,64,0.88) 0%,
+                rgba(10,40,64,0.65) 50%,
+                rgba(10,40,64,0.45) 100%
             );
             z-index: 2;
         }
@@ -172,8 +197,8 @@
         .hero-content {
             position: relative;
             z-index: 3;
-            max-width: 700px;
-            padding: 120px 48px 80px;
+            max-width: 660px;
+            padding: 140px 48px 100px;
             animation: fadeInUp 0.7s ease-out;
         }
 
@@ -182,113 +207,97 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero-label {
+        .hero-overline {
             display: inline-block;
-            color: #00B0F0;
-            font-weight: 700;
-            font-size: 13px;
+            color: var(--signal);
+            font-weight: 600;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 20px;
         }
 
         .hero h1 {
-            font-size: 52px;
-            font-weight: 900;
-            line-height: 1.1;
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.15;
             color: white;
             margin-bottom: 20px;
         }
 
-        .hero h1 span {
-            color: #00B0F0;
-        }
+        .hero h1 span { color: var(--accent); }
 
-        .hero p {
-            font-size: 18px;
+        .hero-sub {
+            font-size: 17px;
             font-weight: 400;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.75);
             margin-bottom: 40px;
             line-height: 1.7;
-            max-width: 540px;
+            max-width: 520px;
         }
 
         .hero-actions {
             display: flex;
-            gap: 16px;
-            align-items: center;
+            gap: 14px;
             flex-wrap: wrap;
         }
 
-        .btn-hero-primary {
-            padding: 16px 40px;
-            background: #00B0F0;
-            color: white;
+        .btn-hero {
+            padding: 15px 36px;
             border: none;
-            border-radius: 0;
             font-size: 14px;
             font-weight: 700;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Inter', sans-serif;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: background 0.2s ease;
-        }
-
-        .btn-hero-primary:hover { background: #009dd6; }
-
-        .btn-hero-secondary {
-            padding: 16px 40px;
-            background: transparent;
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 0;
-            font-size: 14px;
-            font-weight: 700;
-            font-family: 'Montserrat', sans-serif;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.3px;
             transition: all 0.2s ease;
         }
 
-        .btn-hero-secondary:hover {
-            border-color: white;
-            background: rgba(255,255,255,0.05);
+        .btn-hero-accent {
+            background: var(--accent);
+            color: white;
         }
 
-        /* ===== STATS BAR ===== */
+        .btn-hero-accent:hover { background: var(--accent-hover); }
+
+        .btn-hero-ghost {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.25);
+        }
+
+        .btn-hero-ghost:hover { border-color: white; }
+
+        /* ===== STATS ===== */
         .stats-bar {
-            background: #f7f8fa;
-            border-bottom: 1px solid #e8eaed;
-            padding: 40px 48px;
+            background: var(--primary);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 48px;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 32px;
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
-        .stat-item {
-            text-align: center;
-        }
+        .stat-item { text-align: center; }
 
         .stat-number {
-            font-size: 36px;
-            font-weight: 900;
-            color: #00B0F0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
             margin-bottom: 4px;
         }
 
         .stat-label {
             font-size: 13px;
-            font-weight: 600;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.3px;
         }
 
         /* ===== HOW IT WORKS ===== */
@@ -298,10 +307,10 @@
             margin: 0 auto;
         }
 
-        .section-label {
-            color: #00B0F0;
-            font-weight: 700;
-            font-size: 13px;
+        .overline {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 12px;
@@ -309,85 +318,84 @@
 
         .section-title {
             font-size: 36px;
-            font-weight: 900;
-            color: #1a1a2e;
-            margin-bottom: 16px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.2;
         }
 
-        .section-subtitle {
+        .section-sub {
             font-size: 16px;
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 48px;
-            max-width: 600px;
+            max-width: 560px;
             line-height: 1.7;
         }
 
         .steps-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
+            gap: 32px;
         }
 
         .step-card {
-            padding: 32px;
-            background: #f7f8fa;
-            border-left: 3px solid #00B0F0;
+            padding: 32px 28px;
+            background: var(--bg-light);
+            border-top: 3px solid var(--accent);
             transition: all 0.2s ease;
         }
 
-        .step-card:hover {
-            background: #f0f6ff;
-        }
+        .step-card:hover { background: #eef5fa; }
 
         .step-num {
-            font-size: 48px;
-            font-weight: 900;
-            color: #00B0F0;
-            opacity: 0.3;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--accent);
+            opacity: 0.25;
             margin-bottom: 16px;
             line-height: 1;
         }
 
         .step-card h3 {
-            font-size: 18px;
-            font-weight: 800;
-            color: #1a1a2e;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--primary);
             margin-bottom: 8px;
         }
 
         .step-card p {
             font-size: 14px;
-            color: #666;
+            color: var(--text-secondary);
             line-height: 1.6;
         }
 
         /* ===== FORM SECTION ===== */
         .form-section {
-            background: #f7f8fa;
+            background: var(--bg-light);
             padding: 80px 48px;
         }
 
         .form-container {
             background: white;
-            max-width: 800px;
+            max-width: 780px;
             margin: 0 auto;
-            padding: 56px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            padding: 52px;
+            box-shadow: 0 1px 12px rgba(0,0,0,0.05);
         }
 
-        /* Progress Bar */
-        .progress-container { margin-bottom: 48px; }
+        .progress-container { margin-bottom: 44px; }
 
         .progress-bar-wrapper {
-            background: #e8eaed;
+            background: var(--bg-muted);
             height: 3px;
             overflow: hidden;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         #progressBarFill {
             height: 100%;
-            background: #00B0F0;
+            background: var(--accent);
             width: 0%;
             transition: width 0.4s ease;
         }
@@ -395,56 +403,53 @@
         .progress-steps {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
+            gap: 12px;
         }
 
         .progress-step {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .progress-step-circle {
-            width: 36px;
-            height: 36px;
-            border-radius: 0;
-            background: #e8eaed;
-            border: 2px solid #e8eaed;
+            width: 34px; height: 34px;
+            background: var(--bg-muted);
+            border: 2px solid var(--bg-muted);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 800;
-            color: #999;
-            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-size: 13px;
             transition: all 0.3s ease;
         }
 
         .progress-step.active .progress-step-circle {
-            background: #00B0F0;
-            border-color: #00B0F0;
+            background: var(--accent);
+            border-color: var(--accent);
             color: white;
         }
 
         .progress-step.completed .progress-step-circle {
-            background: #2ecc71;
-            border-color: #2ecc71;
+            background: var(--signal);
+            border-color: var(--signal);
             color: white;
         }
 
         .progress-step-label {
-            font-size: 12px;
-            font-weight: 700;
-            color: #999;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .progress-step.active .progress-step-label { color: #00B0F0; }
-        .progress-step.completed .progress-step-label { color: #2ecc71; }
+        .progress-step.active .progress-step-label { color: var(--accent); }
+        .progress-step.completed .progress-step-label { color: var(--signal); }
 
-        /* Form Steps */
         .form-step { display: none; animation: fadeIn 0.3s ease; }
         .form-step.active { display: block; }
 
@@ -453,80 +458,97 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .step-title {
-            font-size: 28px;
-            font-weight: 900;
-            color: #1a1a2e;
+        .step-title { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+        .step-description { font-size: 15px; color: var(--text-secondary); margin-bottom: 32px; }
+
+        .path-selection {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .path-card {
+            padding: 32px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .path-card:hover {
+            border-color: var(--accent);
+            background: rgba(0, 157, 219, 0.04);
+        }
+
+        .path-card.selected {
+            border-color: var(--accent);
+            background: rgba(0, 157, 219, 0.04);
+        }
+
+        .path-card-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .path-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
             margin-bottom: 8px;
         }
 
-        .step-description {
-            font-size: 15px;
-            color: #666;
-            margin-bottom: 36px;
+        .path-card-description {
+            font-size: 13px;
+            color: var(--text-secondary);
             line-height: 1.6;
         }
 
-        /* Form Groups */
-        .form-group { margin-bottom: 24px; }
+        .form-group { margin-bottom: 22px; }
 
         .form-label {
             display: block;
             font-size: 12px;
-            font-weight: 800;
-            color: #1a1a2e;
+            font-weight: 600;
+            color: var(--primary);
             margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .required { color: #EC671A; }
+        .required { color: var(--accent); }
 
-        .form-input,
-        .form-textarea,
-        .form-select {
+        .form-input, .form-textarea, .form-select {
             width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #d0d4da;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
             border-radius: 0;
             font-size: 15px;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Inter', sans-serif;
             transition: all 0.2s ease;
             background: #fff;
-            color: #1a1a2e;
+            color: var(--text-primary);
         }
 
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
             outline: none;
-            border-color: #00B0F0;
-            box-shadow: 0 0 0 2px rgba(0,176,240,0.15);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(0,157,219,0.12);
         }
 
-        .form-textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
+        .form-textarea { resize: vertical; min-height: 100px; }
 
-        /* Website Analysis */
-        .website-input-group {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 12px;
-        }
-
-        #analyzeWebsiteBtn { padding: 14px 28px; }
+        .website-input-group { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+        #analyzeWebsiteBtn { padding: 12px 24px; }
 
         .loading-spinner { display: none; text-align: center; padding: 28px; }
         .loading-spinner.active { display: block; }
 
         .spinner {
-            border: 3px solid #e8eaed;
-            border-top: 3px solid #00B0F0;
+            border: 3px solid var(--bg-muted);
+            border-top: 3px solid var(--accent);
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
+            width: 28px; height: 28px;
             animation: spin 1s linear infinite;
             margin: 0 auto 12px;
         }
@@ -534,10 +556,10 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .extracted-data {
-            background: #f7f8fa;
-            border-left: 3px solid #00B0F0;
-            padding: 24px;
-            margin: 24px 0;
+            background: var(--bg-light);
+            border-left: 3px solid var(--accent);
+            padding: 20px;
+            margin: 20px 0;
             display: none;
         }
 
@@ -548,314 +570,404 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #e8eaed;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
         }
 
         .extracted-data-item:last-child { border-bottom: none; }
 
-        .extracted-data-label {
+        .extracted-data-label { font-weight: 600; color: var(--primary); font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .extracted-data-value { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 700; font-size: 14px; }
+
+        .manual-input-toggle { margin-top: 14px; }
+        .manual-input-toggle button { background: none; border: none; color: var(--accent); font-weight: 600; cursor: pointer; font-size: 13px; text-decoration: underline; font-family: 'Inter', sans-serif; }
+        .manual-input-toggle button:hover { color: var(--signal); }
+
+        #manualInputFields { background: var(--bg-light); padding: 20px; margin-top: 16px; display: none; }
+        #manualInputFields.hidden { display: none; }
+        #manualInputFields:not(.hidden) { display: block; }
+
+        .upload-area { border: 2px dashed var(--border); padding: 36px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: var(--bg-light); margin-bottom: 20px; }
+        .upload-area:hover { border-color: var(--accent); background: #f0f7fb; }
+        .upload-area.dragover { border-color: var(--accent); background: rgba(0,157,219,0.04); }
+
+        .upload-icon { font-size: 36px; margin-bottom: 10px; }
+        .upload-text { font-size: 15px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+        .upload-subtext { font-size: 13px; color: var(--text-secondary); }
+
+        #photoUpload { display: none; }
+        #uploadedFiles { display: grid; gap: 8px; margin-bottom: 20px; }
+
+        .uploaded-file { background: var(--bg-light); border-left: 3px solid var(--signal); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+        .uploaded-file-name { font-size: 13px; font-weight: 600; color: var(--primary); }
+        .remove-file { background: none; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; }
+        .remove-file:hover { color: #e74c3c; }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .category-card {
+            padding: 20px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .category-card:hover {
+            border-color: var(--accent);
+            background: rgba(0, 157, 219, 0.04);
+        }
+
+        .category-card.selected {
+            border-color: var(--accent);
+            background: rgba(0, 157, 219, 0.04);
+        }
+
+        .category-card-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .category-card-name {
+            font-size: 14px;
             font-weight: 700;
-            color: #1a1a2e;
-            font-size: 13px;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .category-card-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .results-header {
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .results-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .opportunity-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .opportunity-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 2px 8px rgba(0,157,219,0.1);
+        }
+
+        .opportunity-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .opportunity-card-title-wrap {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .opportunity-card-icon {
+            font-size: 20px;
+        }
+
+        .opportunity-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .opportunity-card-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 8px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
 
-        .extracted-data-value {
-            color: #00B0F0;
-            font-weight: 800;
+        .opportunity-card-badge.high {
+            background: rgba(0, 184, 148, 0.15);
+            color: #00a07f;
         }
 
-        .manual-input-toggle { margin-top: 16px; }
+        .opportunity-card-badge.medium {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ff9800;
+        }
 
-        .manual-input-toggle button {
-            background: none;
-            border: none;
-            color: #00B0F0;
-            font-weight: 700;
-            cursor: pointer;
+        .opportunity-card-badge.low {
+            background: rgba(244, 67, 54, 0.15);
+            color: #d32f2f;
+        }
+
+        .opportunity-card-description {
             font-size: 13px;
-            text-decoration: underline;
-            font-family: 'Montserrat', sans-serif;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.6;
         }
 
-        .manual-input-toggle button:hover { color: #EC671A; }
-
-        #manualInputFields {
-            background: #f7f8fa;
-            padding: 24px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        #manualInputFields.hidden { display: none; }
-        #manualInputFields:not(.hidden) { display: block; }
-
-        /* Photo Upload */
-        .upload-area {
-            border: 2px dashed #d0d4da;
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background: #f7f8fa;
-            margin-bottom: 24px;
-        }
-
-        .upload-area:hover { border-color: #00B0F0; background: #f0f6ff; }
-        .upload-area.dragover { border-color: #00B0F0; background: rgba(0,176,240,0.05); }
-
-        .upload-icon { font-size: 40px; margin-bottom: 12px; }
-        .upload-text { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
-        .upload-subtext { font-size: 13px; color: #999; }
-
-        #photoUpload { display: none; }
-
-        #uploadedFiles { display: grid; gap: 8px; margin-bottom: 24px; }
-
-        .uploaded-file {
-            background: #f7f8fa;
-            border-left: 3px solid #2ecc71;
-            padding: 12px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .uploaded-file-name { font-size: 13px; font-weight: 700; color: #1a1a2e; }
-
-        .remove-file {
-            background: none;
-            border: none;
-            color: #999;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .remove-file:hover { color: #e74c3c; }
-
-        /* Radio Options */
-        .radio-group {
+        .opportunity-card-meta {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin: 12px 0 24px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
         }
 
-        .radio-option {
-            position: relative;
-            display: block;
-            padding: 16px;
-            border: 1px solid #d0d4da;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background: white;
-        }
-
-        .radio-option input[type="radio"] { position: absolute; opacity: 0; }
-
-        .radio-option span {
-            display: block;
-            font-weight: 700;
-            font-size: 13px;
-            color: #1a1a2e;
-        }
-
-        .radio-option:hover { border-color: #00B0F0; background: #f0f6ff; }
-
-        .radio-option.selected {
-            border-color: #00B0F0;
-            background: rgba(0,176,240,0.05);
-        }
-
-        .radio-option.selected span { color: #00B0F0; }
-
-        /* Form Navigation */
-        .form-navigation {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 48px;
-            padding-top: 32px;
-            border-top: 1px solid #e8eaed;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 16px 36px;
-            border: none;
-            border-radius: 0;
-            font-size: 13px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Montserrat', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-primary {
-            background: #00B0F0;
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) { background: #009dd6; }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .btn-secondary {
-            background: white;
-            color: #1a1a2e;
-            border: 1px solid #d0d4da;
-        }
-
-        .btn-secondary:hover:not(:disabled) { border-color: #00B0F0; color: #00B0F0; }
-        .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .btn-orange {
-            background: #EC671A;
-            color: white;
-        }
-
-        .btn-orange:hover:not(:disabled) { background: #d45a15; }
-
-        /* Review Section */
-        .review-section {
-            background: #f7f8fa;
-            padding: 24px;
-            margin-bottom: 20px;
-            border-left: 3px solid #00B0F0;
-        }
-
-        .review-section-header {
+        .opportunity-meta-item {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #e8eaed;
+            flex-direction: column;
         }
 
-        .review-section-title {
-            font-size: 16px;
-            font-weight: 900;
-            color: #1a1a2e;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .review-edit-btn {
-            background: none;
-            border: none;
-            color: #00B0F0;
-            font-weight: 800;
-            cursor: pointer;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .review-edit-btn:hover { color: #EC671A; }
-
-        .review-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .review-item { display: flex; flex-direction: column; }
-
-        .review-item-label {
+        .opportunity-meta-label {
             font-size: 11px;
-            font-weight: 800;
-            color: #999;
+            font-weight: 600;
+            color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
             margin-bottom: 4px;
         }
 
-        .review-item-value {
-            font-size: 15px;
+        .opportunity-meta-value {
+            font-size: 13px;
             font-weight: 700;
-            color: #1a1a2e;
+            color: var(--accent);
         }
 
-        /* Success Container */
-        .success-container { display: none; text-align: center; padding: 60px 40px; }
-        .success-container.active { display: block; }
+        .solution-card {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
 
-        .success-icon {
-            width: 72px;
-            height: 72px;
-            background: #2ecc71;
-            color: white;
+        .solution-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 2px 8px rgba(0,157,219,0.1);
+        }
+
+        .solution-card-header {
+            margin-bottom: 12px;
+        }
+
+        .solution-card-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .solution-card-provider {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .solution-card-meta {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .solution-meta-item {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            margin: 0 auto 20px;
-            animation: scaleIn 0.4s ease;
+            flex-direction: column;
         }
 
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
+        .solution-meta-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
         }
 
-        .success-title { font-size: 28px; font-weight: 900; color: #1a1a2e; margin-bottom: 8px; }
-        .success-message { font-size: 15px; color: #666; margin-bottom: 24px; line-height: 1.6; max-width: 480px; margin-left: auto; margin-right: auto; }
-
-        /* ===== FOOTER ===== */
-        footer {
-            background: #0b1929;
-            color: white;
-            padding: 48px;
-            text-align: center;
+        .solution-meta-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
         }
 
-        footer p { font-size: 13px; opacity: 0.6; }
+        .match-score-bar {
+            background: var(--bg-muted);
+            height: 6px;
+            overflow: hidden;
+            border-radius: 3px;
+        }
 
-        /* ===== RESPONSIVE ===== */
+        .match-score-fill {
+            background: var(--accent);
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .potential-badge {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 16px;
+        }
+
+        .potential-badge.high {
+            background: rgba(0, 184, 148, 0.15);
+            color: #00a07f;
+        }
+
+        .potential-badge.medium {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ff9800;
+        }
+
+        .potential-badge.low {
+            background: rgba(244, 67, 54, 0.15);
+            color: #d32f2f;
+        }
+
+        .partner-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .partner-card-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .partner-card-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .radio-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin: 10px 0 22px; }
+        .radio-option { position: relative; display: block; padding: 14px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s ease; background: white; }
+        .radio-option input[type="radio"] { position: absolute; opacity: 0; }
+        .radio-option span { display: block; font-weight: 600; font-size: 13px; color: var(--primary); }
+        .radio-option:hover { border-color: var(--accent); }
+        .radio-option.selected { border-color: var(--accent); background: rgba(0,157,219,0.04); }
+        .radio-option.selected span { color: var(--accent); }
+
+        .form-navigation { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--border); }
+
+        .btn { padding: 14px 32px; border: none; border-radius: 0; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; font-family: 'Inter', sans-serif; letter-spacing: 0.3px; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-secondary { background: white; color: var(--primary); border: 1px solid var(--border); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+        .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-signal { background: var(--signal); color: white; }
+        .btn-signal:hover:not(:disabled) { background: var(--signal-hover); }
+
+        .review-section { background: var(--bg-light); padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+        .review-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+        .review-section-title { font-size: 14px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .review-edit-btn { background: none; border: none; color: var(--accent); font-weight: 700; cursor: pointer; font-size: 12px; font-family: 'Inter', sans-serif; }
+        .review-edit-btn:hover { color: var(--signal); }
+        .review-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .review-item { display: flex; flex-direction: column; }
+        .review-item-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+        .review-item-value { font-size: 14px; font-weight: 600; color: var(--primary); }
+
+        .success-container { display: none; text-align: center; padding: 56px 36px; }
+        .success-container.active { display: block; }
+        .success-icon { width: 64px; height: 64px; background: var(--signal); color: white; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 20px; }
+        .success-title { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+        .success-message { font-size: 15px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6; max-width: 460px; margin-left: auto; margin-right: auto; }
+
+        footer { background: var(--primary); color: white; padding: 40px 48px; display: flex; justify-content: space-between; align-items: center; }
+        footer p { font-size: 13px; color: rgba(255,255,255,0.5); }
+        .footer-claim { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1px; }
+
         @media (max-width: 768px) {
             nav { padding: 0 20px; height: 60px; }
-            .logo { font-size: 18px; }
+            .logo-text { font-size: 17px; }
             .nav-cta { display: none; }
             .hero h1 { font-size: 32px; }
-            .hero p { font-size: 16px; }
+            .hero-sub { font-size: 15px; }
             .hero-content { padding: 100px 24px 60px; }
-            .hero-actions { flex-direction: column; align-items: flex-start; }
+            .hero-actions { flex-direction: column; align-items: stretch; }
+            .btn-hero { text-align: center; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
             .stats-bar { padding: 32px 24px; }
             .how-section { padding: 48px 24px; }
-            .steps-grid { grid-template-columns: 1fr; gap: 20px; }
+            .steps-grid { grid-template-columns: 1fr; gap: 16px; }
             .form-section { padding: 48px 20px; }
-            .form-container { padding: 32px 24px; }
-            .progress-steps { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .form-container { padding: 32px 20px; }
+            .progress-steps { grid-template-columns: repeat(4, 1fr); gap: 6px; }
             .step-title { font-size: 22px; }
+            .path-selection { grid-template-columns: 1fr; }
+            .category-grid { grid-template-columns: 1fr; }
             .radio-group { grid-template-columns: 1fr; }
             .form-navigation { grid-template-columns: 1fr; }
             .website-input-group { grid-template-columns: 1fr; }
             .review-content { grid-template-columns: 1fr; }
             .section-title { font-size: 28px; }
+            .solution-card-meta { grid-template-columns: repeat(2, 1fr); }
+            .opportunity-card-meta { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 8px; text-align: center; }
         }
 
         @media (max-width: 480px) {
             .hero h1 { font-size: 26px; }
             .hero-content { padding: 90px 16px 48px; }
             .form-container { padding: 24px 16px; }
-            .progress-steps { grid-template-columns: 1fr; }
             .step-title { font-size: 20px; }
-            .btn { padding: 14px 24px; font-size: 12px; }
+            .btn { padding: 12px 24px; font-size: 12px; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
-            .stat-number { font-size: 28px; }
+            .stat-number { font-size: 26px; }
+            .progress-steps { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav id="mainNav">
-        <div class="logo">ROBOFOLIO</div>
+        <div class="logo-wrap">
+            <div class="logo-icon">R</div>
+            <div class="logo-text">Robofolio</div>
+        </div>
         <div class="nav-right">
             <div class="lang-toggle">
                 <button class="lang-btn active" data-lang-btn="de" onclick="switchLanguage('de')">DE</button>
@@ -866,7 +978,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-bg" id="heroBg">
             <div class="hero-bg-fallback"></div>
@@ -875,27 +986,22 @@
             <video autoplay muted loop playsinline src="videos/cobot-machine-tending.mp4"></video>
         </div>
         <div class="hero-overlay"></div>
-
         <div class="hero-content">
-            <div class="hero-label" data-lang="de">KI-gestützter Robotik-Marktplatz</div>
-            <div class="hero-label" data-lang="en" style="display:none;">AI-Powered Robotics Marketplace</div>
-
+            <div class="hero-overline" data-lang="de">Automatisierung beginnt hier</div>
+            <div class="hero-overline" data-lang="en" style="display:none;">Automation starts here</div>
             <h1 data-lang="de">Finden Sie Ihren <span>Robotik-Integrator</span> in 2 Minuten</h1>
             <h1 data-lang="en" style="display:none;">Find Your <span>Robotics Integrator</span> in 2 Minutes</h1>
-
-            <p data-lang="de">Unsere KI analysiert Ihren Betrieb und verbindet Sie mit dem passenden Automatisierungspartner — kostenlos und unverbindlich.</p>
-            <p data-lang="en" style="display:none;">Our AI analyzes your operations and connects you with the right automation partner — free and non-binding.</p>
-
+            <p class="hero-sub" data-lang="de">Unsere KI analysiert Ihren Betrieb und verbindet Sie mit dem passenden Automatisierungspartner. Neutral, datenbasiert und kostenlos.</p>
+            <p class="hero-sub" data-lang="en" style="display:none;">Our AI analyzes your operations and connects you with the right automation partner. Neutral, data-driven and free.</p>
             <div class="hero-actions">
-                <button class="btn-hero-primary" onclick="scrollToForm()" data-lang="de">Kostenlos starten</button>
-                <button class="btn-hero-primary" onclick="scrollToForm()" data-lang="en" style="display:none;">Start Free</button>
-                <button class="btn-hero-secondary" onclick="scrollToHow()" data-lang="de">So funktioniert's</button>
-                <button class="btn-hero-secondary" onclick="scrollToHow()" data-lang="en" style="display:none;">How It Works</button>
+                <button class="btn-hero btn-hero-accent" onclick="scrollToForm()" data-lang="de">Jetzt Anfrage starten</button>
+                <button class="btn-hero btn-hero-accent" onclick="scrollToForm()" data-lang="en" style="display:none;">Start Your Request</button>
+                <button class="btn-hero btn-hero-ghost" onclick="scrollToHow()" data-lang="de">So funktioniert's</button>
+                <button class="btn-hero btn-hero-ghost" onclick="scrollToHow()" data-lang="en" style="display:none;">How It Works</button>
             </div>
         </div>
     </section>
 
-    <!-- Stats Bar -->
     <section class="stats-bar">
         <div class="stats-grid">
             <div class="stat-item">
@@ -921,17 +1027,13 @@
         </div>
     </section>
 
-    <!-- How It Works -->
     <section class="how-section" id="howSection">
-        <div class="section-label" data-lang="de">So funktioniert's</div>
-        <div class="section-label" data-lang="en" style="display:none;">How It Works</div>
-
+        <div class="overline" data-lang="de">So funktioniert's</div>
+        <div class="overline" data-lang="en" style="display:none;">How It Works</div>
         <h2 class="section-title" data-lang="de">In 3 Schritten zum Integrator</h2>
         <h2 class="section-title" data-lang="en" style="display:none;">3 Steps to Your Integrator</h2>
-
-        <p class="section-subtitle" data-lang="de">Kein langes Suchen, keine Kaltakquise. Unsere KI übernimmt den Matching-Prozess.</p>
-        <p class="section-subtitle" data-lang="en" style="display:none;">No long searches, no cold calls. Our AI handles the matching process.</p>
-
+        <p class="section-sub" data-lang="de">Kein langes Suchen, keine Kaltakquise. Unsere KI übernimmt den Matching-Prozess.</p>
+        <p class="section-sub" data-lang="en" style="display:none;">No long searches, no cold calls. Our AI handles the matching process.</p>
         <div class="steps-grid">
             <div class="step-card">
                 <div class="step-num">01</div>
@@ -957,274 +1059,196 @@
         </div>
     </section>
 
-    <!-- Form Section -->
     <section class="form-section" id="formSection">
         <div class="form-container">
-            <!-- Progress -->
             <div class="progress-container">
-                <div class="progress-bar-wrapper">
-                    <div id="progressBarFill"></div>
-                </div>
-                <div class="progress-steps">
-                    <div class="progress-step active" data-step="1">
-                        <div class="progress-step-circle">1</div>
-                        <div class="progress-step-label" data-lang="de">Website</div>
-                        <div class="progress-step-label" data-lang="en" style="display:none;">Website</div>
-                    </div>
-                    <div class="progress-step" data-step="2">
-                        <div class="progress-step-circle">2</div>
-                        <div class="progress-step-label" data-lang="de">Fotos</div>
-                        <div class="progress-step-label" data-lang="en" style="display:none;">Photos</div>
-                    </div>
-                    <div class="progress-step" data-step="3">
-                        <div class="progress-step-circle">3</div>
-                        <div class="progress-step-label" data-lang="de">Details</div>
-                        <div class="progress-step-label" data-lang="en" style="display:none;">Details</div>
-                    </div>
-                    <div class="progress-step" data-step="4">
-                        <div class="progress-step-circle">4</div>
-                        <div class="progress-step-label" data-lang="de">Senden</div>
-                        <div class="progress-step-label" data-lang="en" style="display:none;">Submit</div>
-                    </div>
+                <div class="progress-bar-wrapper"><div id="progressBarFill"></div></div>
+                <div class="progress-steps" id="progressSteps">
+                    <div class="progress-step active" data-step="1"><div class="progress-step-circle">1</div><div class="progress-step-label" data-lang="de">Pfad</div><div class="progress-step-label" data-lang="en" style="display:none;">Path</div></div>
+                    <div class="progress-step" data-step="2"><div class="progress-step-circle">2</div><div class="progress-step-label" data-lang="de">Daten</div><div class="progress-step-label" data-lang="en" style="display:none;">Data</div></div>
+                    <div class="progress-step" data-step="3"><div class="progress-step-circle">3</div><div class="progress-step-label" data-lang="de">Ergebnisse</div><div class="progress-step-label" data-lang="en" style="display:none;">Results</div></div>
+                    <div class="progress-step" data-step="4"><div class="progress-step-circle">4</div><div class="progress-step-label" data-lang="de">Senden</div><div class="progress-step-label" data-lang="en" style="display:none;">Submit</div></div>
                 </div>
             </div>
 
-            <!-- Form -->
             <form id="leadForm" novalidate>
-                <!-- Step 1: Website Analysis -->
+                <!-- STEP 0: Path Selection -->
                 <div class="form-step active" data-step="1">
-                    <h2 class="step-title" data-lang="de">Erzählen Sie uns von Ihrer Firma</h2>
-                    <h2 class="step-title" data-lang="en" style="display:none;">Tell Us About Your Company</h2>
+                    <h2 class="step-title" data-lang="de">Wie möchten Sie vorgehen?</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">How Would You Like to Proceed?</h2>
+                    <p class="step-description" data-lang="de">Wählen Sie den Weg, der am besten zu Ihnen passt.</p>
+                    <p class="step-description" data-lang="en" style="display:none;">Choose the path that works best for you.</p>
 
-                    <p class="step-description" data-lang="de">Wir analysieren Ihre Website, um die wichtigsten Informationen zu extrahieren.</p>
-                    <p class="step-description" data-lang="en" style="display:none;">We'll analyze your website to extract key information about your company.</p>
-
-                    <div class="form-group">
-                        <label class="form-label" data-lang="de">Website-URL</label>
-                        <label class="form-label" data-lang="en" style="display:none;">Website URL</label>
-                        <div class="website-input-group">
-                            <input type="url" class="form-input" id="websiteUrl"
-                                data-placeholder-de="z.B. https://example.com"
-                                data-placeholder-en="e.g. https://example.com"
-                                placeholder="z.B. https://example.com">
-                            <button type="button" class="btn btn-primary" id="analyzeWebsiteBtn" data-lang="de">Analysieren</button>
-                            <button type="button" class="btn btn-primary" id="analyzeWebsiteBtn" data-lang="en" style="display:none;">Analyze</button>
+                    <div class="path-selection">
+                        <div class="path-card" onclick="selectPath('discovery')">
+                            <div class="path-card-icon">🔍</div>
+                            <div class="path-card-title" data-lang="de">Discovery Path</div>
+                            <div class="path-card-title" data-lang="en" style="display:none;">Discovery Path</div>
+                            <div class="path-card-description" data-lang="de">Ich möchte mein Automatisierungspotenzial kennenlernen</div>
+                            <div class="path-card-description" data-lang="en" style="display:none;">I want to discover my automation potential</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;" data-lang="de">Unsere KI analysiert Ihren Betrieb und zeigt Ihnen konkrete Automatisierungsmöglichkeiten mit Preisen und ROI.</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;" data-lang="en" style="display:none;">Our AI analyzes your operations and shows you specific automation opportunities with pricing and ROI.</div>
                         </div>
-                    </div>
-
-                    <div class="loading-spinner" id="websiteLoading">
-                        <div class="spinner"></div>
-                        <p data-lang="de">Website wird analysiert...</p>
-                        <p data-lang="en" style="display:none;">Analyzing website...</p>
-                    </div>
-
-                    <div class="extracted-data hidden" id="extractedCompanyData">
-                        <div class="extracted-data-item">
-                            <div class="extracted-data-label" data-lang="de">Firmenname</div>
-                            <div class="extracted-data-label" data-lang="en" style="display:none;">Company Name</div>
-                            <div class="extracted-data-value" id="extracted-company-name">—</div>
-                        </div>
-                        <div class="extracted-data-item">
-                            <div class="extracted-data-label" data-lang="de">Branche</div>
-                            <div class="extracted-data-label" data-lang="en" style="display:none;">Industry</div>
-                            <div class="extracted-data-value" id="extracted-industry">—</div>
-                        </div>
-                        <div class="extracted-data-item">
-                            <div class="extracted-data-label" data-lang="de">Standort</div>
-                            <div class="extracted-data-label" data-lang="en" style="display:none;">Location</div>
-                            <div class="extracted-data-value" id="extracted-location">—</div>
-                        </div>
-                        <div class="extracted-data-item">
-                            <div class="extracted-data-label" data-lang="de">Größe</div>
-                            <div class="extracted-data-label" data-lang="en" style="display:none;">Size</div>
-                            <div class="extracted-data-value" id="extracted-size">—</div>
-                        </div>
-                    </div>
-
-                    <div class="manual-input-toggle">
-                        <button type="button" onclick="showManualInput()" data-lang="de">Manuell eingeben</button>
-                        <button type="button" onclick="showManualInput()" data-lang="en" style="display:none;">Enter Manually</button>
-                    </div>
-
-                    <div id="manualInputFields" class="hidden">
-                        <div class="form-group">
-                            <label class="form-label" data-lang="de">Firmenname <span class="required">*</span></label>
-                            <label class="form-label" data-lang="en" style="display:none;">Company Name <span class="required">*</span></label>
-                            <input type="text" class="form-input" id="company-name-manual" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" data-lang="de">Branche</label>
-                            <label class="form-label" data-lang="en" style="display:none;">Industry</label>
-                            <input type="text" class="form-input" id="industry-manual">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" data-lang="de">Standort</label>
-                            <label class="form-label" data-lang="en" style="display:none;">Location</label>
-                            <input type="text" class="form-input" id="location-manual">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" data-lang="de">Größe</label>
-                            <label class="form-label" data-lang="en" style="display:none;">Company Size</label>
-                            <input type="text" class="form-input" id="size-manual">
+                        <div class="path-card" onclick="selectPath('direct')">
+                            <div class="path-card-icon">🎯</div>
+                            <div class="path-card-title" data-lang="de">Direct Search Path</div>
+                            <div class="path-card-title" data-lang="en" style="display:none;">Direct Search Path</div>
+                            <div class="path-card-description" data-lang="de">Ich weiß bereits, was ich automatisieren möchte</div>
+                            <div class="path-card-description" data-lang="en" style="display:none;">I already know what I want to automate</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;" data-lang="de">Wählen Sie Ihre gewünschte Anwendung und erhalten Sie passende Komplettlösungen aus unserer Datenbank.</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;" data-lang="en" style="display:none;">Select your desired application and get matching complete solutions from our database.</div>
                         </div>
                     </div>
 
                     <div class="form-navigation">
                         <div></div>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()" data-lang="de">Weiter</button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()" data-lang="en" style="display:none;">Next</button>
+                        <button type="button" class="btn btn-primary" onclick="startPath()" data-lang="de">Weiter</button>
+                        <button type="button" class="btn btn-primary" onclick="startPath()" data-lang="en" style="display:none;">Next</button>
                     </div>
                 </div>
 
-                <!-- Step 2: Photo Upload -->
-                <div class="form-step" data-step="2">
+                <!-- DISCOVERY PATH: Step 1 (Website) -->
+                <div class="form-step" data-step="2" id="discoveryStep1">
+                    <h2 class="step-title" data-lang="de">Erzählen Sie uns von Ihrer Firma</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">Tell Us About Your Company</h2>
+                    <p class="step-description" data-lang="de">Wir analysieren Ihre Website, um die wichtigsten Informationen zu extrahieren.</p>
+                    <p class="step-description" data-lang="en" style="display:none;">We'll analyze your website to extract key information about your company.</p>
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Website-URL</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Website URL</label>
+                        <div class="website-input-group">
+                            <input type="url" class="form-input" id="websiteUrl" data-placeholder-de="z.B. https://example.com" data-placeholder-en="e.g. https://example.com" placeholder="z.B. https://example.com">
+                            <button type="button" class="btn btn-primary" id="analyzeWebsiteBtn" data-lang="de">Analysieren</button>
+                            <button type="button" class="btn btn-primary" id="analyzeWebsiteBtn" data-lang="en" style="display:none;">Analyze</button>
+                        </div>
+                    </div>
+                    <div class="loading-spinner" id="websiteLoading"><div class="spinner"></div><p data-lang="de">Website wird analysiert...</p><p data-lang="en" style="display:none;">Analyzing website...</p></div>
+                    <div class="extracted-data hidden" id="extractedCompanyData">
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Firmenname</div><div class="extracted-data-label" data-lang="en" style="display:none;">Company Name</div><div class="extracted-data-value" id="extracted-company-name">&mdash;</div></div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Branche</div><div class="extracted-data-label" data-lang="en" style="display:none;">Industry</div><div class="extracted-data-value" id="extracted-industry">&mdash;</div></div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Standort</div><div class="extracted-data-label" data-lang="en" style="display:none;">Location</div><div class="extracted-data-value" id="extracted-location">&mdash;</div></div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Größe</div><div class="extracted-data-label" data-lang="en" style="display:none;">Size</div><div class="extracted-data-value" id="extracted-size">&mdash;</div></div>
+                    </div>
+                    <div class="manual-input-toggle"><button type="button" onclick="showManualInput()" data-lang="de">Manuell eingeben</button><button type="button" onclick="showManualInput()" data-lang="en" style="display:none;">Enter Manually</button></div>
+                    <div id="manualInputFields" class="hidden">
+                        <div class="form-group"><label class="form-label" data-lang="de">Firmenname <span class="required">*</span></label><label class="form-label" data-lang="en" style="display:none;">Company Name <span class="required">*</span></label><input type="text" class="form-input" id="company-name-manual" required></div>
+                        <div class="form-group"><label class="form-label" data-lang="de">Branche</label><label class="form-label" data-lang="en" style="display:none;">Industry</label><input type="text" class="form-input" id="industry-manual"></div>
+                        <div class="form-group"><label class="form-label" data-lang="de">Standort</label><label class="form-label" data-lang="en" style="display:none;">Location</label><input type="text" class="form-input" id="location-manual"></div>
+                        <div class="form-group"><label class="form-label" data-lang="de">Größe</label><label class="form-label" data-lang="en" style="display:none;">Company Size</label><input type="text" class="form-input" id="size-manual"></div>
+                    </div>
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="en" style="display:none;">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="nextDiscoveryStep()" data-lang="de">Weiter</button><button type="button" class="btn btn-primary" onclick="nextDiscoveryStep()" data-lang="en" style="display:none;">Next</button>
+                    </div>
+                </div>
+
+                <!-- DISCOVERY PATH: Step 2 (Photos) -->
+                <div class="form-step" data-step="2" id="discoveryStep2">
                     <h2 class="step-title" data-lang="de">Fotos Ihrer Anlage</h2>
                     <h2 class="step-title" data-lang="en" style="display:none;">Upload Facility Photos</h2>
-
                     <p class="step-description" data-lang="de">Laden Sie bis zu 5 Fotos Ihrer Produktionsanlage hoch, damit wir sie analysieren können.</p>
                     <p class="step-description" data-lang="en" style="display:none;">Upload up to 5 photos of your facility for AI analysis.</p>
-
-                    <div class="upload-area" id="uploadArea">
-                        <div class="upload-icon">&#128247;</div>
-                        <div class="upload-text" data-lang="de">Fotos hier ablegen</div>
-                        <div class="upload-text" data-lang="en" style="display:none;">Drop photos here</div>
-                        <div class="upload-subtext" data-lang="de">oder klicken zum Durchsuchen</div>
-                        <div class="upload-subtext" data-lang="en" style="display:none;">or click to browse</div>
-                    </div>
-
+                    <div class="upload-area" id="uploadArea"><div class="upload-icon">📷</div><div class="upload-text" data-lang="de">Fotos hier ablegen</div><div class="upload-text" data-lang="en" style="display:none;">Drop photos here</div><div class="upload-subtext" data-lang="de">oder klicken zum Durchsuchen</div><div class="upload-subtext" data-lang="en" style="display:none;">or click to browse</div></div>
                     <input type="file" id="photoUpload" multiple accept="image/*">
-
-                    <div class="loading-spinner" id="photoLoading">
-                        <div class="spinner"></div>
-                        <p data-lang="de">Fotos werden analysiert...</p>
-                        <p data-lang="en" style="display:none;">Analyzing photos...</p>
-                    </div>
-
+                    <div class="loading-spinner" id="photoLoading"><div class="spinner"></div><p data-lang="de">Fotos werden analysiert...</p><p data-lang="en" style="display:none;">Analyzing photos...</p></div>
                     <div id="uploadedFiles"></div>
-
                     <div class="extracted-data hidden" id="extractedPhotoData">
-                        <div class="extracted-data-item">
-                            <div class="extracted-data-label" data-lang="de">Prozesstyp</div>
-                            <div class="extracted-data-label" data-lang="en" style="display:none;">Process Type</div>
-                            <div class="extracted-data-value" id="extracted-process-type">—</div>
-                        </div>
-                        <div class="extracted-data-item">
-                            <div class="extracted-data-label" data-lang="de">Arbeitsbereich</div>
-                            <div class="extracted-data-label" data-lang="en" style="display:none;">Workspace</div>
-                            <div class="extracted-data-value" id="extracted-workspace">—</div>
-                        </div>
-                        <div class="extracted-data-item">
-                            <div class="extracted-data-label" data-lang="de">Umgebung</div>
-                            <div class="extracted-data-label" data-lang="en" style="display:none;">Environment</div>
-                            <div class="extracted-data-value" id="extracted-environment">—</div>
-                        </div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Prozesstyp</div><div class="extracted-data-label" data-lang="en" style="display:none;">Process Type</div><div class="extracted-data-value" id="extracted-process-type">&mdash;</div></div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Arbeitsbereich</div><div class="extracted-data-label" data-lang="en" style="display:none;">Workspace</div><div class="extracted-data-value" id="extracted-workspace">&mdash;</div></div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Umgebung</div><div class="extracted-data-label" data-lang="en" style="display:none;">Environment</div><div class="extracted-data-value" id="extracted-environment">&mdash;</div></div>
+                    </div>
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="prevDiscoveryStep()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="prevDiscoveryStep()" data-lang="en" style="display:none;">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="analyzeDiscovery()" data-lang="de">Analysieren</button><button type="button" class="btn btn-primary" onclick="analyzeDiscovery()" data-lang="en" style="display:none;">Analyze</button>
+                    </div>
+                </div>
+
+                <!-- DIRECT SEARCH PATH: Step 1 (Category) -->
+                <div class="form-step" data-step="2" id="directStep1">
+                    <h2 class="step-title" data-lang="de">Wählen Sie Ihre Kategorie</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">Select Your Category</h2>
+                    <p class="step-description" data-lang="de">Welche Art von Automatisierung interessiert Sie?</p>
+                    <p class="step-description" data-lang="en" style="display:none;">What type of automation are you interested in?</p>
+
+                    <div class="category-grid" id="categoryGrid">
+                        <!-- Populated by JS -->
                     </div>
 
                     <div class="form-navigation">
-                        <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="de">Zurück</button>
-                        <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="en" style="display:none;">Back</button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()" data-lang="de">Weiter</button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()" data-lang="en" style="display:none;">Next</button>
+                        <button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="en" style="display:none;">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="nextDirectStep()" data-lang="de">Weiter</button><button type="button" class="btn btn-primary" onclick="nextDirectStep()" data-lang="en" style="display:none;">Next</button>
                     </div>
                 </div>
 
-                <!-- Step 3: Project Details -->
-                <div class="form-step" data-step="3">
-                    <h2 class="step-title" data-lang="de">Projektdetails</h2>
-                    <h2 class="step-title" data-lang="en" style="display:none;">Project Details</h2>
-
-                    <p class="step-description" data-lang="de">Erzählen Sie uns mehr über Ihr Projekt und Ihre Anforderungen.</p>
-                    <p class="step-description" data-lang="en" style="display:none;">Tell us more about your project and requirements.</p>
+                <!-- DIRECT SEARCH PATH: Step 2 (Specs) -->
+                <div class="form-step" data-step="2" id="directStep2">
+                    <h2 class="step-title" data-lang="de">Spezifikationen</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">Specifications</h2>
+                    <p class="step-description" data-lang="de">Weitere Details helfen uns, die perfekte Lösung zu finden.</p>
+                    <p class="step-description" data-lang="en" style="display:none;">Additional details help us find the perfect solution.</p>
 
                     <div class="form-group">
-                        <label class="form-label" data-lang="de">Primäres Ziel <span class="required">*</span></label>
-                        <label class="form-label" data-lang="en" style="display:none;">Primary Goal <span class="required">*</span></label>
-                        <textarea class="form-textarea" id="primary-goal" required></textarea>
+                        <label class="form-label" data-lang="de">Branche</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Industry</label>
+                        <select class="form-select" id="spec-industry">
+                            <option value="">Wählen Sie...</option>
+                            <option value="automotive">Automobilbau / Automotive</option>
+                            <option value="food">Lebensmittel / Food</option>
+                            <option value="pharma">Pharmazie / Pharma</option>
+                            <option value="electronics">Elektronik / Electronics</option>
+                            <option value="metal">Metallverarbeitung / Metal Working</option>
+                            <option value="plastic">Kunststoff / Plastics</option>
+                            <option value="other">Sonstiges / Other</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" data-lang="de">Zeitrahmen</label>
-                        <label class="form-label" data-lang="en" style="display:none;">Timeline</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="timeline" value="0-3">
-                                <span data-lang="de">0-3 Monate</span>
-                                <span data-lang="en" style="display:none;">0-3 Months</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="timeline" value="3-6">
-                                <span data-lang="de">3-6 Monate</span>
-                                <span data-lang="en" style="display:none;">3-6 Months</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="timeline" value="6-12">
-                                <span data-lang="de">6-12 Monate</span>
-                                <span data-lang="en" style="display:none;">6-12 Months</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="timeline" value="12+">
-                                <span data-lang="de">12+ Monate</span>
-                                <span data-lang="en" style="display:none;">12+ Months</span>
-                            </label>
-                        </div>
+                        <label class="form-label" data-lang="de">Max. Werkstückgewicht (kg)</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Max. Workpiece Weight (kg)</label>
+                        <input type="number" class="form-input" id="spec-weight" placeholder="z.B. 50">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Reichweite (mm)</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Reach (mm)</label>
+                        <input type="number" class="form-input" id="spec-reach" placeholder="z.B. 1500">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Genauigkeitsanforderung</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Precision Requirement</label>
+                        <select class="form-select" id="spec-precision">
+                            <option value="">Wählen Sie...</option>
+                            <option value="standard">Standard</option>
+                            <option value="high">Hoch / High</option>
+                            <option value="very-high">Sehr hoch / Very High</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Umgebung</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Environment</label>
+                        <select class="form-select" id="spec-environment">
+                            <option value="">Wählen Sie...</option>
+                            <option value="standard">Standard</option>
+                            <option value="cleanroom">Reinraum / Cleanroom</option>
+                            <option value="wet">Nass / Wet</option>
+                            <option value="dusty">Staubig / Dusty</option>
+                            <option value="outdoor">Outdoor</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label" data-lang="de">Budget-Bereich</label>
                         <label class="form-label" data-lang="en" style="display:none;">Budget Range</label>
                         <select class="form-select" id="budget-range">
-                            <option value="" data-lang="de">Wählen Sie...</option>
-                            <option value="" data-lang="en" style="display:none;">Select...</option>
+                            <option value="">Wählen Sie...</option>
                             <option value="0-50k">&euro;0 - &euro;50.000</option>
                             <option value="50k-100k">&euro;50.000 - &euro;100.000</option>
                             <option value="100k-250k">&euro;100.000 - &euro;250.000</option>
                             <option value="250k-500k">&euro;250.000 - &euro;500.000</option>
                             <option value="500k+">&euro;500.000+</option>
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" data-lang="de">Budget ist</label>
-                        <label class="form-label" data-lang="en" style="display:none;">Budget is</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="budget-status" value="approved">
-                                <span data-lang="de">Genehmigt</span>
-                                <span data-lang="en" style="display:none;">Approved</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="budget-status" value="pending">
-                                <span data-lang="de">In Bearbeitung</span>
-                                <span data-lang="en" style="display:none;">Pending</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="budget-status" value="not-allocated">
-                                <span data-lang="de">Nicht zugeordnet</span>
-                                <span data-lang="en" style="display:none;">Not Allocated</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" data-lang="de">Entscheidungsträger</label>
-                        <label class="form-label" data-lang="en" style="display:none;">Decision Authority</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="authority" value="sole">
-                                <span data-lang="de">Alleinverantwortung</span>
-                                <span data-lang="en" style="display:none;">Sole Authority</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="authority" value="primary">
-                                <span data-lang="de">Hauptverantwortung</span>
-                                <span data-lang="en" style="display:none;">Primary Authority</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="authority" value="committee">
-                                <span data-lang="de">Komitee-Entscheidung</span>
-                                <span data-lang="en" style="display:none;">Committee Decision</span>
-                            </label>
-                        </div>
                     </div>
 
                     <div class="form-group">
@@ -1251,437 +1275,486 @@
                     </div>
 
                     <div class="form-navigation">
-                        <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="de">Zurück</button>
-                        <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="en" style="display:none;">Back</button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()" data-lang="de">Weiter zur Überprüfung</button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep()" data-lang="en" style="display:none;">Continue to Review</button>
+                        <button type="button" class="btn btn-secondary" onclick="prevDirectStep()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="prevDirectStep()" data-lang="en" style="display:none;">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="searchSolutions()" data-lang="de">Lösungen suchen</button><button type="button" class="btn btn-primary" onclick="searchSolutions()" data-lang="en" style="display:none;">Search Solutions</button>
                     </div>
                 </div>
 
-                <!-- Step 4: Review -->
-                <div class="form-step" data-step="4">
-                    <h2 class="step-title" data-lang="de">Überprüfen Sie Ihr Projekt-Profil</h2>
-                    <h2 class="step-title" data-lang="en" style="display:none;">Review Your Project Profile</h2>
-
-                    <p class="step-description" data-lang="de">Stellen Sie sicher, dass alle Informationen korrekt sind, bevor wir Sie mit Integratoren verbinden.</p>
-                    <p class="step-description" data-lang="en" style="display:none;">Make sure all information is correct before we match you with integrators.</p>
-
-                    <div id="reviewContent"></div>
+                <!-- RESULTS STEP: Discovery or Direct Search -->
+                <div class="form-step" data-step="3" id="resultsStep">
+                    <div class="results-container" id="resultsContainer">
+                        <!-- Populated by JS -->
+                    </div>
 
                     <div class="form-navigation">
-                        <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="de">Zurück</button>
-                        <button type="button" class="btn btn-secondary" onclick="prevStep()" data-lang="en" style="display:none;">Back</button>
-                        <button type="submit" class="btn btn-orange" id="submitBtn" data-lang="de">Partner finden</button>
-                        <button type="submit" class="btn btn-orange" id="submitBtn" data-lang="en" style="display:none;">Get My Matches</button>
+                        <button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="en" style="display:none;">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="submitContactInfo()" data-lang="de">Mit Integratoren verbinden</button><button type="button" class="btn btn-primary" onclick="submitContactInfo()" data-lang="en" style="display:none;">Connect with Integrators</button>
+                    </div>
+                </div>
+
+                <!-- FINAL STEP: Review & Submit -->
+                <div class="form-step" data-step="4">
+                    <h2 class="step-title" data-lang="de">Überprüfen Sie Ihre Anfrage</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">Review Your Request</h2>
+                    <p class="step-description" data-lang="de">Stellen Sie sicher, dass alle Informationen korrekt sind.</p>
+                    <p class="step-description" data-lang="en" style="display:none;">Make sure all information is correct.</p>
+                    <div id="reviewContent"></div>
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="en" style="display:none;">Back</button>
+                        <button type="submit" class="btn btn-signal" id="submitBtn" data-lang="de">Partner finden</button><button type="submit" class="btn btn-signal" id="submitBtn" data-lang="en" style="display:none;">Get My Matches</button>
                     </div>
                 </div>
             </form>
 
-            <!-- Success Message + Profile Builder -->
             <div class="success-container" id="successContainer">
-                <div class="success-icon">&#10003;</div>
-                <div class="success-title" data-lang="de">Vielen Dank!</div>
-                <div class="success-title" data-lang="en" style="display:none;">Thank You!</div>
-                <div class="success-message" data-lang="de">
-                    Wir haben Ihr Projekt erhalten und suchen jetzt nach passenden Integratoren.
-                </div>
-                <div class="success-message" data-lang="en" style="display:none;">
-                    We've received your project and are now searching for matching integrators.
-                </div>
-
-                <!-- Profile Builder -->
-                <div style="background:#f7f8fa;padding:32px;margin-top:28px;text-align:left;max-width:480px;margin-left:auto;margin-right:auto;">
-                    <h3 style="font-size:18px;color:#1a1a2e;margin-bottom:6px;font-weight:900;">
-                        <span data-lang="de">Ihr Kundenprofil erstellen</span>
-                        <span data-lang="en" style="display:none;">Create Your Profile</span>
-                    </h3>
-                    <p style="font-size:13px;color:#666;margin-bottom:24px;">
-                        <span data-lang="de">Erstellen Sie Ihr Profil, um den Status Ihres Gesuchs live zu verfolgen.</span>
-                        <span data-lang="en" style="display:none;">Set up your profile to track your request status in real time.</span>
-                    </p>
-
-                    <div style="margin-bottom:16px;">
-                        <label style="display:block;font-weight:800;color:#1a1a2e;margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">
-                            <span data-lang="de">Ihr Name</span>
-                            <span data-lang="en" style="display:none;">Your Name</span>
-                        </label>
-                        <input type="text" id="profile-name" style="width:100%;padding:12px 16px;border:1px solid #d0d4da;font-size:15px;font-family:'Montserrat',sans-serif;">
-                    </div>
-
-                    <div style="margin-bottom:16px;">
-                        <label style="display:block;font-weight:800;color:#1a1a2e;margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">
-                            <span data-lang="de">Firma</span>
-                            <span data-lang="en" style="display:none;">Company</span>
-                        </label>
-                        <input type="text" id="profile-company" style="width:100%;padding:12px 16px;border:1px solid #d0d4da;font-size:15px;font-family:'Montserrat',sans-serif;background:#f0f0f0;color:#666;" readonly>
-                    </div>
-
-                    <div style="margin-bottom:24px;">
-                        <label style="display:block;font-weight:800;color:#1a1a2e;margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Email</label>
-                        <input type="email" id="profile-email" style="width:100%;padding:12px 16px;border:1px solid #d0d4da;font-size:15px;font-family:'Montserrat',sans-serif;">
-                    </div>
-
-                    <button type="button" id="goToPortalBtn" onclick="goToPortal()" style="width:100%;padding:16px;background:#EC671A;color:white;border:none;font-size:13px;font-weight:800;cursor:pointer;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:1px;transition:background 0.2s;">
-                        <span data-lang="de">Zum Kundenportal &rarr;</span>
-                        <span data-lang="en" style="display:none;">Go to My Portal &rarr;</span>
-                    </button>
+                <div class="success-icon">✓</div>
+                <div class="success-title" data-lang="de">Vielen Dank!</div><div class="success-title" data-lang="en" style="display:none;">Thank You!</div>
+                <div class="success-message" data-lang="de">Wir haben Ihre Anfrage erhalten und suchen jetzt nach passenden Integratoren.</div>
+                <div class="success-message" data-lang="en" style="display:none;">We've received your request and are now searching for matching integrators.</div>
+                <div style="background:var(--bg-light);padding:28px;margin-top:24px;text-align:left;max-width:460px;margin-left:auto;margin-right:auto;">
+                    <h3 style="font-size:17px;color:var(--primary);margin-bottom:4px;font-weight:800;"><span data-lang="de">Ihr Kundenprofil erstellen</span><span data-lang="en" style="display:none;">Create Your Profile</span></h3>
+                    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px;"><span data-lang="de">Erstellen Sie Ihr Profil, um den Status Ihres Gesuchs live zu verfolgen.</span><span data-lang="en" style="display:none;">Set up your profile to track your request status in real time.</span></p>
+                    <div style="margin-bottom:14px;"><label style="display:block;font-weight:600;color:var(--primary);margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;"><span data-lang="de">Ihr Name</span><span data-lang="en" style="display:none;">Your Name</span></label><input type="text" id="profile-name" style="width:100%;padding:10px 14px;border:1px solid var(--border);font-size:14px;font-family:'Inter',sans-serif;"></div>
+                    <div style="margin-bottom:14px;"><label style="display:block;font-weight:600;color:var(--primary);margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;"><span data-lang="de">Firma</span><span data-lang="en" style="display:none;">Company</span></label><input type="text" id="profile-company" style="width:100%;padding:10px 14px;border:1px solid var(--border);font-size:14px;font-family:'Inter',sans-serif;background:var(--bg-muted);color:var(--text-secondary);" readonly></div>
+                    <div style="margin-bottom:20px;"><label style="display:block;font-weight:600;color:var(--primary);margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Email</label><input type="email" id="profile-email" style="width:100%;padding:10px 14px;border:1px solid var(--border);font-size:14px;font-family:'Inter',sans-serif;"></div>
+                    <button type="button" id="goToPortalBtn" onclick="goToPortal()" style="width:100%;padding:14px;background:var(--signal);color:white;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:0.3px;"><span data-lang="de">Zum Kundenportal →</span><span data-lang="en" style="display:none;">Go to My Portal →</span></button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2026 Robofolio. <span data-lang="de">Alle Rechte vorbehalten.</span><span data-lang="en" style="display:none;">All rights reserved.</span></p>
+        <div class="footer-claim">Automatisierung beginnt hier.</div>
     </footer>
 
     <script>
-        // Scroll functions
-        function scrollToForm() {
-            document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
-        }
+        function scrollToForm() { document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' }); }
+        function scrollToHow() { document.getElementById('howSection').scrollIntoView({ behavior: 'smooth' }); }
+        window.addEventListener('scroll', function() { document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 80); });
 
-        function scrollToHow() {
-            document.getElementById('howSection').scrollIntoView({ behavior: 'smooth' });
-        }
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001' : 'https://robofolio-api.onrender.com';
 
-        // Nav scroll effect
-        window.addEventListener('scroll', function() {
-            const nav = document.getElementById('mainNav');
-            if (window.scrollY > 80) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
-        });
-
-        // API Configuration
-        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:5001'
-            : 'https://robofolio-api.onrender.com';
-
-        // Global state
         let formData = {
             currentStep: 1,
+            currentPath: null,
+            discoverySubStep: 1,
+            directSubStep: 1,
             extractedData: {},
-            userInputs: {}
+            userInputs: {},
+            selectedCategory: null,
+            categories: []
         };
 
-        // Language switching
         function switchLanguage(lang) {
             document.documentElement.lang = lang;
             localStorage.setItem('preferredLanguage', lang);
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`[data-lang-btn="${lang}"]`).classList.add('active');
-            updatePlaceholders(lang);
-        }
-
-        function updatePlaceholders(lang) {
-            document.querySelectorAll('[data-placeholder-de]').forEach(field => {
-                const placeholder = field.getAttribute(`data-placeholder-${lang}`);
-                if (placeholder) field.placeholder = placeholder;
-            });
+            document.querySelectorAll('[data-placeholder-de]').forEach(f => { const ph = f.getAttribute(`data-placeholder-${lang}`); if (ph) f.placeholder = ph; });
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('preferredLanguage') || 'de';
-            switchLanguage(savedLang);
+            switchLanguage(localStorage.getItem('preferredLanguage') || 'de');
+            loadCategories();
         });
 
-        function nextStep() {
-            if (formData.currentStep < 4) {
-                if (!validateStep(formData.currentStep)) return;
-                formData.currentStep++;
-                updateSteps();
-                if (formData.currentStep === 4) generateReview();
-            }
+        function selectPath(path) {
+            document.querySelectorAll('.path-card').forEach(c => c.classList.remove('selected'));
+            event.target.closest('.path-card').classList.add('selected');
+            formData.currentPath = path;
         }
 
-        function prevStep() {
-            if (formData.currentStep > 1) {
+        function startPath() {
+            if (!formData.currentPath) {
+                alert(document.documentElement.lang === 'de' ? 'Bitte wählen Sie einen Pfad' : 'Please select a path');
+                return;
+            }
+            formData.currentStep = 2;
+            formData.discoverySubStep = 1;
+            formData.directSubStep = 1;
+            updateFormSteps();
+        }
+
+        function nextDiscoveryStep() {
+            if (formData.discoverySubStep === 1) {
+                const companyName = document.getElementById('company-name-manual').value || document.getElementById('extracted-company-name').textContent;
+                if (!companyName || companyName === '—') {
+                    alert(document.documentElement.lang === 'de' ? 'Bitte geben Sie einen Firmennamen ein' : 'Please enter a company name');
+                    return;
+                }
+                formData.discoverySubStep = 2;
+            } else if (formData.discoverySubStep === 2) {
+                // Move to results
+                formData.currentStep = 3;
+            }
+            updateFormSteps();
+        }
+
+        function prevDiscoveryStep() {
+            if (formData.discoverySubStep > 1) {
+                formData.discoverySubStep--;
+            } else {
+                goBack();
+            }
+            updateFormSteps();
+        }
+
+        function nextDirectStep() {
+            if (formData.directSubStep === 1) {
+                if (!formData.selectedCategory) {
+                    alert(document.documentElement.lang === 'de' ? 'Bitte wählen Sie eine Kategorie' : 'Please select a category');
+                    return;
+                }
+                formData.directSubStep = 2;
+            }
+            updateFormSteps();
+        }
+
+        function prevDirectStep() {
+            if (formData.directSubStep > 1) {
+                formData.directSubStep--;
+            } else {
+                goBack();
+            }
+            updateFormSteps();
+        }
+
+        function goBack() {
+            if (formData.currentPath === 'discovery' && formData.discoverySubStep > 1) {
+                formData.discoverySubStep--;
+                updateFormSteps();
+            } else if (formData.currentPath === 'direct' && formData.directSubStep > 1) {
+                formData.directSubStep--;
+                updateFormSteps();
+            } else if (formData.currentStep > 1) {
                 formData.currentStep--;
-                updateSteps();
+                formData.discoverySubStep = 1;
+                formData.directSubStep = 1;
+                formData.currentPath = null;
+                updateFormSteps();
             }
         }
 
-        function updateSteps() {
-            document.querySelectorAll('.progress-step').forEach(step => {
-                const stepNum = parseInt(step.dataset.step);
-                step.classList.remove('active', 'completed');
-                if (stepNum === formData.currentStep) step.classList.add('active');
-                else if (stepNum < formData.currentStep) step.classList.add('completed');
+        function updateFormSteps() {
+            // Update progress bar
+            const stepMap = formData.currentPath ? (formData.currentStep === 2 ? 2 : 3) : formData.currentStep;
+            document.getElementById('progressBarFill').style.width = ((stepMap - 1) / 3) * 100 + '%';
+
+            // Update progress steps
+            document.querySelectorAll('.progress-step').forEach(s => {
+                const n = parseInt(s.dataset.step);
+                s.classList.remove('active', 'completed');
+                if (n === stepMap) s.classList.add('active');
+                else if (n < stepMap) s.classList.add('completed');
             });
-            const progress = ((formData.currentStep - 1) / 3) * 100;
-            document.getElementById('progressBarFill').style.width = progress + '%';
-            document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
-            document.querySelector(`.form-step[data-step="${formData.currentStep}"]`).classList.add('active');
+
+            // Hide all form steps
+            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+
+            if (formData.currentStep === 1) {
+                // Path selection
+                document.querySelector('.form-step[data-step="1"]').classList.add('active');
+            } else if (formData.currentStep === 2) {
+                if (formData.currentPath === 'discovery') {
+                    if (formData.discoverySubStep === 1) {
+                        document.getElementById('discoveryStep1').classList.add('active');
+                    } else {
+                        document.getElementById('discoveryStep2').classList.add('active');
+                    }
+                } else if (formData.currentPath === 'direct') {
+                    if (formData.directSubStep === 1) {
+                        document.getElementById('directStep1').classList.add('active');
+                    } else {
+                        document.getElementById('directStep2').classList.add('active');
+                    }
+                }
+            } else if (formData.currentStep === 3) {
+                document.getElementById('resultsStep').classList.add('active');
+            } else if (formData.currentStep === 4) {
+                document.querySelector('.form-step[data-step="4"]').classList.add('active');
+                generateReview();
+            }
+
             document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function validateStep(step) { return true; }
-
-        // Website analysis
-        document.getElementById('analyzeWebsiteBtn').addEventListener('click', async function() {
-            const url = document.getElementById('websiteUrl').value;
-            if (!url) {
-                alert(document.documentElement.lang === 'de' ? 'Bitte geben Sie eine Website-URL ein' : 'Please enter a website URL');
-                return;
-            }
-            document.getElementById('websiteLoading').classList.add('active');
-            this.disabled = true;
+        async function loadCategories() {
             try {
-                const response = await fetch(`${API_BASE_URL}/api/analyze-website`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: url })
-                });
-                const result = await response.json();
-                if (!response.ok || !result.success) throw new Error(result.error || `Server error (${response.status})`);
-                const extracted = {
-                    companyName: result.data.company_name || 'Unknown',
-                    industry: result.data.industry || 'Unknown',
-                    location: result.data.location || 'Unknown',
-                    size: result.data.company_size || 'Unknown'
-                };
-                formData.extractedData = { ...formData.extractedData, ...extracted };
-                document.getElementById('extracted-company-name').textContent = extracted.companyName;
-                document.getElementById('extracted-industry').textContent = extracted.industry;
-                document.getElementById('extracted-location').textContent = extracted.location;
-                document.getElementById('extracted-size').textContent = extracted.size;
-                document.getElementById('extractedCompanyData').classList.remove('hidden');
-            } catch (error) {
-                console.error('Error analyzing website:', error);
-                const isConnectionError = error.message === 'Failed to fetch' || error.name === 'TypeError';
-                let errorMsg;
-                if (isConnectionError) {
-                    errorMsg = document.documentElement.lang === 'de'
-                        ? 'Verbindung zum Backend fehlgeschlagen.\n\nBitte stellen Sie sicher, dass der Server läuft:\npython backend_api.py'
-                        : 'Could not connect to backend.\n\nMake sure the server is running:\npython backend_api.py';
-                } else {
-                    errorMsg = document.documentElement.lang === 'de'
-                        ? `Fehler bei der Analyse:\n${error.message}`
-                        : `Analysis error:\n${error.message}`;
+                const r = await fetch(`${API_BASE_URL}/api/solutions/categories`);
+                if (r.ok) {
+                    const result = await r.json();
+                    if (result.success && result.data) {
+                        formData.categories = result.data;
+                        renderCategories();
+                    }
                 }
-                alert(errorMsg);
-            } finally {
-                document.getElementById('websiteLoading').classList.remove('active');
-                this.disabled = false;
+            } catch (e) {
+                console.error('Error loading categories:', e);
             }
-        });
-
-        function showManualInput() {
-            document.getElementById('manualInputFields').classList.remove('hidden');
-            document.getElementById('websiteUrl').disabled = true;
-            document.getElementById('analyzeWebsiteBtn').disabled = true;
         }
 
-        // Photo upload
+        function renderCategories() {
+            const grid = document.getElementById('categoryGrid');
+            grid.innerHTML = '';
+            formData.categories.forEach(cat => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.onclick = () => selectCategory(cat.id, card);
+                card.innerHTML = `
+                    <div class="category-card-icon">${cat.icon || '🤖'}</div>
+                    <div class="category-card-name">${document.documentElement.lang === 'de' ? cat.name_de : cat.name_en}</div>
+                    <div class="category-card-meta">${cat.solution_count} Lösungen</div>
+                    <div class="category-card-meta">${cat.price_range || '€0 - €250k+'}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function selectCategory(catId, element) {
+            document.querySelectorAll('.category-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            formData.selectedCategory = catId;
+        }
+
+        document.getElementById('analyzeWebsiteBtn').addEventListener('click', async function() {
+            const url = document.getElementById('websiteUrl').value;
+            if (!url) { alert(document.documentElement.lang === 'de' ? 'Bitte geben Sie eine Website-URL ein' : 'Please enter a website URL'); return; }
+            document.getElementById('websiteLoading').classList.add('active'); this.disabled = true;
+            try {
+                const r = await fetch(`${API_BASE_URL}/api/analyze-website`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
+                const result = await r.json();
+                if (!r.ok || !result.success) throw new Error(result.error || `Server error (${r.status})`);
+                const ex = { companyName: result.data.company_name || 'Unknown', industry: result.data.industry || 'Unknown', location: result.data.location || 'Unknown', size: result.data.company_size || 'Unknown' };
+                formData.extractedData = { ...formData.extractedData, ...ex };
+                document.getElementById('extracted-company-name').textContent = ex.companyName;
+                document.getElementById('extracted-industry').textContent = ex.industry;
+                document.getElementById('extracted-location').textContent = ex.location;
+                document.getElementById('extracted-size').textContent = ex.size;
+                document.getElementById('extractedCompanyData').classList.remove('hidden');
+            } catch (e) {
+                const msg = (e.message === 'Failed to fetch' || e.name === 'TypeError') ? (document.documentElement.lang === 'de' ? 'Verbindung zum Backend fehlgeschlagen' : 'Could not connect to backend') : (document.documentElement.lang === 'de' ? `Fehler: ${e.message}` : `Error: ${e.message}`);
+                alert(msg);
+            } finally { document.getElementById('websiteLoading').classList.remove('active'); this.disabled = false; }
+        });
+
+        function showManualInput() { document.getElementById('manualInputFields').classList.remove('hidden'); }
+
         const uploadArea = document.getElementById('uploadArea');
         const photoUpload = document.getElementById('photoUpload');
         let uploadedPhotos = [];
-
         uploadArea.addEventListener('click', () => photoUpload.click());
-        uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
         uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
-        uploadArea.addEventListener('drop', (e) => { e.preventDefault(); uploadArea.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
-        photoUpload.addEventListener('change', (e) => handleFiles(e.target.files));
+        uploadArea.addEventListener('drop', e => { e.preventDefault(); uploadArea.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
+        photoUpload.addEventListener('change', e => handleFiles(e.target.files));
 
         async function handleFiles(files) {
-            const fileArray = Array.from(files).slice(0, 5);
-            uploadedPhotos = uploadedPhotos.concat(fileArray);
-            const container = document.getElementById('uploadedFiles');
-            container.innerHTML = '';
-            uploadedPhotos.forEach((file, index) => {
-                const fileDiv = document.createElement('div');
-                fileDiv.className = 'uploaded-file';
-                fileDiv.innerHTML = `<span class="uploaded-file-name">${file.name}</span><button type="button" class="remove-file" onclick="removeFile(${index})">&times;</button>`;
-                container.appendChild(fileDiv);
-            });
+            uploadedPhotos = uploadedPhotos.concat(Array.from(files).slice(0, 5));
+            const c = document.getElementById('uploadedFiles'); c.innerHTML = '';
+            uploadedPhotos.forEach((f, i) => { const d = document.createElement('div'); d.className = 'uploaded-file'; d.innerHTML = `<span class="uploaded-file-name">${f.name}</span><button type="button" class="remove-file" onclick="removeFile(${i})">&times;</button>`; c.appendChild(d); });
             if (uploadedPhotos.length > 0) await analyzePhotos();
         }
-
-        function removeFile(index) {
-            uploadedPhotos.splice(index, 1);
-            handleFiles([]);
-        }
+        function removeFile(i) { uploadedPhotos.splice(i, 1); handleFiles([]); }
 
         async function analyzePhotos() {
             document.getElementById('photoLoading').classList.add('active');
             try {
-                const photoFormData = new FormData();
-                uploadedPhotos.forEach(file => photoFormData.append('photos', file));
-                const response = await fetch(`${API_BASE_URL}/api/analyze-photos`, { method: 'POST', body: photoFormData });
-                if (!response.ok) throw new Error('Photo analysis failed');
-                const result = await response.json();
-                if (!result.success) throw new Error(result.error || 'Analysis failed');
-                const extracted = {
-                    processType: result.data.process_type || 'Unknown',
-                    workspace: result.data.workspace_dimensions || 'Unknown',
-                    environment: result.data.environment_type || 'Unknown'
-                };
-                formData.extractedData = { ...formData.extractedData, ...extracted };
-                document.getElementById('extracted-process-type').textContent = extracted.processType;
-                document.getElementById('extracted-workspace').textContent = extracted.workspace;
-                document.getElementById('extracted-environment').textContent = extracted.environment;
+                const fd = new FormData(); uploadedPhotos.forEach(f => fd.append('photos', f));
+                const r = await fetch(`${API_BASE_URL}/api/analyze-photos`, { method: 'POST', body: fd });
+                if (!r.ok) throw new Error('fail'); const result = await r.json(); if (!result.success) throw new Error('fail');
+                const ex = { processType: result.data.process_type || 'Unknown', workspace: result.data.workspace_dimensions || 'Unknown', environment: result.data.environment_type || 'Unknown' };
+                formData.extractedData = { ...formData.extractedData, ...ex };
+                document.getElementById('extracted-process-type').textContent = ex.processType;
+                document.getElementById('extracted-workspace').textContent = ex.workspace;
+                document.getElementById('extracted-environment').textContent = ex.environment;
                 document.getElementById('extractedPhotoData').classList.remove('hidden');
-            } catch (error) {
-                console.error('Error analyzing photos:', error);
-            } finally {
-                document.getElementById('photoLoading').classList.remove('active');
+            } catch (e) { console.error(e); }
+            finally { document.getElementById('photoLoading').classList.remove('active'); }
+        }
+
+        async function analyzeDiscovery() {
+            formData.extractedData.companyName = document.getElementById('company-name-manual').value || document.getElementById('extracted-company-name').textContent;
+            formData.extractedData.industry = document.getElementById('industry-manual').value || document.getElementById('extracted-industry').textContent;
+            formData.extractedData.location = document.getElementById('location-manual').value || document.getElementById('extracted-location').textContent;
+            formData.extractedData.size = document.getElementById('size-manual').value || document.getElementById('extracted-size').textContent;
+
+            try {
+                const r = await fetch(`${API_BASE_URL}/api/discovery-analysis`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...formData.extractedData })
+                });
+                if (!r.ok) throw new Error('fail');
+                const result = await r.json();
+                if (!result.success) throw new Error('fail');
+
+                formData.analysisResult = result.data;
+                formData.currentStep = 3;
+                showResults();
+            } catch (e) {
+                alert(document.documentElement.lang === 'de' ? 'Fehler bei der Analyse' : 'Analysis error');
             }
         }
 
-        // Radio options
-        document.querySelectorAll('.radio-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const radio = this.querySelector('input[type="radio"]');
-                radio.checked = true;
-                this.parentElement.querySelectorAll('.radio-option').forEach(opt => opt.classList.remove('selected'));
-                this.classList.add('selected');
-            });
-        });
-
-        // Review generation
-        function generateReview() {
-            const reviewContent = document.getElementById('reviewContent');
-            const lang = document.documentElement.lang;
-            const allData = {
-                ...formData.extractedData,
-                primaryGoal: document.getElementById('primary-goal').value,
-                timeline: document.querySelector('input[name="timeline"]:checked')?.value,
-                budgetRange: document.getElementById('budget-range').value,
-                budgetStatus: document.querySelector('input[name="budget-status"]:checked')?.value,
-                authority: document.querySelector('input[name="authority"]:checked')?.value,
-                contactName: document.getElementById('contact-name').value,
-                contactTitle: document.getElementById('contact-title').value,
-                contactEmail: document.getElementById('contact-email').value,
-                contactPhone: document.getElementById('contact-phone').value
+        async function searchSolutions() {
+            formData.userInputs = {
+                industry: document.getElementById('spec-industry').value,
+                weight: document.getElementById('spec-weight').value,
+                reach: document.getElementById('spec-reach').value,
+                precision: document.getElementById('spec-precision').value,
+                environment: document.getElementById('spec-environment').value,
+                budget: document.getElementById('budget-range').value,
+                contact_name: document.getElementById('contact-name').value,
+                contact_title: document.getElementById('contact-title').value,
+                contact_email: document.getElementById('contact-email').value,
+                contact_phone: document.getElementById('contact-phone').value
             };
-            reviewContent.innerHTML = `
-                <div class="review-section">
-                    <div class="review-section-header">
-                        <h3 class="review-section-title">${lang === 'de' ? 'Firma' : 'Company'}</h3>
-                        <button type="button" class="review-edit-btn" onclick="editStep(1)">${lang === 'de' ? 'Bearbeiten' : 'Edit'}</button>
-                    </div>
-                    <div class="review-content">
-                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Firmenname' : 'Company Name'}</div><div class="review-item-value">${allData.companyName || '\u2014'}</div></div>
-                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Branche' : 'Industry'}</div><div class="review-item-value">${allData.industry || '\u2014'}</div></div>
-                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Standort' : 'Location'}</div><div class="review-item-value">${allData.location || '\u2014'}</div></div>
-                    </div>
-                </div>
-                <div class="review-section">
-                    <div class="review-section-header">
-                        <h3 class="review-section-title">${lang === 'de' ? 'Projekt' : 'Project'}</h3>
-                        <button type="button" class="review-edit-btn" onclick="editStep(3)">${lang === 'de' ? 'Bearbeiten' : 'Edit'}</button>
-                    </div>
-                    <div class="review-content">
-                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Hauptziel' : 'Primary Goal'}</div><div class="review-item-value">${allData.primaryGoal || '\u2014'}</div></div>
-                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Zeitrahmen' : 'Timeline'}</div><div class="review-item-value">${allData.timeline || '\u2014'}</div></div>
-                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Budget' : 'Budget'}</div><div class="review-item-value">${allData.budgetRange || '\u2014'} (${allData.budgetStatus || '\u2014'})</div></div>
-                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Entscheidungsträger' : 'Decision Maker'}</div><div class="review-item-value">${allData.authority || '\u2014'}</div></div>
-                    </div>
-                </div>
-                <div class="review-section">
-                    <div class="review-section-header">
-                        <h3 class="review-section-title">${lang === 'de' ? 'Kontakt' : 'Contact'}</h3>
-                        <button type="button" class="review-edit-btn" onclick="editStep(3)">${lang === 'de' ? 'Bearbeiten' : 'Edit'}</button>
-                    </div>
-                    <div class="review-content">
-                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Name' : 'Name'}</div><div class="review-item-value">${allData.contactName || '\u2014'} (${allData.contactTitle || '\u2014'})</div></div>
-                        <div class="review-item"><div class="review-item-label">Email</div><div class="review-item-value">${allData.contactEmail || '\u2014'}</div></div>
-                        <div class="review-item"><div class="review-item-label">${lang === 'de' ? 'Telefon' : 'Phone'}</div><div class="review-item-value">${allData.contactPhone || '\u2014'}</div></div>
-                    </div>
-                </div>
-            `;
-        }
 
-        function editStep(stepNum) {
-            formData.currentStep = stepNum;
-            updateSteps();
-        }
-
-        // Form submission
-        document.getElementById('leadForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = document.documentElement.lang === 'de' ? 'Wird gesendet...' : 'Submitting...';
             try {
-                const ext = formData.extractedData;
-                const leadData = {
-                    company_name: ext.companyName || '',
-                    industry: ext.industry || '',
-                    location: ext.location || '',
-                    company_size: ext.size || '',
-                    process_type: ext.processType || '',
-                    workspace_dimensions: ext.workspace || '',
-                    environment_type: ext.environment || '',
-                    primary_goal: document.getElementById('primary-goal').value || '',
-                    timeline: document.querySelector('input[name="timeline"]:checked')?.value || '',
-                    budget_range: document.getElementById('budget-range').value || '',
-                    budget_status: document.querySelector('input[name="budget-status"]:checked')?.value || '',
-                    authority: document.querySelector('input[name="authority"]:checked')?.value || '',
-                    contact_name: document.getElementById('contact-name').value || '',
-                    contact_title: document.getElementById('contact-title').value || '',
-                    contact_email: document.getElementById('contact-email').value || '',
-                    contact_phone: document.getElementById('contact-phone').value || '',
-                    language: document.documentElement.lang
-                };
-                const response = await fetch(`${API_BASE_URL}/api/submit-lead`, {
+                const r = await fetch(`${API_BASE_URL}/api/match-solutions`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(leadData)
+                    body: JSON.stringify({ category_id: formData.selectedCategory, ...formData.userInputs })
                 });
-                if (!response.ok) throw new Error('Submission failed');
-                const result = await response.json();
-                if (!result.success) throw new Error(result.error || 'Submission failed');
-                const portalData = {
-                    lead_id: result.lead_id,
-                    lead_score: result.lead_score,
-                    ...leadData,
-                    status: 'searching',
-                    submitted_at: new Date().toISOString()
+                if (!r.ok) throw new Error('fail');
+                const result = await r.json();
+                if (!result.success) throw new Error('fail');
+
+                formData.searchResults = result.data;
+                formData.currentStep = 3;
+                showResults();
+            } catch (e) {
+                alert(document.documentElement.lang === 'de' ? 'Fehler bei der Suche' : 'Search error');
+            }
+        }
+
+        function showResults() {
+            const container = document.getElementById('resultsContainer');
+            const lang = document.documentElement.lang;
+
+            let html = '<div class="results-header">';
+            html += '<div class="results-title">' + (lang === 'de' ? 'Ihre Ergebnisse' : 'Your Results') + '</div>';
+
+            if (formData.currentPath === 'discovery' && formData.analysisResult) {
+                const potential = formData.analysisResult.potential || 'Medium';
+                const badgeClass = potential === 'High' ? 'high' : potential === 'Low' ? 'low' : 'medium';
+                html += '<div class="potential-badge ' + badgeClass + '">' + (lang === 'de' ? 'Potenzial: ' : 'Potential: ') + potential + '</div>';
+                html += '<div class="results-subtitle">' + (formData.analysisResult.summary || '') + '</div>';
+                html += '</div>';
+
+                if (formData.analysisResult.opportunities) {
+                    formData.analysisResult.opportunities.forEach(opp => {
+                        const oppBadgeClass = opp.priority === 'High' ? 'high' : opp.priority === 'Low' ? 'low' : 'medium';
+                        html += '<div class="opportunity-card">';
+                        html += '<div class="opportunity-card-header">';
+                        html += '<div class="opportunity-card-title-wrap">';
+                        html += '<div class="opportunity-card-icon">' + (opp.icon || '🤖') + '</div>';
+                        html += '<div class="opportunity-card-title">' + (lang === 'de' ? opp.name_de : opp.name_en) + '</div>';
+                        html += '</div>';
+                        html += '<div class="opportunity-card-badge ' + oppBadgeClass + '">' + (opp.priority || 'Medium') + '</div>';
+                        html += '</div>';
+                        html += '<div class="opportunity-card-description">' + (lang === 'de' ? opp.description_de : opp.description_en) + '</div>';
+                        html += '<div class="opportunity-card-meta">';
+                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">' + (lang === 'de' ? 'Lösungen' : 'Solutions') + '</div><div class="opportunity-meta-value">' + (opp.solution_count || 0) + '</div></div>';
+                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">' + (lang === 'de' ? 'Preis' : 'Price') + '</div><div class="opportunity-meta-value">' + (opp.price_range || '—') + '</div></div>';
+                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">ROI</div><div class="opportunity-meta-value">' + (opp.estimated_roi || '—') + '</div></div>';
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                }
+            } else if (formData.currentPath === 'direct' && formData.searchResults) {
+                html += '<div class="results-subtitle">' + (lang === 'de' ? 'Gefundene Lösungen' : 'Found Solutions') + '</div>';
+                html += '</div>';
+
+                if (Array.isArray(formData.searchResults)) {
+                    formData.searchResults.forEach(sol => {
+                        const matchPercent = sol.match_score || 85;
+                        html += '<div class="solution-card">';
+                        html += '<div class="solution-card-header">';
+                        html += '<div class="solution-card-name">' + (sol.name || 'Solution') + '</div>';
+                        html += '<div class="solution-card-provider">' + (sol.provider || 'Provider') + '</div>';
+                        html += '</div>';
+                        html += '<div class="solution-card-meta">';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">Preis</div><div class="solution-meta-value">' + (sol.price || '—') + '</div></div>';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">ROI</div><div class="solution-meta-value">' + (sol.roi || '—') + '</div></div>';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">' + (lang === 'de' ? 'Nutzlast' : 'Payload') + '</div><div class="solution-meta-value">' + (sol.payload || '—') + '</div></div>';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">' + (lang === 'de' ? 'Match' : 'Match') + '</div><div class="solution-meta-value">' + matchPercent + '%</div></div>';
+                        html += '</div>';
+                        html += '<div class="match-score-bar"><div class="match-score-fill" style="width:' + matchPercent + '%"></div></div>';
+                        html += '</div>';
+                    });
+                }
+            }
+
+            container.innerHTML = html;
+            container.classList.add('active');
+            updateFormSteps();
+        }
+
+        function submitContactInfo() {
+            if (!document.getElementById('contact-email').value) {
+                alert(document.documentElement.lang === 'de' ? 'Bitte geben Sie Ihre Email ein' : 'Please enter your email');
+                return;
+            }
+            formData.currentStep = 4;
+            updateFormSteps();
+        }
+
+        function generateReview() {
+            const l = document.documentElement.lang;
+            let html = '';
+
+            if (formData.currentPath === 'discovery') {
+                html += '<div class="review-section"><div class="review-section-header"><h3 class="review-section-title">' + (l==='de'?'Firma':'Company') + '</h3></div>';
+                html += '<div class="review-content"><div class="review-item"><div class="review-item-label">' + (l==='de'?'Firmenname':'Company') + '</div><div class="review-item-value">' + (formData.extractedData.companyName||'—') + '</div></div>';
+                html += '<div class="review-item"><div class="review-item-label">' + (l==='de'?'Branche':'Industry') + '</div><div class="review-item-value">' + (formData.extractedData.industry||'—') + '</div></div></div></div>';
+            } else {
+                html += '<div class="review-section"><div class="review-section-header"><h3 class="review-section-title">' + (l==='de'?'Anfrage':'Request') + '</h3></div>';
+                html += '<div class="review-content"><div class="review-item"><div class="review-item-label">' + (l==='de'?'Kategorie':'Category') + '</div><div class="review-item-value">' + (formData.selectedCategory||'—') + '</div></div>';
+                html += '<div class="review-item"><div class="review-item-label">Budget</div><div class="review-item-value">' + (formData.userInputs.budget||'—') + '</div></div></div></div>';
+            }
+
+            html += '<div class="review-section"><div class="review-section-header"><h3 class="review-section-title">' + (l==='de'?'Kontakt':'Contact') + '</h3></div>';
+            html += '<div class="review-content"><div class="review-item"><div class="review-item-label">Name</div><div class="review-item-value">' + (document.getElementById('contact-name').value||'—') + '</div></div>';
+            html += '<div class="review-item"><div class="review-item-label">Email</div><div class="review-item-value">' + (document.getElementById('contact-email').value||'—') + '</div></div></div></div>';
+
+            document.getElementById('reviewContent').innerHTML = html;
+        }
+
+        document.getElementById('leadForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); const btn = document.getElementById('submitBtn'); btn.disabled = true; btn.textContent = document.documentElement.lang === 'de' ? 'Wird gesendet...' : 'Submitting...';
+            try {
+                const ld = {
+                    path: formData.currentPath,
+                    ...formData.extractedData,
+                    ...formData.userInputs,
+                    contact_name: document.getElementById('contact-name').value||'',
+                    contact_email: document.getElementById('contact-email').value||'',
+                    language: document.documentElement.lang
                 };
-                localStorage.setItem('robofolio_lead', JSON.stringify(portalData));
-                document.getElementById('profile-name').value = leadData.contact_name || '';
-                document.getElementById('profile-company').value = leadData.company_name || '';
-                document.getElementById('profile-email').value = leadData.contact_email || '';
+                const r = await fetch(`${API_BASE_URL}/api/submit-lead`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(ld) });
+                if (!r.ok) throw new Error('fail'); const result = await r.json(); if (!result.success) throw new Error('fail');
+                localStorage.setItem('robofolio_lead', JSON.stringify({ lead_id: result.lead_id, lead_score: result.lead_score, ...ld, status: 'searching', submitted_at: new Date().toISOString() }));
+                document.getElementById('profile-name').value = ld.contact_name||'';
+                document.getElementById('profile-company').value = formData.extractedData.companyName||'';
+                document.getElementById('profile-email').value = ld.contact_email||'';
                 document.getElementById('leadForm').style.display = 'none';
                 document.querySelector('.progress-container').style.display = 'none';
                 document.getElementById('successContainer').classList.add('active');
-            } catch (error) {
-                console.error('Error submitting form:', error);
-                alert(document.documentElement.lang === 'de' ? 'Fehler beim Senden. Bitte versuchen Sie es erneut.' : 'Error submitting. Please try again.');
-                submitBtn.disabled = false;
-            }
+            } catch (e) { alert(document.documentElement.lang === 'de' ? 'Fehler beim Senden.' : 'Error submitting.'); btn.disabled = false; }
         });
 
         function goToPortal() {
-            const name = document.getElementById('profile-name').value.trim();
-            const email = document.getElementById('profile-email').value.trim();
-            if (!name || !email) {
-                alert(document.documentElement.lang === 'de' ? 'Bitte füllen Sie Name und Email aus.' : 'Please fill in your name and email.');
-                return;
-            }
-            const lead = JSON.parse(localStorage.getItem('robofolio_lead') || '{}');
-            lead.profile_name = name;
-            lead.profile_email = email;
-            lead.profile_company = document.getElementById('profile-company').value;
+            const name = document.getElementById('profile-name').value.trim(), email = document.getElementById('profile-email').value.trim();
+            if (!name || !email) { alert(document.documentElement.lang === 'de' ? 'Bitte füllen Sie Name und Email aus.' : 'Please fill in your name and email.'); return; }
+            const lead = JSON.parse(localStorage.getItem('robofolio_lead')||'{}');
+            lead.profile_name = name; lead.profile_email = email; lead.profile_company = document.getElementById('profile-company').value;
             localStorage.setItem('robofolio_lead', JSON.stringify(lead));
             window.location.href = 'portal.html';
         }
 
-        // Hero video rotation (activate when MP4 videos are added)
-        (function() {
-            const videos = document.querySelectorAll('#heroBg video');
-            if (videos.length <= 1) return;
-            let current = 0;
-            setInterval(() => {
-                videos[current].classList.remove('active-video');
-                current = (current + 1) % videos.length;
-                videos[current].classList.add('active-video');
-            }, 12000);
-        })();
+        (function() { const v = document.querySelectorAll('#heroBg video'); if (v.length <= 1) return; let c = 0; setInterval(() => { v[c].classList.remove('active-video'); c = (c + 1) % v.length; v[c].classList.add('active-video'); }, 12000); })();
     </script>
 </body>
 </html>
