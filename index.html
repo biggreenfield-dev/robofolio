@@ -133,6 +133,37 @@
 
         .nav-cta:hover { background: var(--signal-hover); }
 
+        .nav-partner {
+            padding: 10px 24px;
+            background: transparent;
+            color: rgba(255,255,255,0.8);
+            border: 1px solid rgba(255,255,255,0.3);
+            font-weight: 600;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .nav-partner:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.5);
+            color: white;
+        }
+
+        nav.scrolled .nav-partner {
+            color: var(--text-secondary);
+            border-color: var(--border);
+        }
+
+        nav.scrolled .nav-partner:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: transparent;
+        }
+
         /* ===== HERO ===== */
         .hero {
             position: relative;
@@ -973,6 +1004,8 @@
                 <button class="lang-btn active" data-lang-btn="de" onclick="switchLanguage('de')">DE</button>
                 <button class="lang-btn" data-lang-btn="en" onclick="switchLanguage('en')">EN</button>
             </div>
+            <a href="partner-portal.html" class="nav-partner" data-lang="de">Partner Login</a>
+            <a href="partner-portal.html" class="nav-partner" data-lang="en" style="display:none;">Partner Login</a>
             <button class="nav-cta" onclick="scrollToForm()" data-lang="de">Anfrage starten</button>
             <button class="nav-cta" onclick="scrollToForm()" data-lang="en" style="display:none;">Get Started</button>
         </div>
