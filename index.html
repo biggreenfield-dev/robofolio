@@ -3,868 +3,1758 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Robofolio - Der kuratierte Marktplatz für Robotik-Integratoren in Deutschland und Europa">
-    <title>Robofolio - Finden Sie Ihren perfekten Robotik-Partner</title>
+    <meta name="description" content="Robofolio — Finden Sie den passenden Robotik-Integrator. Automatisierung beginnt hier.">
+    <title>Robofolio — Automatisierung beginnt hier.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #0A2840;
+            --primary-light: #1E2F3A;
+            --accent: #009DDB;
+            --accent-hover: #0088c2;
+            --signal: #00B894;
+            --signal-hover: #00a07f;
+            --bg-white: #FFFFFF;
+            --bg-light: #F5F7F9;
+            --bg-muted: #E6EAEE;
+            --text-primary: #000000;
+            --text-secondary: #6F7C86;
+            --text-muted: #B8C7D3;
+            --border: #E6EAEE;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+            background: var(--bg-white);
+            color: var(--text-primary);
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Language Toggle */
-        .lang-toggle {
+        /* ===== NAVIGATION ===== */
+        nav {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 0; left: 0; right: 0;
             z-index: 1000;
-            display: flex;
-            gap: 5px;
-            background: white;
-            padding: 5px;
-            border-radius: 25px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .lang-btn {
-            padding: 8px 16px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            border-radius: 20px;
-            font-weight: 600;
+            background: rgba(10, 40, 64, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             transition: all 0.3s ease;
-            color: #666;
-        }
-        .lang-btn.active {
-            background: #1a365d;
-            color: white;
-        }
-        .lang-btn:hover:not(.active) {
-            background: #f0f0f0;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%);
-            color: white;
-            padding: 15px 40px;
+            padding: 0 48px;
+            height: 72px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .logo {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -1px;
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.97);
+            box-shadow: 0 1px 0 var(--border);
         }
-        nav {
+
+        .logo-wrap {
             display: flex;
             align-items: center;
-            gap: 30px;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s ease;
-        }
-        nav a:hover {
-            opacity: 0.8;
-        }
-        .nav-cta {
-            background: #48bb78;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-weight: 600;
-        }
-        .nav-cta:hover {
-            background: #38a169;
-            opacity: 1;
+            gap: 10px;
         }
 
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #2d5a87 0%, #1a365d 100%);
-            color: white;
-            padding: 100px 40px 80px;
-            text-align: center;
-        }
-        .hero h1 {
-            font-size: 52px;
-            margin-bottom: 24px;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-        .hero p {
-            font-size: 22px;
-            max-width: 750px;
-            margin: 0 auto 40px;
-            opacity: 0.95;
-            line-height: 1.5;
-        }
-        .hero-cta {
-            display: inline-block;
-            background: #48bb78;
-            color: white;
-            padding: 20px 45px;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 700;
-            text-decoration: none;
-            margin: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
-        }
-        .hero-cta:hover {
-            background: #38a169;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
-        }
-        .hero-cta.secondary {
-            background: transparent;
-            border: 2px solid white;
-            box-shadow: none;
-        }
-        .hero-cta.secondary:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        .hero-stats {
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: var(--accent);
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 80px;
-            margin-top: 60px;
+            font-weight: 800;
+            font-size: 18px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+
+        nav.scrolled .logo-text { color: var(--primary); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 2px;
+            background: rgba(255,255,255,0.12);
+            padding: 3px;
+        }
+
+        nav.scrolled .lang-toggle { background: var(--bg-muted); }
+
+        .lang-btn {
+            padding: 5px 10px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+        }
+
+        nav.scrolled .lang-btn { color: var(--text-secondary); }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .nav-cta {
+            padding: 10px 24px;
+            background: var(--signal);
+            color: white;
+            border: none;
+            font-weight: 700;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            transition: background 0.2s ease;
+        }
+
+        .nav-cta:hover { background: var(--signal-hover); }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: var(--primary);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+        }
+
+        .hero-bg video {
+            position: absolute;
+            top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .hero-bg video.active-video { opacity: 1; }
+
+        .hero-bg-fallback {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(0,157,219,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(0,184,148,0.08) 0%, transparent 50%),
+                linear-gradient(160deg, #0A2840 0%, #132f47 40%, #0d2538 100%);
+        }
+
+        .hero-bg-fallback::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: radial-gradient(circle, rgba(0,157,219,0.06) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(
+                to right,
+                rgba(10,40,64,0.88) 0%,
+                rgba(10,40,64,0.65) 50%,
+                rgba(10,40,64,0.45) 100%
+            );
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 660px;
+            padding: 140px 48px 100px;
+            animation: fadeInUp 0.7s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-overline {
+            display: inline-block;
+            color: var(--signal);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.15;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span { color: var(--accent); }
+
+        .hero-sub {
+            font-size: 17px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 40px;
+            line-height: 1.7;
+            max-width: 520px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
             flex-wrap: wrap;
         }
-        .stat { text-align: center; }
-        .stat-number {
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-        .stat-label {
-            opacity: 0.85;
-            font-size: 15px;
-            font-weight: 500;
+
+        .btn-hero {
+            padding: 15px 36px;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
         }
 
-        /* How It Works */
-        .how-it-works {
-            padding: 100px 40px;
-            background: white;
-            text-align: center;
+        .btn-hero-accent {
+            background: var(--accent);
+            color: white;
         }
-        .section-title {
-            font-size: 38px;
-            color: #1a365d;
-            margin-bottom: 60px;
-            font-weight: 800;
+
+        .btn-hero-accent:hover { background: var(--accent-hover); }
+
+        .btn-hero-ghost {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.25);
         }
-        .steps {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
+
+        .btn-hero-ghost:hover { border-color: white; }
+
+        /* ===== STATS ===== */
+        .stats-bar {
+            background: var(--primary);
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding: 48px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stat-item { text-align: center; }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== HOW IT WORKS ===== */
+        .how-section {
+            padding: 80px 48px;
             max-width: 1100px;
             margin: 0 auto;
-            flex-wrap: wrap;
         }
-        .step {
-            flex: 1;
-            min-width: 280px;
-            padding: 40px 30px;
-            background: #f8f9fa;
-            border-radius: 16px;
-            transition: all 0.3s ease;
-        }
-        .step:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: #1a365d;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: 800;
-            margin: 0 auto 24px;
-        }
-        .step h3 {
-            color: #1a365d;
+
+        .overline {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             margin-bottom: 12px;
-            font-size: 22px;
-            font-weight: 700;
         }
-        .step p {
-            color: #666;
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .section-sub {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            max-width: 560px;
             line-height: 1.7;
         }
 
-        /* For Buyers Section */
-        .for-buyers {
-            padding: 100px 40px;
-            background: #f8f9fa;
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
         }
-        .two-col {
-            display: flex;
-            max-width: 1200px;
-            margin: 0 auto;
-            align-items: center;
-            gap: 80px;
-            flex-wrap: wrap;
+
+        .step-card {
+            padding: 32px 28px;
+            background: var(--bg-light);
+            border-top: 3px solid var(--accent);
+            transition: all 0.2s ease;
         }
-        .two-col > div { flex: 1; min-width: 400px; }
-        .benefits-list {
-            list-style: none;
+
+        .step-card:hover { background: #eef5fa; }
+
+        .step-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--accent);
+            opacity: 0.25;
+            margin-bottom: 16px;
+            line-height: 1;
         }
-        .benefits-list li {
-            padding: 18px 0 18px 45px;
-            position: relative;
-            border-bottom: 1px solid #e0e0e0;
+
+        .step-card h3 {
             font-size: 17px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .step-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
             line-height: 1.6;
         }
-        .benefits-list li:last-child {
-            border-bottom: none;
+
+        /* ===== FORM SECTION ===== */
+        .form-section {
+            background: var(--bg-light);
+            padding: 80px 48px;
         }
-        .benefits-list li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #48bb78;
-            font-weight: bold;
-            font-size: 24px;
-        }
+
         .form-container {
             background: white;
-            padding: 45px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 52px;
+            box-shadow: 0 1px 12px rgba(0,0,0,0.05);
         }
-        .form-container h3 {
-            color: #1a365d;
-            margin-bottom: 28px;
-            font-size: 26px;
+
+        .progress-container { margin-bottom: 44px; }
+
+        .progress-bar-wrapper {
+            background: var(--bg-muted);
+            height: 3px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #progressBarFill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .progress-step-circle {
+            width: 34px; height: 34px;
+            background: var(--bg-muted);
+            border: 2px solid var(--bg-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: 700;
+            color: var(--text-secondary);
+            font-size: 13px;
+            transition: all 0.3s ease;
         }
-        .form-field {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            font-size: 16px;
-            font-family: inherit;
-            transition: border-color 0.3s ease;
-        }
-        .form-field:focus {
-            outline: none;
-            border-color: #1a365d;
-        }
-        .form-field.textarea {
-            min-height: 120px;
-            resize: vertical;
-            font-family: inherit;
-        }
-        .form-btn {
-            width: 100%;
-            background: #1a365d;
+
+        .progress-step.active .progress-step-circle {
+            background: var(--accent);
+            border-color: var(--accent);
             color: white;
-            padding: 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 17px;
-            font-weight: 700;
+        }
+
+        .progress-step.completed .progress-step-circle {
+            background: var(--signal);
+            border-color: var(--signal);
+            color: white;
+        }
+
+        .progress-step-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-step.active .progress-step-label { color: var(--accent); }
+        .progress-step.completed .progress-step-label { color: var(--signal); }
+
+        .form-step { display: none; animation: fadeIn 0.3s ease; }
+        .form-step.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+        .step-description { font-size: 15px; color: var(--text-secondary); margin-bottom: 32px; }
+
+        .path-selection {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .path-card {
+            padding: 32px;
+            border: 2px solid var(--border);
             cursor: pointer;
             transition: all 0.3s ease;
-        }
-        .form-btn:hover {
-            background: #2d5a87;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(26, 54, 93, 0.3);
-        }
-        .form-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .form-note {
-            font-size: 13px;
-            color: #888;
-            margin-top: 12px;
-            text-align: center;
-        }
-        .form-message {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-        }
-        .form-message.success {
-            background: #d4edda;
-            color: #155724;
-            display: block;
-        }
-        .form-message.error {
-            background: #f8d7da;
-            color: #721c24;
-            display: block;
+            background: white;
         }
 
-        /* Integrators Section */
-        .integrators {
-            padding: 100px 40px;
-            background: white;
-            text-align: center;
+        .path-card:hover {
+            border-color: var(--accent);
+            background: rgba(0, 157, 219, 0.04);
         }
-        .integrator-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 35px;
-            max-width: 1100px;
-            margin: 0 auto 40px;
+
+        .path-card.selected {
+            border-color: var(--accent);
+            background: rgba(0, 157, 219, 0.04);
         }
-        .integrator-card {
-            background: #f8f9fa;
-            padding: 35px;
-            border-radius: 16px;
-            text-align: left;
-            transition: all 0.3s ease;
-        }
-        .integrator-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .integrator-logo {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #e0e0e0 0%, #f0f0f0 100%);
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            font-size: 13px;
-            font-weight: 600;
-        }
-        .integrator-card h4 {
-            color: #1a365d;
-            margin-bottom: 8px;
-            font-size: 20px;
-            font-weight: 700;
-        }
-        .integrator-card .specialty {
-            color: #666;
-            font-size: 15px;
+
+        .path-card-icon {
+            font-size: 32px;
             margin-bottom: 12px;
         }
-        .integrator-card .rating {
-            color: #f6ad55;
-            font-weight: 600;
-        }
-        .view-all-link {
-            color: #1a365d;
+
+        .path-card-title {
+            font-size: 16px;
             font-weight: 700;
-            text-decoration: none;
-            font-size: 17px;
-            transition: opacity 0.3s ease;
-        }
-        .view-all-link:hover {
-            opacity: 0.7;
+            color: var(--primary);
+            margin-bottom: 8px;
         }
 
-        /* Trust Section */
-        .trust {
-            padding: 80px 40px;
-            background: #1a365d;
-            color: white;
-            text-align: center;
+        .path-card-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
         }
-        .trust h2 {
-            margin-bottom: 50px;
-            font-size: 36px;
-            font-weight: 800;
+
+        .form-group { margin-bottom: 22px; }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .trust-badges {
-            display: flex;
-            justify-content: center;
-            gap: 70px;
-            flex-wrap: wrap;
+
+        .required { color: var(--accent); }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 0;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+            background: #fff;
+            color: var(--text-primary);
         }
-        .badge {
-            text-align: center;
-            max-width: 150px;
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(0,157,219,0.12);
         }
-        .badge-icon {
-            width: 70px;
-            height: 70px;
-            background: rgba(255,255,255,0.1);
+
+        .form-textarea { resize: vertical; min-height: 100px; }
+
+        .website-input-group { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+        #analyzeWebsiteBtn { padding: 12px 24px; }
+
+        .loading-spinner { display: none; text-align: center; padding: 28px; }
+        .loading-spinner.active { display: block; }
+
+        .spinner {
+            border: 3px solid var(--bg-muted);
+            border-top: 3px solid var(--accent);
             border-radius: 50%;
-            margin: 0 auto 16px;
+            width: 28px; height: 28px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .extracted-data {
+            background: var(--bg-light);
+            border-left: 3px solid var(--accent);
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .extracted-data.hidden { display: none; }
+        .extracted-data:not(.hidden) { display: block; }
+
+        .extracted-data-item {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            font-size: 32px;
-        }
-        .badge-label {
-            font-weight: 600;
-            font-size: 15px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
         }
 
-        /* CTA Section */
-        .final-cta {
-            padding: 100px 40px;
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-            color: white;
-            text-align: center;
-        }
-        .final-cta h2 {
-            font-size: 42px;
+        .extracted-data-item:last-child { border-bottom: none; }
+
+        .extracted-data-label { font-weight: 600; color: var(--primary); font-size: 13px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .extracted-data-value { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-weight: 700; font-size: 14px; }
+
+        .manual-input-toggle { margin-top: 14px; }
+        .manual-input-toggle button { background: none; border: none; color: var(--accent); font-weight: 600; cursor: pointer; font-size: 13px; text-decoration: underline; font-family: 'Inter', sans-serif; }
+        .manual-input-toggle button:hover { color: var(--signal); }
+
+        #manualInputFields { background: var(--bg-light); padding: 20px; margin-top: 16px; display: none; }
+        #manualInputFields.hidden { display: none; }
+        #manualInputFields:not(.hidden) { display: block; }
+
+        .upload-area { border: 2px dashed var(--border); padding: 36px; text-align: center; cursor: pointer; transition: all 0.2s ease; background: var(--bg-light); margin-bottom: 20px; }
+        .upload-area:hover { border-color: var(--accent); background: #f0f7fb; }
+        .upload-area.dragover { border-color: var(--accent); background: rgba(0,157,219,0.04); }
+
+        .upload-icon { font-size: 36px; margin-bottom: 10px; }
+        .upload-text { font-size: 15px; font-weight: 600; color: var(--primary); margin-bottom: 4px; }
+        .upload-subtext { font-size: 13px; color: var(--text-secondary); }
+
+        #photoUpload { display: none; }
+        #uploadedFiles { display: grid; gap: 8px; margin-bottom: 20px; }
+
+        .uploaded-file { background: var(--bg-light); border-left: 3px solid var(--signal); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+        .uploaded-file-name { font-size: 13px; font-weight: 600; color: var(--primary); }
+        .remove-file { background: none; border: none; color: var(--text-muted); font-size: 18px; cursor: pointer; }
+        .remove-file:hover { color: #e74c3c; }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
             margin-bottom: 20px;
-            font-weight: 800;
         }
-        .final-cta p {
-            font-size: 20px;
-            margin-bottom: 35px;
-            opacity: 0.95;
-        }
-        .final-cta a {
-            display: inline-block;
-            background: white;
-            color: #38a169;
-            padding: 20px 45px;
-            border-radius: 8px;
-            font-weight: 700;
-            text-decoration: none;
-            font-size: 18px;
+
+        .category-card {
+            padding: 20px;
+            border: 1px solid var(--border);
+            cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .final-cta a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            background: white;
         }
 
-        /* Footer */
-        footer {
-            background: #1a365d;
-            color: white;
-            padding: 50px 40px;
-            text-align: center;
-        }
-        footer p {
-            opacity: 0.8;
-            font-size: 15px;
-            margin-bottom: 10px;
-        }
-        footer a {
-            color: white;
-            text-decoration: none;
-            margin: 0 12px;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
-        }
-        footer a:hover {
-            opacity: 1;
+        .category-card:hover {
+            border-color: var(--accent);
+            background: rgba(0, 157, 219, 0.04);
         }
 
-        /* Responsive */
+        .category-card.selected {
+            border-color: var(--accent);
+            background: rgba(0, 157, 219, 0.04);
+        }
+
+        .category-card-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .category-card-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .category-card-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .results-header {
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .results-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .results-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .opportunity-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .opportunity-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 2px 8px rgba(0,157,219,0.1);
+        }
+
+        .opportunity-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .opportunity-card-title-wrap {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .opportunity-card-icon {
+            font-size: 20px;
+        }
+
+        .opportunity-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .opportunity-card-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .opportunity-card-badge.high {
+            background: rgba(0, 184, 148, 0.15);
+            color: #00a07f;
+        }
+
+        .opportunity-card-badge.medium {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ff9800;
+        }
+
+        .opportunity-card-badge.low {
+            background: rgba(244, 67, 54, 0.15);
+            color: #d32f2f;
+        }
+
+        .opportunity-card-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .opportunity-card-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .opportunity-meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .opportunity-meta-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+
+        .opportunity-meta-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .solution-card {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .solution-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 2px 8px rgba(0,157,219,0.1);
+        }
+
+        .solution-card-header {
+            margin-bottom: 12px;
+        }
+
+        .solution-card-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .solution-card-provider {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .solution-card-meta {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .solution-meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .solution-meta-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 4px;
+        }
+
+        .solution-meta-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .match-score-bar {
+            background: var(--bg-muted);
+            height: 6px;
+            overflow: hidden;
+            border-radius: 3px;
+        }
+
+        .match-score-fill {
+            background: var(--accent);
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .potential-badge {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 16px;
+        }
+
+        .potential-badge.high {
+            background: rgba(0, 184, 148, 0.15);
+            color: #00a07f;
+        }
+
+        .potential-badge.medium {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ff9800;
+        }
+
+        .potential-badge.low {
+            background: rgba(244, 67, 54, 0.15);
+            color: #d32f2f;
+        }
+
+        .partner-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .partner-card-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .partner-card-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .radio-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin: 10px 0 22px; }
+        .radio-option { position: relative; display: block; padding: 14px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s ease; background: white; }
+        .radio-option input[type="radio"] { position: absolute; opacity: 0; }
+        .radio-option span { display: block; font-weight: 600; font-size: 13px; color: var(--primary); }
+        .radio-option:hover { border-color: var(--accent); }
+        .radio-option.selected { border-color: var(--accent); background: rgba(0,157,219,0.04); }
+        .radio-option.selected span { color: var(--accent); }
+
+        .form-navigation { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--border); }
+
+        .btn { padding: 14px 32px; border: none; border-radius: 0; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; font-family: 'Inter', sans-serif; letter-spacing: 0.3px; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-secondary { background: white; color: var(--primary); border: 1px solid var(--border); }
+        .btn-secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+        .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-signal { background: var(--signal); color: white; }
+        .btn-signal:hover:not(:disabled) { background: var(--signal-hover); }
+
+        .review-section { background: var(--bg-light); padding: 20px; margin-bottom: 16px; border-left: 3px solid var(--accent); }
+        .review-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+        .review-section-title { font-size: 14px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .review-edit-btn { background: none; border: none; color: var(--accent); font-weight: 700; cursor: pointer; font-size: 12px; font-family: 'Inter', sans-serif; }
+        .review-edit-btn:hover { color: var(--signal); }
+        .review-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .review-item { display: flex; flex-direction: column; }
+        .review-item-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+        .review-item-value { font-size: 14px; font-weight: 600; color: var(--primary); }
+
+        .success-container { display: none; text-align: center; padding: 56px 36px; }
+        .success-container.active { display: block; }
+        .success-icon { width: 64px; height: 64px; background: var(--signal); color: white; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 20px; }
+        .success-title { font-size: 26px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+        .success-message { font-size: 15px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6; max-width: 460px; margin-left: auto; margin-right: auto; }
+
+        footer { background: var(--primary); color: white; padding: 40px 48px; display: flex; justify-content: space-between; align-items: center; }
+        footer p { font-size: 13px; color: rgba(255,255,255,0.5); }
+        .footer-claim { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1px; }
+
         @media (max-width: 768px) {
-            .hero h1 { font-size: 36px; }
-            .hero p { font-size: 18px; }
-            .section-title { font-size: 30px; }
-            .steps { flex-direction: column; }
-            .two-col { flex-direction: column; gap: 40px; }
-            .two-col > div { min-width: 100%; }
-            .hero-stats { gap: 40px; }
-            .trust-badges { gap: 40px; }
-            nav { display: none; }
-            .mobile-menu-btn { display: block; }
-            header { padding: 15px 20px; }
-            .hero, .how-it-works, .for-buyers, .integrators, .final-cta {
-                padding: 60px 20px;
-            }
+            nav { padding: 0 20px; height: 60px; }
+            .logo-text { font-size: 17px; }
+            .nav-cta { display: none; }
+            .hero h1 { font-size: 32px; }
+            .hero-sub { font-size: 15px; }
+            .hero-content { padding: 100px 24px 60px; }
+            .hero-actions { flex-direction: column; align-items: stretch; }
+            .btn-hero { text-align: center; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .stats-bar { padding: 32px 24px; }
+            .how-section { padding: 48px 24px; }
+            .steps-grid { grid-template-columns: 1fr; gap: 16px; }
+            .form-section { padding: 48px 20px; }
+            .form-container { padding: 32px 20px; }
+            .progress-steps { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+            .step-title { font-size: 22px; }
+            .path-selection { grid-template-columns: 1fr; }
+            .category-grid { grid-template-columns: 1fr; }
+            .radio-group { grid-template-columns: 1fr; }
+            .form-navigation { grid-template-columns: 1fr; }
+            .website-input-group { grid-template-columns: 1fr; }
+            .review-content { grid-template-columns: 1fr; }
+            .section-title { font-size: 28px; }
+            .solution-card-meta { grid-template-columns: repeat(2, 1fr); }
+            .opportunity-card-meta { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 8px; text-align: center; }
         }
 
-        /* Smooth scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Hidden content for language switch */
-        [data-lang]:not([data-lang="de"]) {
-            display: none;
-        }
-        html[lang="en"] [data-lang]:not([data-lang="en"]) {
-            display: none;
-        }
-        html[lang="en"] [data-lang="en"] {
-            display: block;
-        }
-        html[lang="de"] [data-lang="de"] {
-            display: block;
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 26px; }
+            .hero-content { padding: 90px 16px 48px; }
+            .form-container { padding: 24px 16px; }
+            .step-title { font-size: 20px; }
+            .btn { padding: 12px 24px; font-size: 12px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stat-number { font-size: 26px; }
+            .progress-steps { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
-    <!-- Language Toggle -->
-    <div class="lang-toggle">
-        <button class="lang-btn active" data-lang-btn="de" onclick="switchLanguage('de')">DE</button>
-        <button class="lang-btn" data-lang-btn="en" onclick="switchLanguage('en')">EN</button>
-    </div>
+    <nav id="mainNav">
+        <div class="logo-wrap">
+            <div class="logo-icon">R</div>
+            <div class="logo-text">Robofolio</div>
+        </div>
+        <div class="nav-right">
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang-btn="de" onclick="switchLanguage('de')">DE</button>
+                <button class="lang-btn" data-lang-btn="en" onclick="switchLanguage('en')">EN</button>
+            </div>
+            <button class="nav-cta" onclick="scrollToForm()" data-lang="de">Anfrage starten</button>
+            <button class="nav-cta" onclick="scrollToForm()" data-lang="en" style="display:none;">Get Started</button>
+        </div>
+    </nav>
 
-    <!-- Header -->
-    <header>
-        <div class="logo">ROBOFOLIO</div>
-        <nav>
-            <a href="#how-it-works" data-lang="de">Wie es funktioniert</a>
-            <a href="#how-it-works" data-lang="en">How It Works</a>
-
-            <a href="#for-integrators" data-lang="de">Für Integratoren</a>
-            <a href="#for-integrators" data-lang="en">For Integrators</a>
-
-            <a href="#about" data-lang="de">Über uns</a>
-            <a href="#about" data-lang="en">About</a>
-
-            <a href="#get-matched" class="nav-cta" data-lang="de">Kostenlos Partner finden</a>
-            <a href="#get-matched" class="nav-cta" data-lang="en">Get Matched Free</a>
-        </nav>
-        <button class="mobile-menu-btn">☰</button>
-    </header>
-
-    <!-- Hero Section -->
     <section class="hero">
-        <h1 data-lang="de">Finden Sie Ihren perfekten Robotik-Partner</h1>
-        <h1 data-lang="en">Find Your Perfect Robotics Partner</h1>
-
-        <p data-lang="de">Lassen Sie sich mit geprüften Robotik-Integratoren verbinden, die auf Ihre Branche spezialisiert sind. Kostenlos für Käufer. Ohne Verpflichtung.</p>
-        <p data-lang="en">Get matched with vetted robotics integrators who specialize in your industry. Free for buyers. No obligation.</p>
-
-        <div>
-            <a href="#get-matched" class="hero-cta" data-lang="de">Jetzt Partner finden — Kostenlos</a>
-            <a href="#get-matched" class="hero-cta" data-lang="en">Get Matched — It's Free</a>
-
-            <a href="#for-integrators" class="hero-cta secondary" data-lang="de">Ich bin ein Integrator</a>
-            <a href="#for-integrators" class="hero-cta secondary" data-lang="en">I'm an Integrator</a>
+        <div class="hero-bg" id="heroBg">
+            <div class="hero-bg-fallback"></div>
+            <video class="active-video" autoplay muted loop playsinline src="videos/cobot-welding.mp4"></video>
+            <video autoplay muted loop playsinline src="videos/cobot-palletizing.mp4"></video>
+            <video autoplay muted loop playsinline src="videos/cobot-machine-tending.mp4"></video>
         </div>
-
-        <div class="hero-stats">
-            <div class="stat">
-                <div class="stat-number">50+</div>
-                <div class="stat-label" data-lang="de">Geprüfte Integratoren</div>
-                <div class="stat-label" data-lang="en">Vetted Integrators</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">2 Mio.€+</div>
-                <div class="stat-label" data-lang="de">Vermittelte Projekte</div>
-                <div class="stat-label" data-lang="en">Projects Matched</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">48 Std.</div>
-                <div class="stat-label" data-lang="de">Durchschn. Reaktionszeit</div>
-                <div class="stat-label" data-lang="en">Avg. Response Time</div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-overline" data-lang="de">Automatisierung beginnt hier</div>
+            <div class="hero-overline" data-lang="en" style="display:none;">Automation starts here</div>
+            <h1 data-lang="de">Finden Sie Ihren <span>Robotik-Integrator</span> in 2 Minuten</h1>
+            <h1 data-lang="en" style="display:none;">Find Your <span>Robotics Integrator</span> in 2 Minutes</h1>
+            <p class="hero-sub" data-lang="de">Unsere KI analysiert Ihren Betrieb und verbindet Sie mit dem passenden Automatisierungspartner. Neutral, datenbasiert und kostenlos.</p>
+            <p class="hero-sub" data-lang="en" style="display:none;">Our AI analyzes your operations and connects you with the right automation partner. Neutral, data-driven and free.</p>
+            <div class="hero-actions">
+                <button class="btn-hero btn-hero-accent" onclick="scrollToForm()" data-lang="de">Jetzt Anfrage starten</button>
+                <button class="btn-hero btn-hero-accent" onclick="scrollToForm()" data-lang="en" style="display:none;">Start Your Request</button>
+                <button class="btn-hero btn-hero-ghost" onclick="scrollToHow()" data-lang="de">So funktioniert's</button>
+                <button class="btn-hero btn-hero-ghost" onclick="scrollToHow()" data-lang="en" style="display:none;">How It Works</button>
             </div>
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works" id="how-it-works">
-        <h2 class="section-title" data-lang="de">Wie es funktioniert</h2>
-        <h2 class="section-title" data-lang="en">How It Works</h2>
-
-        <div class="steps">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3 data-lang="de">Teilen Sie uns Ihre Anforderungen mit</h3>
-                <h3 data-lang="en">Tell Us Your Needs</h3>
-                <p data-lang="de">Beschreiben Sie in 2 Minuten Ihre Projektanforderungen, Zeitrahmen und Budgetrahmen.</p>
-                <p data-lang="en">Share your project requirements, timeline, and budget range in 2 minutes.</p>
+    <section class="stats-bar">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">20.000+</div>
+                <div class="stat-label" data-lang="de">KMU im Markt</div>
+                <div class="stat-label" data-lang="en" style="display:none;">SMEs in Market</div>
             </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3 data-lang="de">Werden Sie gematcht</h3>
-                <h3 data-lang="en">Get Matched</h3>
-                <p data-lang="de">Wir wählen 2-3 geprüfte Integratoren aus, die auf Ihren Anwendungsfall spezialisiert sind.</p>
-                <p data-lang="en">We hand-select 2-3 vetted integrators who specialize in your exact use case.</p>
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label" data-lang="de">Integratoren</div>
+                <div class="stat-label" data-lang="en" style="display:none;">Integrators</div>
             </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3 data-lang="de">Vergleichen & Auswählen</h3>
-                <h3 data-lang="en">Compare & Choose</h3>
-                <p data-lang="de">Prüfen Sie Angebote, stellen Sie Fragen und wählen Sie Ihren Partner. Keine Gebühren, keine Verpflichtung.</p>
-                <p data-lang="en">Review proposals, ask questions, and pick your partner. No fees, no obligation.</p>
+            <div class="stat-item">
+                <div class="stat-number">2 Min.</div>
+                <div class="stat-label" data-lang="de">KI-Analyse</div>
+                <div class="stat-label" data-lang="en" style="display:none;">AI Analysis</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label" data-lang="de">Kostenlos</div>
+                <div class="stat-label" data-lang="en" style="display:none;">Free</div>
             </div>
         </div>
     </section>
 
-    <!-- For Buyers / Lead Capture -->
-    <section class="for-buyers" id="get-matched">
-        <div class="two-col">
-            <div>
-                <h2 class="section-title" style="text-align:left; margin-bottom: 30px;" data-lang="de">Warum Robofolio nutzen?</h2>
-                <h2 class="section-title" style="text-align:left; margin-bottom: 30px;" data-lang="en">Why Use Robofolio?</h2>
-
-                <ul class="benefits-list" data-lang="de">
-                    <li><strong>Sparen Sie 40+ Stunden</strong> Recherche bei der Suche nach qualifizierten Integratoren</li>
-                    <li><strong>Vorab geprüfte Partner</strong> mit nachgewiesener Erfahrung und Referenzen</li>
-                    <li><strong>Branchenspezialisten</strong> passend zu Ihrer spezifischen Anwendung</li>
-                    <li><strong>100% kostenlos für Käufer</strong> — Integratoren zahlen für qualifizierte Leads</li>
-                    <li><strong>Kein Spam, kein Druck</strong> — nur relevante Vermittlungen</li>
-                </ul>
-
-                <ul class="benefits-list" data-lang="en">
-                    <li><strong>Save 40+ hours</strong> of research finding qualified integrators</li>
-                    <li><strong>Pre-vetted partners</strong> with verified experience and references</li>
-                    <li><strong>Industry specialists</strong> matched to your specific application</li>
-                    <li><strong>100% free for buyers</strong> — integrators pay for qualified leads</li>
-                    <li><strong>No spam, no pressure</strong> — just relevant introductions</li>
-                </ul>
+    <section class="how-section" id="howSection">
+        <div class="overline" data-lang="de">So funktioniert's</div>
+        <div class="overline" data-lang="en" style="display:none;">How It Works</div>
+        <h2 class="section-title" data-lang="de">In 3 Schritten zum Integrator</h2>
+        <h2 class="section-title" data-lang="en" style="display:none;">3 Steps to Your Integrator</h2>
+        <p class="section-sub" data-lang="de">Kein langes Suchen, keine Kaltakquise. Unsere KI übernimmt den Matching-Prozess.</p>
+        <p class="section-sub" data-lang="en" style="display:none;">No long searches, no cold calls. Our AI handles the matching process.</p>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">01</div>
+                <h3 data-lang="de">Betrieb beschreiben</h3>
+                <h3 data-lang="en" style="display:none;">Describe Your Operations</h3>
+                <p data-lang="de">Website eingeben oder Fotos hochladen — unsere KI extrahiert alle relevanten Daten automatisch.</p>
+                <p data-lang="en" style="display:none;">Enter your website or upload photos — our AI extracts all relevant data automatically.</p>
             </div>
-
-            <div class="form-container">
-                <div class="form-message" id="formMessage"></div>
-
-                <h3 data-lang="de">Erhalten Sie Ihre kostenlosen Matches</h3>
-                <h3 data-lang="en">Get Your Free Matches</h3>
-
-                <form id="leadForm" onsubmit="return handleFormSubmit(event)">
-                    <input type="text" class="form-field" name="name" placeholder="Ihr Name / Your Name" required data-placeholder-de="Ihr Name" data-placeholder-en="Your Name">
-                    <input type="email" class="form-field" name="email" placeholder="Geschäftliche E-Mail / Work Email" required data-placeholder-de="Geschäftliche E-Mail" data-placeholder-en="Work Email">
-                    <input type="text" class="form-field" name="company" placeholder="Firmenname / Company Name" required data-placeholder-de="Firmenname" data-placeholder-en="Company Name">
-                    <input type="text" class="form-field" name="industry" placeholder="Branche / Anwendung / Industry / Application" required data-placeholder-de="Branche / Anwendung" data-placeholder-en="Industry / Application">
-                    <textarea class="form-field textarea" name="description" placeholder="Kurze Projektbeschreibung / Brief Project Description" required data-placeholder-de="Kurze Projektbeschreibung" data-placeholder-en="Brief Project Description"></textarea>
-                    <input type="hidden" name="language" id="languageField" value="de">
-                    <input type="hidden" name="timestamp" id="timestampField">
-
-                    <button type="submit" class="form-btn" id="submitBtn">
-                        <span data-lang="de">Partner finden — Kostenlos & Unverbindlich</span>
-                        <span data-lang="en">Get Matched — Free & No Obligation</span>
-                    </button>
-
-                    <p class="form-note" data-lang="de">Wir antworten innerhalb von 48 Stunden mit personalisierten Matches.</p>
-                    <p class="form-note" data-lang="en">We'll respond within 48 hours with personalized matches.</p>
-                </form>
+            <div class="step-card">
+                <div class="step-num">02</div>
+                <h3 data-lang="de">KI-Matching</h3>
+                <h3 data-lang="en" style="display:none;">AI Matching</h3>
+                <p data-lang="de">Unser Algorithmus bewertet Ihren Bedarf und findet die besten Integratoren für Ihr Projekt.</p>
+                <p data-lang="en" style="display:none;">Our algorithm evaluates your needs and finds the best integrators for your project.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">03</div>
+                <h3 data-lang="de">Angebote erhalten</h3>
+                <h3 data-lang="en" style="display:none;">Receive Proposals</h3>
+                <p data-lang="de">Qualifizierte Integratoren kontaktieren Sie direkt mit passenden Lösungsvorschlägen.</p>
+                <p data-lang="en" style="display:none;">Qualified integrators contact you directly with tailored solution proposals.</p>
             </div>
         </div>
     </section>
 
-    <!-- Featured Integrators -->
-    <section class="integrators" id="integrators">
-        <h2 class="section-title" data-lang="de">Ausgewählte Integratoren</h2>
-        <h2 class="section-title" data-lang="en">Featured Integrators</h2>
+    <section class="form-section" id="formSection">
+        <div class="form-container">
+            <div class="progress-container">
+                <div class="progress-bar-wrapper"><div id="progressBarFill"></div></div>
+                <div class="progress-steps" id="progressSteps">
+                    <div class="progress-step active" data-step="1"><div class="progress-step-circle">1</div><div class="progress-step-label" data-lang="de">Pfad</div><div class="progress-step-label" data-lang="en" style="display:none;">Path</div></div>
+                    <div class="progress-step" data-step="2"><div class="progress-step-circle">2</div><div class="progress-step-label" data-lang="de">Daten</div><div class="progress-step-label" data-lang="en" style="display:none;">Data</div></div>
+                    <div class="progress-step" data-step="3"><div class="progress-step-circle">3</div><div class="progress-step-label" data-lang="de">Ergebnisse</div><div class="progress-step-label" data-lang="en" style="display:none;">Results</div></div>
+                    <div class="progress-step" data-step="4"><div class="progress-step-circle">4</div><div class="progress-step-label" data-lang="de">Senden</div><div class="progress-step-label" data-lang="en" style="display:none;">Submit</div></div>
+                </div>
+            </div>
 
-        <div class="integrator-grid">
-            <div class="integrator-card">
-                <div class="integrator-logo">LOGO</div>
-                <h4>Precision Robotics GmbH</h4>
-                <div class="specialty" data-lang="de">Lagerautomatisierung • Pick & Pack</div>
-                <div class="specialty" data-lang="en">Warehouse Automation • Pick & Pack</div>
-                <div class="rating">★★★★★ (12 <span data-lang="de">Projekte</span><span data-lang="en">projects</span>)</div>
-            </div>
-            <div class="integrator-card">
-                <div class="integrator-logo">LOGO</div>
-                <h4>AutoMate Solutions AG</h4>
-                <div class="specialty" data-lang="de">Lebensmittel & Getränke • Palettierung</div>
-                <div class="specialty" data-lang="en">Food & Beverage • Palletizing</div>
-                <div class="rating">★★★★★ (8 <span data-lang="de">Projekte</span><span data-lang="en">projects</span>)</div>
-            </div>
-            <div class="integrator-card">
-                <div class="integrator-logo">LOGO</div>
-                <h4>RoboWorks Systems</h4>
-                <div class="specialty" data-lang="de">Fertigung • Montagelinien</div>
-                <div class="specialty" data-lang="en">Manufacturing • Assembly Lines</div>
-                <div class="rating">★★★★☆ (15 <span data-lang="de">Projekte</span><span data-lang="en">projects</span>)</div>
+            <form id="leadForm" novalidate>
+                <!-- STEP 0: Path Selection -->
+                <div class="form-step active" data-step="1">
+                    <h2 class="step-title" data-lang="de">Wie möchten Sie vorgehen?</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">How Would You Like to Proceed?</h2>
+                    <p class="step-description" data-lang="de">Wählen Sie den Weg, der am besten zu Ihnen passt.</p>
+                    <p class="step-description" data-lang="en" style="display:none;">Choose the path that works best for you.</p>
+
+                    <div class="path-selection">
+                        <div class="path-card" onclick="selectPath('discovery')">
+                            <div class="path-card-icon">🔍</div>
+                            <div class="path-card-title" data-lang="de">Discovery Path</div>
+                            <div class="path-card-title" data-lang="en" style="display:none;">Discovery Path</div>
+                            <div class="path-card-description" data-lang="de">Ich möchte mein Automatisierungspotenzial kennenlernen</div>
+                            <div class="path-card-description" data-lang="en" style="display:none;">I want to discover my automation potential</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;" data-lang="de">Unsere KI analysiert Ihren Betrieb und zeigt Ihnen konkrete Automatisierungsmöglichkeiten mit Preisen und ROI.</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;" data-lang="en" style="display:none;">Our AI analyzes your operations and shows you specific automation opportunities with pricing and ROI.</div>
+                        </div>
+                        <div class="path-card" onclick="selectPath('direct')">
+                            <div class="path-card-icon">🎯</div>
+                            <div class="path-card-title" data-lang="de">Direct Search Path</div>
+                            <div class="path-card-title" data-lang="en" style="display:none;">Direct Search Path</div>
+                            <div class="path-card-description" data-lang="de">Ich weiß bereits, was ich automatisieren möchte</div>
+                            <div class="path-card-description" data-lang="en" style="display:none;">I already know what I want to automate</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;" data-lang="de">Wählen Sie Ihre gewünschte Anwendung und erhalten Sie passende Komplettlösungen aus unserer Datenbank.</div>
+                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 12px;" data-lang="en" style="display:none;">Select your desired application and get matching complete solutions from our database.</div>
+                        </div>
+                    </div>
+
+                    <div class="form-navigation">
+                        <div></div>
+                        <button type="button" class="btn btn-primary" onclick="startPath()" data-lang="de">Weiter</button>
+                        <button type="button" class="btn btn-primary" onclick="startPath()" data-lang="en" style="display:none;">Next</button>
+                    </div>
+                </div>
+
+                <!-- DISCOVERY PATH: Step 1 (Website) -->
+                <div class="form-step" data-step="2" id="discoveryStep1">
+                    <h2 class="step-title" data-lang="de">Erzählen Sie uns von Ihrer Firma</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">Tell Us About Your Company</h2>
+                    <p class="step-description" data-lang="de">Wir analysieren Ihre Website, um die wichtigsten Informationen zu extrahieren.</p>
+                    <p class="step-description" data-lang="en" style="display:none;">We'll analyze your website to extract key information about your company.</p>
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Website-URL</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Website URL</label>
+                        <div class="website-input-group">
+                            <input type="url" class="form-input" id="websiteUrl" data-placeholder-de="z.B. https://example.com" data-placeholder-en="e.g. https://example.com" placeholder="z.B. https://example.com">
+                            <button type="button" class="btn btn-primary" id="analyzeWebsiteBtn" data-lang="de">Analysieren</button>
+                            <button type="button" class="btn btn-primary" id="analyzeWebsiteBtn" data-lang="en" style="display:none;">Analyze</button>
+                        </div>
+                    </div>
+                    <div class="loading-spinner" id="websiteLoading"><div class="spinner"></div><p data-lang="de">Website wird analysiert...</p><p data-lang="en" style="display:none;">Analyzing website...</p></div>
+                    <div class="extracted-data hidden" id="extractedCompanyData">
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Firmenname</div><div class="extracted-data-label" data-lang="en" style="display:none;">Company Name</div><div class="extracted-data-value" id="extracted-company-name">&mdash;</div></div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Branche</div><div class="extracted-data-label" data-lang="en" style="display:none;">Industry</div><div class="extracted-data-value" id="extracted-industry">&mdash;</div></div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Standort</div><div class="extracted-data-label" data-lang="en" style="display:none;">Location</div><div class="extracted-data-value" id="extracted-location">&mdash;</div></div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Größe</div><div class="extracted-data-label" data-lang="en" style="display:none;">Size</div><div class="extracted-data-value" id="extracted-size">&mdash;</div></div>
+                    </div>
+                    <div class="manual-input-toggle"><button type="button" onclick="showManualInput()" data-lang="de">Manuell eingeben</button><button type="button" onclick="showManualInput()" data-lang="en" style="display:none;">Enter Manually</button></div>
+                    <div id="manualInputFields" class="hidden">
+                        <div class="form-group"><label class="form-label" data-lang="de">Firmenname <span class="required">*</span></label><label class="form-label" data-lang="en" style="display:none;">Company Name <span class="required">*</span></label><input type="text" class="form-input" id="company-name-manual" required></div>
+                        <div class="form-group"><label class="form-label" data-lang="de">Branche</label><label class="form-label" data-lang="en" style="display:none;">Industry</label><input type="text" class="form-input" id="industry-manual"></div>
+                        <div class="form-group"><label class="form-label" data-lang="de">Standort</label><label class="form-label" data-lang="en" style="display:none;">Location</label><input type="text" class="form-input" id="location-manual"></div>
+                        <div class="form-group"><label class="form-label" data-lang="de">Größe</label><label class="form-label" data-lang="en" style="display:none;">Company Size</label><input type="text" class="form-input" id="size-manual"></div>
+                    </div>
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="en" style="display:none;">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="nextDiscoveryStep()" data-lang="de">Weiter</button><button type="button" class="btn btn-primary" onclick="nextDiscoveryStep()" data-lang="en" style="display:none;">Next</button>
+                    </div>
+                </div>
+
+                <!-- DISCOVERY PATH: Step 2 (Photos) -->
+                <div class="form-step" data-step="2" id="discoveryStep2">
+                    <h2 class="step-title" data-lang="de">Fotos Ihrer Anlage</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">Upload Facility Photos</h2>
+                    <p class="step-description" data-lang="de">Laden Sie bis zu 5 Fotos Ihrer Produktionsanlage hoch, damit wir sie analysieren können.</p>
+                    <p class="step-description" data-lang="en" style="display:none;">Upload up to 5 photos of your facility for AI analysis.</p>
+                    <div class="upload-area" id="uploadArea"><div class="upload-icon">📷</div><div class="upload-text" data-lang="de">Fotos hier ablegen</div><div class="upload-text" data-lang="en" style="display:none;">Drop photos here</div><div class="upload-subtext" data-lang="de">oder klicken zum Durchsuchen</div><div class="upload-subtext" data-lang="en" style="display:none;">or click to browse</div></div>
+                    <input type="file" id="photoUpload" multiple accept="image/*">
+                    <div class="loading-spinner" id="photoLoading"><div class="spinner"></div><p data-lang="de">Fotos werden analysiert...</p><p data-lang="en" style="display:none;">Analyzing photos...</p></div>
+                    <div id="uploadedFiles"></div>
+                    <div class="extracted-data hidden" id="extractedPhotoData">
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Prozesstyp</div><div class="extracted-data-label" data-lang="en" style="display:none;">Process Type</div><div class="extracted-data-value" id="extracted-process-type">&mdash;</div></div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Arbeitsbereich</div><div class="extracted-data-label" data-lang="en" style="display:none;">Workspace</div><div class="extracted-data-value" id="extracted-workspace">&mdash;</div></div>
+                        <div class="extracted-data-item"><div class="extracted-data-label" data-lang="de">Umgebung</div><div class="extracted-data-label" data-lang="en" style="display:none;">Environment</div><div class="extracted-data-value" id="extracted-environment">&mdash;</div></div>
+                    </div>
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="prevDiscoveryStep()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="prevDiscoveryStep()" data-lang="en" style="display:none;">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="analyzeDiscovery()" data-lang="de">Analysieren</button><button type="button" class="btn btn-primary" onclick="analyzeDiscovery()" data-lang="en" style="display:none;">Analyze</button>
+                    </div>
+                </div>
+
+                <!-- DIRECT SEARCH PATH: Step 1 (Category) -->
+                <div class="form-step" data-step="2" id="directStep1">
+                    <h2 class="step-title" data-lang="de">Wählen Sie Ihre Kategorie</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">Select Your Category</h2>
+                    <p class="step-description" data-lang="de">Welche Art von Automatisierung interessiert Sie?</p>
+                    <p class="step-description" data-lang="en" style="display:none;">What type of automation are you interested in?</p>
+
+                    <div class="category-grid" id="categoryGrid">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="en" style="display:none;">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="nextDirectStep()" data-lang="de">Weiter</button><button type="button" class="btn btn-primary" onclick="nextDirectStep()" data-lang="en" style="display:none;">Next</button>
+                    </div>
+                </div>
+
+                <!-- DIRECT SEARCH PATH: Step 2 (Specs) -->
+                <div class="form-step" data-step="2" id="directStep2">
+                    <h2 class="step-title" data-lang="de">Spezifikationen</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">Specifications</h2>
+                    <p class="step-description" data-lang="de">Weitere Details helfen uns, die perfekte Lösung zu finden.</p>
+                    <p class="step-description" data-lang="en" style="display:none;">Additional details help us find the perfect solution.</p>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Branche</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Industry</label>
+                        <select class="form-select" id="spec-industry">
+                            <option value="">Wählen Sie...</option>
+                            <option value="automotive">Automobilbau / Automotive</option>
+                            <option value="food">Lebensmittel / Food</option>
+                            <option value="pharma">Pharmazie / Pharma</option>
+                            <option value="electronics">Elektronik / Electronics</option>
+                            <option value="metal">Metallverarbeitung / Metal Working</option>
+                            <option value="plastic">Kunststoff / Plastics</option>
+                            <option value="other">Sonstiges / Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Max. Werkstückgewicht (kg)</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Max. Workpiece Weight (kg)</label>
+                        <input type="number" class="form-input" id="spec-weight" placeholder="z.B. 50">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Reichweite (mm)</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Reach (mm)</label>
+                        <input type="number" class="form-input" id="spec-reach" placeholder="z.B. 1500">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Genauigkeitsanforderung</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Precision Requirement</label>
+                        <select class="form-select" id="spec-precision">
+                            <option value="">Wählen Sie...</option>
+                            <option value="standard">Standard</option>
+                            <option value="high">Hoch / High</option>
+                            <option value="very-high">Sehr hoch / Very High</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Umgebung</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Environment</label>
+                        <select class="form-select" id="spec-environment">
+                            <option value="">Wählen Sie...</option>
+                            <option value="standard">Standard</option>
+                            <option value="cleanroom">Reinraum / Cleanroom</option>
+                            <option value="wet">Nass / Wet</option>
+                            <option value="dusty">Staubig / Dusty</option>
+                            <option value="outdoor">Outdoor</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Budget-Bereich</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Budget Range</label>
+                        <select class="form-select" id="budget-range">
+                            <option value="">Wählen Sie...</option>
+                            <option value="0-50k">&euro;0 - &euro;50.000</option>
+                            <option value="50k-100k">&euro;50.000 - &euro;100.000</option>
+                            <option value="100k-250k">&euro;100.000 - &euro;250.000</option>
+                            <option value="250k-500k">&euro;250.000 - &euro;500.000</option>
+                            <option value="500k+">&euro;500.000+</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Ihr Name <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en" style="display:none;">Your Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="contact-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Ihre Position <span class="required">*</span></label>
+                        <label class="form-label" data-lang="en" style="display:none;">Your Title <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="contact-title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email <span class="required">*</span></label>
+                        <input type="email" class="form-input" id="contact-email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-lang="de">Telefon</label>
+                        <label class="form-label" data-lang="en" style="display:none;">Phone</label>
+                        <input type="tel" class="form-input" id="contact-phone">
+                    </div>
+
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="prevDirectStep()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="prevDirectStep()" data-lang="en" style="display:none;">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="searchSolutions()" data-lang="de">Lösungen suchen</button><button type="button" class="btn btn-primary" onclick="searchSolutions()" data-lang="en" style="display:none;">Search Solutions</button>
+                    </div>
+                </div>
+
+                <!-- RESULTS STEP: Discovery or Direct Search -->
+                <div class="form-step" data-step="3" id="resultsStep">
+                    <div class="results-container" id="resultsContainer">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="en" style="display:none;">Back</button>
+                        <button type="button" class="btn btn-primary" onclick="submitContactInfo()" data-lang="de">Mit Integratoren verbinden</button><button type="button" class="btn btn-primary" onclick="submitContactInfo()" data-lang="en" style="display:none;">Connect with Integrators</button>
+                    </div>
+                </div>
+
+                <!-- FINAL STEP: Review & Submit -->
+                <div class="form-step" data-step="4">
+                    <h2 class="step-title" data-lang="de">Überprüfen Sie Ihre Anfrage</h2>
+                    <h2 class="step-title" data-lang="en" style="display:none;">Review Your Request</h2>
+                    <p class="step-description" data-lang="de">Stellen Sie sicher, dass alle Informationen korrekt sind.</p>
+                    <p class="step-description" data-lang="en" style="display:none;">Make sure all information is correct.</p>
+                    <div id="reviewContent"></div>
+                    <div class="form-navigation">
+                        <button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="de">Zurück</button><button type="button" class="btn btn-secondary" onclick="goBack()" data-lang="en" style="display:none;">Back</button>
+                        <button type="submit" class="btn btn-signal" id="submitBtn" data-lang="de">Partner finden</button><button type="submit" class="btn btn-signal" id="submitBtn" data-lang="en" style="display:none;">Get My Matches</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="success-container" id="successContainer">
+                <div class="success-icon">✓</div>
+                <div class="success-title" data-lang="de">Vielen Dank!</div><div class="success-title" data-lang="en" style="display:none;">Thank You!</div>
+                <div class="success-message" data-lang="de">Wir haben Ihre Anfrage erhalten und suchen jetzt nach passenden Integratoren.</div>
+                <div class="success-message" data-lang="en" style="display:none;">We've received your request and are now searching for matching integrators.</div>
+                <div style="background:var(--bg-light);padding:28px;margin-top:24px;text-align:left;max-width:460px;margin-left:auto;margin-right:auto;">
+                    <h3 style="font-size:17px;color:var(--primary);margin-bottom:4px;font-weight:800;"><span data-lang="de">Ihr Kundenprofil erstellen</span><span data-lang="en" style="display:none;">Create Your Profile</span></h3>
+                    <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px;"><span data-lang="de">Erstellen Sie Ihr Profil, um den Status Ihres Gesuchs live zu verfolgen.</span><span data-lang="en" style="display:none;">Set up your profile to track your request status in real time.</span></p>
+                    <div style="margin-bottom:14px;"><label style="display:block;font-weight:600;color:var(--primary);margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;"><span data-lang="de">Ihr Name</span><span data-lang="en" style="display:none;">Your Name</span></label><input type="text" id="profile-name" style="width:100%;padding:10px 14px;border:1px solid var(--border);font-size:14px;font-family:'Inter',sans-serif;"></div>
+                    <div style="margin-bottom:14px;"><label style="display:block;font-weight:600;color:var(--primary);margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;"><span data-lang="de">Firma</span><span data-lang="en" style="display:none;">Company</span></label><input type="text" id="profile-company" style="width:100%;padding:10px 14px;border:1px solid var(--border);font-size:14px;font-family:'Inter',sans-serif;background:var(--bg-muted);color:var(--text-secondary);" readonly></div>
+                    <div style="margin-bottom:20px;"><label style="display:block;font-weight:600;color:var(--primary);margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Email</label><input type="email" id="profile-email" style="width:100%;padding:10px 14px;border:1px solid var(--border);font-size:14px;font-family:'Inter',sans-serif;"></div>
+                    <button type="button" id="goToPortalBtn" onclick="goToPortal()" style="width:100%;padding:14px;background:var(--signal);color:white;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:0.3px;"><span data-lang="de">Zum Kundenportal →</span><span data-lang="en" style="display:none;">Go to My Portal →</span></button>
+                </div>
             </div>
         </div>
-
-        <p style="margin-top: 35px; color: #666;">
-            <a href="#get-matched" class="view-all-link" data-lang="de">Alle 50+ Integratoren ansehen →</a>
-            <a href="#get-matched" class="view-all-link" data-lang="en">View All 50+ Integrators →</a>
-        </p>
     </section>
 
-    <!-- Trust Signals -->
-    <section class="trust">
-        <h2 data-lang="de">Jeder Integrator wird geprüft</h2>
-        <h2 data-lang="en">Every Integrator is Vetted</h2>
-
-        <div class="trust-badges">
-            <div class="badge">
-                <div class="badge-icon">🔍</div>
-                <div class="badge-label" data-lang="de">Hintergrund verifiziert</div>
-                <div class="badge-label" data-lang="en">Background Verified</div>
-            </div>
-            <div class="badge">
-                <div class="badge-icon">📋</div>
-                <div class="badge-label" data-lang="de">Portfolio geprüft</div>
-                <div class="badge-label" data-lang="en">Portfolio Reviewed</div>
-            </div>
-            <div class="badge">
-                <div class="badge-icon">📞</div>
-                <div class="badge-label" data-lang="de">Referenzen überprüft</div>
-                <div class="badge-label" data-lang="en">References Checked</div>
-            </div>
-            <div class="badge">
-                <div class="badge-icon">🛡️</div>
-                <div class="badge-label" data-lang="de">Versicherung bestätigt</div>
-                <div class="badge-label" data-lang="en">Insurance Confirmed</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Final CTA -->
-    <section class="final-cta">
-        <h2 data-lang="de">Bereit, Ihren Robotik-Partner zu finden?</h2>
-        <h2 data-lang="en">Ready to Find Your Robotics Partner?</h2>
-
-        <p data-lang="de">Schließen Sie sich 200+ Unternehmen an, die ihren perfekten Integrator über Robofolio gefunden haben.</p>
-        <p data-lang="en">Join 200+ companies who found their perfect integrator through Robofolio.</p>
-
-        <a href="#get-matched" data-lang="de">Jetzt Partner finden — Kostenlos</a>
-        <a href="#get-matched" data-lang="en">Get Matched Now — It's Free</a>
-    </section>
-
-    <!-- Footer -->
     <footer>
-        <p><strong>ROBOFOLIO</strong> — <span data-lang="de">Der kuratierte Robotik-Marktplatz</span><span data-lang="en">The Curated Robotics Marketplace</span></p>
-        <p style="margin-top: 18px;">
-            © 2026 Robofolio. <span data-lang="de">Alle Rechte vorbehalten.</span><span data-lang="en">All rights reserved.</span> |
-            <a href="#" data-lang="de">Datenschutz</a><a href="#" data-lang="en">Privacy</a> |
-            <a href="#" data-lang="de">AGB</a><a href="#" data-lang="en">Terms</a> |
-            <a href="#" data-lang="de">Kontakt</a><a href="#" data-lang="en">Contact</a>
-        </p>
+        <p>&copy; 2026 Robofolio. <span data-lang="de">Alle Rechte vorbehalten.</span><span data-lang="en" style="display:none;">All rights reserved.</span></p>
+        <div class="footer-claim">Automatisierung beginnt hier.</div>
     </footer>
 
     <script>
-        // Language switching functionality
+        function scrollToForm() { document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' }); }
+        function scrollToHow() { document.getElementById('howSection').scrollIntoView({ behavior: 'smooth' }); }
+        window.addEventListener('scroll', function() { document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 80); });
+
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:5001' : 'https://robofolio-api.onrender.com';
+
+        let formData = {
+            currentStep: 1,
+            currentPath: null,
+            discoverySubStep: 1,
+            directSubStep: 1,
+            extractedData: {},
+            userInputs: {},
+            selectedCategory: null,
+            categories: []
+        };
+
         function switchLanguage(lang) {
             document.documentElement.lang = lang;
             localStorage.setItem('preferredLanguage', lang);
-
-            // Update button states
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`[data-lang-btn="${lang}"]`).classList.add('active');
-
-            // Update form placeholders
-            updatePlaceholders(lang);
-
-            // Update hidden language field
-            document.getElementById('languageField').value = lang;
+            document.querySelectorAll('[data-placeholder-de]').forEach(f => { const ph = f.getAttribute(`data-placeholder-${lang}`); if (ph) f.placeholder = ph; });
         }
 
-        function updatePlaceholders(lang) {
-            document.querySelectorAll('.form-field[data-placeholder-de]').forEach(field => {
-                const placeholder = field.getAttribute(`data-placeholder-${lang}`);
-                if (placeholder) {
-                    field.placeholder = placeholder;
-                }
-            });
-        }
-
-        // Load saved language preference
         window.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('preferredLanguage') || 'de';
-            switchLanguage(savedLang);
+            switchLanguage(localStorage.getItem('preferredLanguage') || 'de');
+            loadCategories();
         });
 
-        // Form submission handler
-        async function handleFormSubmit(event) {
-            event.preventDefault();
+        function selectPath(path) {
+            document.querySelectorAll('.path-card').forEach(c => c.classList.remove('selected'));
+            event.target.closest('.path-card').classList.add('selected');
+            formData.currentPath = path;
+        }
 
-            const form = event.target;
-            const submitBtn = document.getElementById('submitBtn');
-            const formMessage = document.getElementById('formMessage');
-            const currentLang = document.documentElement.lang;
+        function startPath() {
+            if (!formData.currentPath) {
+                alert(document.documentElement.lang === 'de' ? 'Bitte wählen Sie einen Pfad' : 'Please select a path');
+                return;
+            }
+            formData.currentStep = 2;
+            formData.discoverySubStep = 1;
+            formData.directSubStep = 1;
+            updateFormSteps();
+        }
 
-            // Disable submit button
-            submitBtn.disabled = true;
-            submitBtn.textContent = currentLang === 'de' ? 'Wird gesendet...' : 'Submitting...';
-
-            // Add timestamp
-            document.getElementById('timestampField').value = new Date().toISOString();
-
-            // Get form data
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            try {
-                // REPLACE THIS URL WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
-                const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
-
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    // Success message
-                    formMessage.className = 'form-message success';
-                    formMessage.textContent = currentLang === 'de'
-                        ? '✓ Vielen Dank! Wir werden uns innerhalb von 48 Stunden bei Ihnen melden.'
-                        : '✓ Thank you! We\'ll get back to you within 48 hours.';
-
-                    // Reset form
-                    form.reset();
-
-                    // Hide success message after 5 seconds
-                    setTimeout(() => {
-                        formMessage.className = 'form-message';
-                        formMessage.textContent = '';
-                    }, 5000);
-                } else {
-                    throw new Error('Submission failed');
+        function nextDiscoveryStep() {
+            if (formData.discoverySubStep === 1) {
+                const companyName = document.getElementById('company-name-manual').value || document.getElementById('extracted-company-name').textContent;
+                if (!companyName || companyName === '—') {
+                    alert(document.documentElement.lang === 'de' ? 'Bitte geben Sie einen Firmennamen ein' : 'Please enter a company name');
+                    return;
                 }
-            } catch (error) {
-                // Error message
-                formMessage.className = 'form-message error';
-                formMessage.textContent = currentLang === 'de'
-                    ? '✗ Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'
-                    : '✗ An error occurred. Please try again.';
+                formData.discoverySubStep = 2;
+            } else if (formData.discoverySubStep === 2) {
+                // Move to results
+                formData.currentStep = 3;
+            }
+            updateFormSteps();
+        }
 
-                console.error('Form submission error:', error);
-            } finally {
-                // Re-enable submit button
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = currentLang === 'de'
-                    ? '<span data-lang="de">Partner finden — Kostenlos & Unverbindlich</span><span data-lang="en">Get Matched — Free & No Obligation</span>'
-                    : '<span data-lang="de">Partner finden — Kostenlos & Unverbindlich</span><span data-lang="en">Get Matched — Free & No Obligation</span>';
+        function prevDiscoveryStep() {
+            if (formData.discoverySubStep > 1) {
+                formData.discoverySubStep--;
+            } else {
+                goBack();
+            }
+            updateFormSteps();
+        }
+
+        function nextDirectStep() {
+            if (formData.directSubStep === 1) {
+                if (!formData.selectedCategory) {
+                    alert(document.documentElement.lang === 'de' ? 'Bitte wählen Sie eine Kategorie' : 'Please select a category');
+                    return;
+                }
+                formData.directSubStep = 2;
+            }
+            updateFormSteps();
+        }
+
+        function prevDirectStep() {
+            if (formData.directSubStep > 1) {
+                formData.directSubStep--;
+            } else {
+                goBack();
+            }
+            updateFormSteps();
+        }
+
+        function goBack() {
+            if (formData.currentPath === 'discovery' && formData.discoverySubStep > 1) {
+                formData.discoverySubStep--;
+                updateFormSteps();
+            } else if (formData.currentPath === 'direct' && formData.directSubStep > 1) {
+                formData.directSubStep--;
+                updateFormSteps();
+            } else if (formData.currentStep > 1) {
+                formData.currentStep--;
+                formData.discoverySubStep = 1;
+                formData.directSubStep = 1;
+                formData.currentPath = null;
+                updateFormSteps();
             }
         }
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+        function updateFormSteps() {
+            // Update progress bar
+            const stepMap = formData.currentPath ? (formData.currentStep === 2 ? 2 : 3) : formData.currentStep;
+            document.getElementById('progressBarFill').style.width = ((stepMap - 1) / 3) * 100 + '%';
+
+            // Update progress steps
+            document.querySelectorAll('.progress-step').forEach(s => {
+                const n = parseInt(s.dataset.step);
+                s.classList.remove('active', 'completed');
+                if (n === stepMap) s.classList.add('active');
+                else if (n < stepMap) s.classList.add('completed');
             });
+
+            // Hide all form steps
+            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+
+            if (formData.currentStep === 1) {
+                // Path selection
+                document.querySelector('.form-step[data-step="1"]').classList.add('active');
+            } else if (formData.currentStep === 2) {
+                if (formData.currentPath === 'discovery') {
+                    if (formData.discoverySubStep === 1) {
+                        document.getElementById('discoveryStep1').classList.add('active');
+                    } else {
+                        document.getElementById('discoveryStep2').classList.add('active');
+                    }
+                } else if (formData.currentPath === 'direct') {
+                    if (formData.directSubStep === 1) {
+                        document.getElementById('directStep1').classList.add('active');
+                    } else {
+                        document.getElementById('directStep2').classList.add('active');
+                    }
+                }
+            } else if (formData.currentStep === 3) {
+                document.getElementById('resultsStep').classList.add('active');
+            } else if (formData.currentStep === 4) {
+                document.querySelector('.form-step[data-step="4"]').classList.add('active');
+                generateReview();
+            }
+
+            document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function loadCategories() {
+            try {
+                const r = await fetch(`${API_BASE_URL}/api/solutions/categories`);
+                if (r.ok) {
+                    const result = await r.json();
+                    if (result.success && result.data) {
+                        formData.categories = result.data;
+                        renderCategories();
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading categories:', e);
+            }
+        }
+
+        function renderCategories() {
+            const grid = document.getElementById('categoryGrid');
+            grid.innerHTML = '';
+            formData.categories.forEach(cat => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.onclick = () => selectCategory(cat.id, card);
+                card.innerHTML = `
+                    <div class="category-card-icon">${cat.icon || '🤖'}</div>
+                    <div class="category-card-name">${document.documentElement.lang === 'de' ? cat.name_de : cat.name_en}</div>
+                    <div class="category-card-meta">${cat.solution_count} Lösungen</div>
+                    <div class="category-card-meta">${cat.price_range || '€0 - €250k+'}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function selectCategory(catId, element) {
+            document.querySelectorAll('.category-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            formData.selectedCategory = catId;
+        }
+
+        document.getElementById('analyzeWebsiteBtn').addEventListener('click', async function() {
+            const url = document.getElementById('websiteUrl').value;
+            if (!url) { alert(document.documentElement.lang === 'de' ? 'Bitte geben Sie eine Website-URL ein' : 'Please enter a website URL'); return; }
+            document.getElementById('websiteLoading').classList.add('active'); this.disabled = true;
+            try {
+                const r = await fetch(`${API_BASE_URL}/api/analyze-website`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
+                const result = await r.json();
+                if (!r.ok || !result.success) throw new Error(result.error || `Server error (${r.status})`);
+                const ex = { companyName: result.data.company_name || 'Unknown', industry: result.data.industry || 'Unknown', location: result.data.location || 'Unknown', size: result.data.company_size || 'Unknown' };
+                formData.extractedData = { ...formData.extractedData, ...ex };
+                document.getElementById('extracted-company-name').textContent = ex.companyName;
+                document.getElementById('extracted-industry').textContent = ex.industry;
+                document.getElementById('extracted-location').textContent = ex.location;
+                document.getElementById('extracted-size').textContent = ex.size;
+                document.getElementById('extractedCompanyData').classList.remove('hidden');
+            } catch (e) {
+                const msg = (e.message === 'Failed to fetch' || e.name === 'TypeError') ? (document.documentElement.lang === 'de' ? 'Verbindung zum Backend fehlgeschlagen' : 'Could not connect to backend') : (document.documentElement.lang === 'de' ? `Fehler: ${e.message}` : `Error: ${e.message}`);
+                alert(msg);
+            } finally { document.getElementById('websiteLoading').classList.remove('active'); this.disabled = false; }
         });
+
+        function showManualInput() { document.getElementById('manualInputFields').classList.remove('hidden'); }
+
+        const uploadArea = document.getElementById('uploadArea');
+        const photoUpload = document.getElementById('photoUpload');
+        let uploadedPhotos = [];
+        uploadArea.addEventListener('click', () => photoUpload.click());
+        uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', e => { e.preventDefault(); uploadArea.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
+        photoUpload.addEventListener('change', e => handleFiles(e.target.files));
+
+        async function handleFiles(files) {
+            uploadedPhotos = uploadedPhotos.concat(Array.from(files).slice(0, 5));
+            const c = document.getElementById('uploadedFiles'); c.innerHTML = '';
+            uploadedPhotos.forEach((f, i) => { const d = document.createElement('div'); d.className = 'uploaded-file'; d.innerHTML = `<span class="uploaded-file-name">${f.name}</span><button type="button" class="remove-file" onclick="removeFile(${i})">&times;</button>`; c.appendChild(d); });
+            if (uploadedPhotos.length > 0) await analyzePhotos();
+        }
+        function removeFile(i) { uploadedPhotos.splice(i, 1); handleFiles([]); }
+
+        async function analyzePhotos() {
+            document.getElementById('photoLoading').classList.add('active');
+            try {
+                const fd = new FormData(); uploadedPhotos.forEach(f => fd.append('photos', f));
+                const r = await fetch(`${API_BASE_URL}/api/analyze-photos`, { method: 'POST', body: fd });
+                if (!r.ok) throw new Error('fail'); const result = await r.json(); if (!result.success) throw new Error('fail');
+                const ex = { processType: result.data.process_type || 'Unknown', workspace: result.data.workspace_dimensions || 'Unknown', environment: result.data.environment_type || 'Unknown' };
+                formData.extractedData = { ...formData.extractedData, ...ex };
+                document.getElementById('extracted-process-type').textContent = ex.processType;
+                document.getElementById('extracted-workspace').textContent = ex.workspace;
+                document.getElementById('extracted-environment').textContent = ex.environment;
+                document.getElementById('extractedPhotoData').classList.remove('hidden');
+            } catch (e) { console.error(e); }
+            finally { document.getElementById('photoLoading').classList.remove('active'); }
+        }
+
+        async function analyzeDiscovery() {
+            formData.extractedData.companyName = document.getElementById('company-name-manual').value || document.getElementById('extracted-company-name').textContent;
+            formData.extractedData.industry = document.getElementById('industry-manual').value || document.getElementById('extracted-industry').textContent;
+            formData.extractedData.location = document.getElementById('location-manual').value || document.getElementById('extracted-location').textContent;
+            formData.extractedData.size = document.getElementById('size-manual').value || document.getElementById('extracted-size').textContent;
+
+            try {
+                const r = await fetch(`${API_BASE_URL}/api/discovery-analysis`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...formData.extractedData })
+                });
+                if (!r.ok) throw new Error('fail');
+                const result = await r.json();
+                if (!result.success) throw new Error('fail');
+
+                formData.analysisResult = result.data;
+                formData.currentStep = 3;
+                showResults();
+            } catch (e) {
+                alert(document.documentElement.lang === 'de' ? 'Fehler bei der Analyse' : 'Analysis error');
+            }
+        }
+
+        async function searchSolutions() {
+            formData.userInputs = {
+                industry: document.getElementById('spec-industry').value,
+                weight: document.getElementById('spec-weight').value,
+                reach: document.getElementById('spec-reach').value,
+                precision: document.getElementById('spec-precision').value,
+                environment: document.getElementById('spec-environment').value,
+                budget: document.getElementById('budget-range').value,
+                contact_name: document.getElementById('contact-name').value,
+                contact_title: document.getElementById('contact-title').value,
+                contact_email: document.getElementById('contact-email').value,
+                contact_phone: document.getElementById('contact-phone').value
+            };
+
+            try {
+                const r = await fetch(`${API_BASE_URL}/api/match-solutions`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ category_id: formData.selectedCategory, ...formData.userInputs })
+                });
+                if (!r.ok) throw new Error('fail');
+                const result = await r.json();
+                if (!result.success) throw new Error('fail');
+
+                formData.searchResults = result.data;
+                formData.currentStep = 3;
+                showResults();
+            } catch (e) {
+                alert(document.documentElement.lang === 'de' ? 'Fehler bei der Suche' : 'Search error');
+            }
+        }
+
+        function showResults() {
+            const container = document.getElementById('resultsContainer');
+            const lang = document.documentElement.lang;
+
+            let html = '<div class="results-header">';
+            html += '<div class="results-title">' + (lang === 'de' ? 'Ihre Ergebnisse' : 'Your Results') + '</div>';
+
+            if (formData.currentPath === 'discovery' && formData.analysisResult) {
+                const potential = formData.analysisResult.potential || 'Medium';
+                const badgeClass = potential === 'High' ? 'high' : potential === 'Low' ? 'low' : 'medium';
+                html += '<div class="potential-badge ' + badgeClass + '">' + (lang === 'de' ? 'Potenzial: ' : 'Potential: ') + potential + '</div>';
+                html += '<div class="results-subtitle">' + (formData.analysisResult.summary || '') + '</div>';
+                html += '</div>';
+
+                if (formData.analysisResult.opportunities) {
+                    formData.analysisResult.opportunities.forEach(opp => {
+                        const oppBadgeClass = opp.priority === 'High' ? 'high' : opp.priority === 'Low' ? 'low' : 'medium';
+                        html += '<div class="opportunity-card">';
+                        html += '<div class="opportunity-card-header">';
+                        html += '<div class="opportunity-card-title-wrap">';
+                        html += '<div class="opportunity-card-icon">' + (opp.icon || '🤖') + '</div>';
+                        html += '<div class="opportunity-card-title">' + (lang === 'de' ? opp.name_de : opp.name_en) + '</div>';
+                        html += '</div>';
+                        html += '<div class="opportunity-card-badge ' + oppBadgeClass + '">' + (opp.priority || 'Medium') + '</div>';
+                        html += '</div>';
+                        html += '<div class="opportunity-card-description">' + (lang === 'de' ? opp.description_de : opp.description_en) + '</div>';
+                        html += '<div class="opportunity-card-meta">';
+                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">' + (lang === 'de' ? 'Lösungen' : 'Solutions') + '</div><div class="opportunity-meta-value">' + (opp.solution_count || 0) + '</div></div>';
+                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">' + (lang === 'de' ? 'Preis' : 'Price') + '</div><div class="opportunity-meta-value">' + (opp.price_range || '—') + '</div></div>';
+                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">ROI</div><div class="opportunity-meta-value">' + (opp.estimated_roi || '—') + '</div></div>';
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                }
+            } else if (formData.currentPath === 'direct' && formData.searchResults) {
+                html += '<div class="results-subtitle">' + (lang === 'de' ? 'Gefundene Lösungen' : 'Found Solutions') + '</div>';
+                html += '</div>';
+
+                if (Array.isArray(formData.searchResults)) {
+                    formData.searchResults.forEach(sol => {
+                        const matchPercent = sol.match_score || 85;
+                        html += '<div class="solution-card">';
+                        html += '<div class="solution-card-header">';
+                        html += '<div class="solution-card-name">' + (sol.name || 'Solution') + '</div>';
+                        html += '<div class="solution-card-provider">' + (sol.provider || 'Provider') + '</div>';
+                        html += '</div>';
+                        html += '<div class="solution-card-meta">';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">Preis</div><div class="solution-meta-value">' + (sol.price || '—') + '</div></div>';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">ROI</div><div class="solution-meta-value">' + (sol.roi || '—') + '</div></div>';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">' + (lang === 'de' ? 'Nutzlast' : 'Payload') + '</div><div class="solution-meta-value">' + (sol.payload || '—') + '</div></div>';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">' + (lang === 'de' ? 'Match' : 'Match') + '</div><div class="solution-meta-value">' + matchPercent + '%</div></div>';
+                        html += '</div>';
+                        html += '<div class="match-score-bar"><div class="match-score-fill" style="width:' + matchPercent + '%"></div></div>';
+                        html += '</div>';
+                    });
+                }
+            }
+
+            container.innerHTML = html;
+            container.classList.add('active');
+            updateFormSteps();
+        }
+
+        function submitContactInfo() {
+            if (!document.getElementById('contact-email').value) {
+                alert(document.documentElement.lang === 'de' ? 'Bitte geben Sie Ihre Email ein' : 'Please enter your email');
+                return;
+            }
+            formData.currentStep = 4;
+            updateFormSteps();
+        }
+
+        function generateReview() {
+            const l = document.documentElement.lang;
+            let html = '';
+
+            if (formData.currentPath === 'discovery') {
+                html += '<div class="review-section"><div class="review-section-header"><h3 class="review-section-title">' + (l==='de'?'Firma':'Company') + '</h3></div>';
+                html += '<div class="review-content"><div class="review-item"><div class="review-item-label">' + (l==='de'?'Firmenname':'Company') + '</div><div class="review-item-value">' + (formData.extractedData.companyName||'—') + '</div></div>';
+                html += '<div class="review-item"><div class="review-item-label">' + (l==='de'?'Branche':'Industry') + '</div><div class="review-item-value">' + (formData.extractedData.industry||'—') + '</div></div></div></div>';
+            } else {
+                html += '<div class="review-section"><div class="review-section-header"><h3 class="review-section-title">' + (l==='de'?'Anfrage':'Request') + '</h3></div>';
+                html += '<div class="review-content"><div class="review-item"><div class="review-item-label">' + (l==='de'?'Kategorie':'Category') + '</div><div class="review-item-value">' + (formData.selectedCategory||'—') + '</div></div>';
+                html += '<div class="review-item"><div class="review-item-label">Budget</div><div class="review-item-value">' + (formData.userInputs.budget||'—') + '</div></div></div></div>';
+            }
+
+            html += '<div class="review-section"><div class="review-section-header"><h3 class="review-section-title">' + (l==='de'?'Kontakt':'Contact') + '</h3></div>';
+            html += '<div class="review-content"><div class="review-item"><div class="review-item-label">Name</div><div class="review-item-value">' + (document.getElementById('contact-name').value||'—') + '</div></div>';
+            html += '<div class="review-item"><div class="review-item-label">Email</div><div class="review-item-value">' + (document.getElementById('contact-email').value||'—') + '</div></div></div></div>';
+
+            document.getElementById('reviewContent').innerHTML = html;
+        }
+
+        document.getElementById('leadForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); const btn = document.getElementById('submitBtn'); btn.disabled = true; btn.textContent = document.documentElement.lang === 'de' ? 'Wird gesendet...' : 'Submitting...';
+            try {
+                const ld = {
+                    path: formData.currentPath,
+                    ...formData.extractedData,
+                    ...formData.userInputs,
+                    contact_name: document.getElementById('contact-name').value||'',
+                    contact_email: document.getElementById('contact-email').value||'',
+                    language: document.documentElement.lang
+                };
+                const r = await fetch(`${API_BASE_URL}/api/submit-lead`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(ld) });
+                if (!r.ok) throw new Error('fail'); const result = await r.json(); if (!result.success) throw new Error('fail');
+                localStorage.setItem('robofolio_lead', JSON.stringify({ lead_id: result.lead_id, lead_score: result.lead_score, ...ld, status: 'searching', submitted_at: new Date().toISOString() }));
+                document.getElementById('profile-name').value = ld.contact_name||'';
+                document.getElementById('profile-company').value = formData.extractedData.companyName||'';
+                document.getElementById('profile-email').value = ld.contact_email||'';
+                document.getElementById('leadForm').style.display = 'none';
+                document.querySelector('.progress-container').style.display = 'none';
+                document.getElementById('successContainer').classList.add('active');
+            } catch (e) { alert(document.documentElement.lang === 'de' ? 'Fehler beim Senden.' : 'Error submitting.'); btn.disabled = false; }
+        });
+
+        function goToPortal() {
+            const name = document.getElementById('profile-name').value.trim(), email = document.getElementById('profile-email').value.trim();
+            if (!name || !email) { alert(document.documentElement.lang === 'de' ? 'Bitte füllen Sie Name und Email aus.' : 'Please fill in your name and email.'); return; }
+            const lead = JSON.parse(localStorage.getItem('robofolio_lead')||'{}');
+            lead.profile_name = name; lead.profile_email = email; lead.profile_company = document.getElementById('profile-company').value;
+            localStorage.setItem('robofolio_lead', JSON.stringify(lead));
+            window.location.href = 'portal.html';
+        }
+
+        (function() { const v = document.querySelectorAll('#heroBg video'); if (v.length <= 1) return; let c = 0; setInterval(() => { v[c].classList.remove('active-video'); c = (c + 1) % v.length; v[c].classList.add('active-video'); }, 12000); })();
     </script>
 </body>
 </html>
