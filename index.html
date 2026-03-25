@@ -1484,37 +1484,53 @@
                 const r = await fetch(`${API_BASE_URL}/api/solutions/categories`);
                 if (r.ok) {
                     const result = await r.json();
-                    if (result.success && result.data) {
-                        formData.categories = result.data;
+                    if (result.success && result.categories) {
+                        formData.categories = result.categories;
                         renderCategories();
                     }
                 }
             } catch (e) {
                 console.error('Error loading categories:', e);
+                // Fallback: render hardcoded categories
+                formData.categories = [
+                    {name: 'Schweißen', name_en: 'Welding', icon: '🔥', solution_count: 4, price_range: {min: 53000, max: 53000}},
+                    {name: 'Palettierung', name_en: 'Palletizing', icon: '📦', solution_count: 4, price_range: {min: 70000, max: 70000}},
+                    {name: 'Maschinenbeschickung', name_en: 'Machine Tending', icon: '⚙️', solution_count: 4, price_range: {min: 45000, max: 45000}},
+                    {name: 'Kleben / Dosieren', name_en: 'Gluing / Dispensing', icon: '💧', solution_count: 4, price_range: {min: 95000, max: 95000}},
+                    {name: 'Verschrauben', name_en: 'Screw Driving', icon: '🔩', solution_count: 4, price_range: {min: 85000, max: 85000}},
+                    {name: 'Inspektion / Vision', name_en: 'Inspection / Vision', icon: '👁️', solution_count: 4, price_range: {min: null, max: null}},
+                    {name: 'Lackieren', name_en: 'Painting', icon: '🎨', solution_count: 4, price_range: {min: null, max: null}},
+                ];
+                renderCategories();
             }
         }
 
         function renderCategories() {
             const grid = document.getElementById('categoryGrid');
+            if (!grid) return;
             grid.innerHTML = '';
+            const lang = document.documentElement.lang || 'de';
             formData.categories.forEach(cat => {
                 const card = document.createElement('div');
                 card.className = 'category-card';
-                card.onclick = () => selectCategory(cat.id, card);
+                card.onclick = () => selectCategory(cat.name, card);
+                const priceStr = (cat.price_range && cat.price_range.min) ?
+                    `ab €${Number(cat.price_range.min).toLocaleString('de-DE')}` : (lang === 'de' ? 'Preis auf Anfrage' : 'Price on request');
+                const solLabel = lang === 'de' ? 'Lösungen' : 'Solutions';
                 card.innerHTML = `
                     <div class="category-card-icon">${cat.icon || '🤖'}</div>
-                    <div class="category-card-name">${document.documentElement.lang === 'de' ? cat.name_de : cat.name_en}</div>
-                    <div class="category-card-meta">${cat.solution_count} Lösungen</div>
-                    <div class="category-card-meta">${cat.price_range || '€0 - €250k+'}</div>
+                    <div class="category-card-name">${lang === 'de' ? cat.name : (cat.name_en || cat.name)}</div>
+                    <div class="category-card-meta">${cat.solution_count} ${solLabel}</div>
+                    <div class="category-card-meta">${priceStr}</div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        function selectCategory(catId, element) {
+        function selectCategory(catName, element) {
             document.querySelectorAll('.category-card').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
-            formData.selectedCategory = catId;
+            formData.selectedCategory = catName;
         }
 
         document.getElementById('analyzeWebsiteBtn').addEventListener('click', async function() {
@@ -1583,13 +1599,22 @@
                 const r = await fetch(`${API_BASE_URL}/api/discovery-analysis`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ...formData.extractedData })
+                    body: JSON.stringify({
+                        company_info: {
+                            industry: formData.extractedData.industry,
+                            company_size: formData.extractedData.size,
+                            main_products: formData.extractedData.companyName,
+                            automation_level: 'Unknown'
+                        },
+                        website_analysis: formData.extractedData,
+                        photo_analysis: formData.extractedData.processType || ''
+                    })
                 });
                 if (!r.ok) throw new Error('fail');
                 const result = await r.json();
                 if (!result.success) throw new Error('fail');
 
-                formData.analysisResult = result.data;
+                formData.analysisResult = result.analysis;
                 formData.currentStep = 3;
                 showResults();
             } catch (e) {
@@ -1615,13 +1640,13 @@
                 const r = await fetch(`${API_BASE_URL}/api/match-solutions`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ category_id: formData.selectedCategory, ...formData.userInputs })
+                    body: JSON.stringify({ category: formData.selectedCategory, max_weight: formData.userInputs.weight, budget_max: formData.userInputs.budget, industry: formData.userInputs.industry, region: 'Europa' })
                 });
                 if (!r.ok) throw new Error('fail');
                 const result = await r.json();
                 if (!result.success) throw new Error('fail');
 
-                formData.searchResults = result.data;
+                formData.searchResults = result.matches;
                 formData.currentStep = 3;
                 showResults();
             } catch (e) {
@@ -1637,29 +1662,35 @@
             html += '<div class="results-title">' + (lang === 'de' ? 'Ihre Ergebnisse' : 'Your Results') + '</div>';
 
             if (formData.currentPath === 'discovery' && formData.analysisResult) {
-                const potential = formData.analysisResult.potential || 'Medium';
-                const badgeClass = potential === 'High' ? 'high' : potential === 'Low' ? 'low' : 'medium';
-                html += '<div class="potential-badge ' + badgeClass + '">' + (lang === 'de' ? 'Potenzial: ' : 'Potential: ') + potential + '</div>';
-                html += '<div class="results-subtitle">' + (formData.analysisResult.summary || '') + '</div>';
+                const potential = formData.analysisResult.automation_potential || 'medium';
+                const potentialLabel = potential === 'high' ? (lang === 'de' ? 'Hoch' : 'High') : potential === 'low' ? (lang === 'de' ? 'Niedrig' : 'Low') : (lang === 'de' ? 'Mittel' : 'Medium');
+                const badgeClass = potential === 'high' ? 'high' : potential === 'low' ? 'low' : 'medium';
+                html += '<div class="potential-badge ' + badgeClass + '">' + (lang === 'de' ? 'Potenzial: ' : 'Potential: ') + potentialLabel + '</div>';
+                html += '<div class="results-subtitle">' + (lang === 'de' ? (formData.analysisResult.summary_de || '') : (formData.analysisResult.summary_en || '')) + '</div>';
                 html += '</div>';
 
                 if (formData.analysisResult.opportunities) {
                     formData.analysisResult.opportunities.forEach(opp => {
-                        const oppBadgeClass = opp.priority === 'High' ? 'high' : opp.priority === 'Low' ? 'low' : 'medium';
+                        const oppPriority = opp.priority || 'medium';
+                        const oppBadgeClass = oppPriority === 'high' ? 'high' : oppPriority === 'low' ? 'low' : 'medium';
+                        const catIcons = {'Schweißen':'🔥','Palettierung':'📦','Maschinenbeschickung':'⚙️','Kleben / Dosieren':'💧','Verschrauben':'🔩','Inspektion / Vision':'👁️','Lackieren':'🎨'};
+                        const oppIcon = catIcons[opp.category] || '🤖';
+                        const priceStr = opp.price_range ? ('€' + Number(opp.price_range.min).toLocaleString('de-DE') + ' – €' + Number(opp.price_range.max).toLocaleString('de-DE')) : '—';
                         html += '<div class="opportunity-card">';
                         html += '<div class="opportunity-card-header">';
                         html += '<div class="opportunity-card-title-wrap">';
-                        html += '<div class="opportunity-card-icon">' + (opp.icon || '🤖') + '</div>';
-                        html += '<div class="opportunity-card-title">' + (lang === 'de' ? opp.name_de : opp.name_en) + '</div>';
+                        html += '<div class="opportunity-card-icon">' + oppIcon + '</div>';
+                        html += '<div class="opportunity-card-title">' + (lang === 'de' ? (opp.title_de || opp.category) : (opp.title_en || opp.category)) + '</div>';
                         html += '</div>';
-                        html += '<div class="opportunity-card-badge ' + oppBadgeClass + '">' + (opp.priority || 'Medium') + '</div>';
+                        html += '<div class="opportunity-card-badge ' + oppBadgeClass + '">' + oppPriority + '</div>';
                         html += '</div>';
-                        html += '<div class="opportunity-card-description">' + (lang === 'de' ? opp.description_de : opp.description_en) + '</div>';
+                        html += '<div class="opportunity-card-description">' + (lang === 'de' ? (opp.description_de || '') : (opp.description_en || '')) + '</div>';
                         html += '<div class="opportunity-card-meta">';
-                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">' + (lang === 'de' ? 'Lösungen' : 'Solutions') + '</div><div class="opportunity-meta-value">' + (opp.solution_count || 0) + '</div></div>';
-                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">' + (lang === 'de' ? 'Preis' : 'Price') + '</div><div class="opportunity-meta-value">' + (opp.price_range || '—') + '</div></div>';
-                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">ROI</div><div class="opportunity-meta-value">' + (opp.estimated_roi || '—') + '</div></div>';
+                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">' + (lang === 'de' ? 'Lösungen' : 'Solutions') + '</div><div class="opportunity-meta-value">' + (opp.available_solutions || 0) + '</div></div>';
+                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">' + (lang === 'de' ? 'Preis' : 'Price') + '</div><div class="opportunity-meta-value">' + priceStr + '</div></div>';
+                        html += '<div class="opportunity-meta-item"><div class="opportunity-meta-label">ROI</div><div class="opportunity-meta-value">' + (opp.estimated_roi_months || '—') + ' ' + (lang === 'de' ? 'Monate' : 'months') + '</div></div>';
                         html += '</div>';
+                        html += '<button class="btn btn-primary" style="margin-top:12px;width:100%;" onclick="switchToDirectSearch(\'' + (opp.category || '') + '\')">' + (lang === 'de' ? 'Lösung suchen' : 'Find Solution') + '</button>';
                         html += '</div>';
                     });
                 }
@@ -1668,20 +1699,23 @@
                 html += '</div>';
 
                 if (Array.isArray(formData.searchResults)) {
-                    formData.searchResults.forEach(sol => {
-                        const matchPercent = sol.match_score || 85;
+                    formData.searchResults.forEach(item => {
+                        const sol = item.solution || item;
+                        const matchPercent = item.match_score || 85;
+                        const priceDisplay = sol.price_eur ? ('€' + Number(sol.price_eur).toLocaleString('de-DE')) : '—';
                         html += '<div class="solution-card">';
                         html += '<div class="solution-card-header">';
-                        html += '<div class="solution-card-name">' + (sol.name || 'Solution') + '</div>';
-                        html += '<div class="solution-card-provider">' + (sol.provider || 'Provider') + '</div>';
+                        html += '<div class="solution-card-name">' + (sol.name || sol.Lösungsname || 'Solution') + '</div>';
+                        html += '<div class="solution-card-provider">' + (sol.provider || sol.Lösungsanbieter || '') + '</div>';
                         html += '</div>';
                         html += '<div class="solution-card-meta">';
-                        html += '<div class="solution-meta-item"><div class="solution-meta-label">Preis</div><div class="solution-meta-value">' + (sol.price || '—') + '</div></div>';
-                        html += '<div class="solution-meta-item"><div class="solution-meta-label">ROI</div><div class="solution-meta-value">' + (sol.roi || '—') + '</div></div>';
-                        html += '<div class="solution-meta-item"><div class="solution-meta-label">' + (lang === 'de' ? 'Nutzlast' : 'Payload') + '</div><div class="solution-meta-value">' + (sol.payload || '—') + '</div></div>';
-                        html += '<div class="solution-meta-item"><div class="solution-meta-label">' + (lang === 'de' ? 'Match' : 'Match') + '</div><div class="solution-meta-value">' + matchPercent + '%</div></div>';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">Preis</div><div class="solution-meta-value">' + priceDisplay + '</div></div>';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">ROI</div><div class="solution-meta-value">' + (sol.roi_months || '—') + '</div></div>';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">' + (lang === 'de' ? 'Nutzlast' : 'Payload') + '</div><div class="solution-meta-value">' + (sol.payload_kg ? sol.payload_kg + ' kg' : '—') + '</div></div>';
+                        html += '<div class="solution-meta-item"><div class="solution-meta-label">Match</div><div class="solution-meta-value">' + matchPercent + '%</div></div>';
                         html += '</div>';
                         html += '<div class="match-score-bar"><div class="match-score-fill" style="width:' + matchPercent + '%"></div></div>';
+                        if (sol.features) { html += '<div style="font-size:13px;color:var(--text-secondary);margin-top:8px;">' + sol.features + '</div>'; }
                         html += '</div>';
                     });
                 }
@@ -1689,6 +1723,14 @@
 
             container.innerHTML = html;
             container.classList.add('active');
+            updateFormSteps();
+        }
+
+        function switchToDirectSearch(category) {
+            formData.currentPath = 'direct';
+            formData.selectedCategory = category;
+            formData.currentStep = 2;
+            formData.directSubStep = 2;
             updateFormSteps();
         }
 
