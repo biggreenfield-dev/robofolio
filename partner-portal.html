@@ -9,179 +9,192 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --navy: #1a365d; --navy-light: #2d5a87; --navy-dark: #0f2440;
-            --green: #48bb78; --green-hover: #38a169; --green-light: #c6f6d5;
-            --bg: #f7fafc; --card: #ffffff; --border: #e2e8f0;
-            --text: #2d3748; --text-light: #718096; --text-muted: #a0aec0;
-            --gold: #d69e2e; --gold-light: #fefcbf; --gold-bg: #fffff0;
+            --primary: #0A2840;
+            --primary-light: #1E2F3A;
+            --primary-dark: #071d30;
+            --accent: #009DDB;
+            --accent-hover: #0088c2;
+            --signal: #00B894;
+            --signal-hover: #00a07f;
+            --signal-light: #d4f5ed;
+            --bg-white: #FFFFFF;
+            --bg-light: #F5F7F9;
+            --bg-muted: #E6EAEE;
+            --text-primary: #000000;
+            --text-secondary: #6F7C86;
+            --text-muted: #B8C7D3;
+            --border: #E6EAEE;
+            --gold: #d69e2e;
+            --gold-light: #fefcbf;
+            --gold-bg: #fffff0;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
-        .sidebar { width: 260px; background: linear-gradient(180deg, var(--navy) 0%, var(--navy-dark) 100%); min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-light); color: var(--text-primary); }
+        .sidebar { width: 260px; background: var(--primary); min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 40; }
         .sidebar-logo { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .sidebar-logo h1 { color: white; font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-        .sidebar-logo span { color: var(--green); }
+        .sidebar-logo span { color: var(--accent); }
         .sidebar-logo p { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 2px; }
         .sidebar-nav { padding: 16px 12px; }
-        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; color: rgba(255,255,255,0.65); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; margin-bottom: 4px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 0; color: rgba(255,255,255,0.65); font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; margin-bottom: 4px; }
         .nav-item:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
-        .nav-item.active { background: rgba(72,187,120,0.15); color: white; }
-        .nav-item.active .nav-icon { color: var(--green); }
+        .nav-item.active { background: rgba(0,157,219,0.15); color: white; }
+        .nav-item.active .nav-icon { color: var(--accent); }
         .nav-icon { width: 20px; height: 20px; flex-shrink: 0; }
-        .nav-badge { margin-left: auto; background: var(--green); color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+        .nav-badge { margin-left: auto; background: var(--accent); color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 0; }
         .main { margin-left: 260px; min-height: 100vh; }
         .topbar { background: white; border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 30; }
-        .topbar h2 { font-size: 20px; font-weight: 700; color: var(--navy); }
+        .topbar h2 { font-size: 20px; font-weight: 800; color: var(--primary); }
         .content { padding: 28px 32px; }
-        .card { background: white; border-radius: 14px; border: 1px solid var(--border); padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+        .card { background: white; border-radius: 0; border: 1px solid var(--border); padding: 24px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
         .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-        .card-title { font-size: 16px; font-weight: 700; color: var(--navy); }
-        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
-        .btn-primary { background: var(--green); color: white; }
-        .btn-primary:hover { background: var(--green-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(72,187,120,0.3); }
-        .btn-secondary { background: white; color: var(--navy); border: 1.5px solid var(--border); }
-        .btn-secondary:hover { border-color: var(--navy-light); background: #f7fafc; }
-        .btn-navy { background: var(--navy); color: white; }
-        .btn-navy:hover { background: var(--navy-light); }
+        .card-title { font-size: 16px; font-weight: 700; color: var(--primary); }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 0; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,157,219,0.3); }
+        .btn-secondary { background: white; color: var(--primary); border: 1.5px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--primary-light); background: var(--bg-light); }
+        .btn-navy { background: var(--primary); color: white; }
+        .btn-navy:hover { background: var(--primary-light); }
         .btn-sm { padding: 7px 14px; font-size: 13px; }
         .btn-danger { background: #fff5f5; color: #e53e3e; border: 1px solid #fed7d7; }
         .btn-danger:hover { background: #fed7d7; }
         .btn-gold { background: linear-gradient(135deg, #d69e2e, #ecc94b); color: white; }
         .btn-gold:hover { box-shadow: 0 4px 16px rgba(214,158,46,0.4); transform: translateY(-1px); }
         .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
-        .form-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: inherit; transition: border-color 0.2s; outline: none; background: white; }
-        .form-input:focus { border-color: var(--navy-light); box-shadow: 0 0 0 3px rgba(45,90,135,0.1); }
+        .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+        .form-input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 0; font-size: 14px; font-family: inherit; transition: border-color 0.2s; outline: none; background: white; }
+        .form-input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(26,54,93,0.1); }
         .form-input::placeholder { color: var(--text-muted); }
         textarea.form-input { min-height: 100px; resize: vertical; }
         .form-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
         .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-        .stat-card { background: white; border-radius: 14px; border: 1px solid var(--border); padding: 20px; }
-        .stat-value { font-size: 28px; font-weight: 800; color: var(--navy); }
-        .stat-label { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+        .stat-card { background: white; border-radius: 0; border: 1px solid var(--border); padding: 20px; }
+        .stat-value { font-size: 28px; font-weight: 800; color: var(--primary); font-family: 'JetBrains Mono', monospace; }
+        .stat-label { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
         .stat-change { font-size: 12px; font-weight: 600; margin-top: 8px; }
-        .stat-change.up { color: var(--green); }
-        .lead-card { background: white; border: 1.5px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 14px; transition: all 0.2s; cursor: pointer; position: relative; overflow: hidden; }
-        .lead-card:hover { border-color: var(--navy-light); box-shadow: 0 4px 16px rgba(0,0,0,0.06); transform: translateY(-1px); }
+        .stat-change.up { color: var(--signal); }
+        .lead-card { background: white; border: 1.5px solid var(--border); border-radius: 0; padding: 20px; margin-bottom: 14px; transition: all 0.2s; cursor: pointer; position: relative; overflow: hidden; }
+        .lead-card:hover { border-color: var(--primary-light); box-shadow: 0 4px 16px rgba(0,0,0,0.06); transform: translateY(-1px); }
         .lead-card.locked { cursor: default; }
         .lead-card.locked:hover { transform: none; box-shadow: none; border-color: var(--border); }
         .lead-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
-        .lead-company { font-size: 16px; font-weight: 700; color: var(--navy); }
-        .lead-location { font-size: 13px; color: var(--text-light); margin-top: 2px; }
-        .match-badge { padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
-        .match-high { background: #c6f6d5; color: #276749; }
-        .match-medium { background: #fefcbf; color: #975a16; }
+        .lead-company { font-size: 16px; font-weight: 700; color: var(--primary); }
+        .lead-location { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+        .match-badge { padding: 4px 12px; border-radius: 0; font-size: 13px; font-weight: 700; }
+        .match-high { background: var(--signal-light); color: #276749; }
+        .match-medium { background: var(--gold-light); color: #975a16; }
         .match-low { background: #fed7d7; color: #9b2c2c; }
         .lead-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-        .lead-tag { padding: 3px 10px; background: #edf2f7; border-radius: 6px; font-size: 12px; color: var(--text-light); font-weight: 500; }
-        .lead-meta { display: flex; gap: 16px; margin-top: 12px; font-size: 13px; color: var(--text-light); }
-        .logo-upload { width: 120px; height: 120px; border: 2px dashed var(--border); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; background: #f7fafc; }
-        .logo-upload:hover { border-color: var(--navy-light); background: #edf2f7; }
-        .logo-upload img { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; }
+        .lead-tag { padding: 3px 10px; background: var(--bg-muted); border-radius: 0; font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+        .lead-meta { display: flex; gap: 16px; margin-top: 12px; font-size: 13px; color: var(--text-secondary); }
+        .logo-upload { width: 120px; height: 120px; border: 2px dashed var(--border); border-radius: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; background: var(--bg-light); }
+        .logo-upload:hover { border-color: var(--primary-light); background: var(--bg-muted); }
+        .logo-upload img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
         .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .upload-zone { border: 2px dashed var(--border); border-radius: 14px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.2s; background: #f7fafc; }
-        .upload-zone:hover { border-color: var(--green); background: #f0fff4; }
-        .upload-zone.dragover { border-color: var(--green); background: #f0fff4; }
-        .doc-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: #f7fafc; border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border); }
-        .doc-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .upload-zone { border: 2px dashed var(--border); border-radius: 0; padding: 40px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--bg-light); }
+        .upload-zone:hover { border-color: var(--signal); background: var(--signal-light); }
+        .upload-zone.dragover { border-color: var(--signal); background: var(--signal-light); }
+        .doc-item { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--bg-light); border-radius: 0; margin-bottom: 8px; border: 1px solid var(--border); }
+        .doc-icon { width: 40px; height: 40px; border-radius: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; }
         .doc-icon.pdf { background: #fff5f5; color: #e53e3e; }
         .doc-icon.doc { background: #ebf8ff; color: #3182ce; }
-        .doc-icon.img { background: #f0fff4; color: #38a169; }
-        .doc-name { font-size: 14px; font-weight: 600; color: var(--text); }
+        .doc-icon.img { background: var(--signal-light); color: #38a169; }
+        .doc-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
         .doc-size { font-size: 12px; color: var(--text-muted); }
-        .ai-box { background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%); border-radius: 16px; padding: 28px; color: white; margin-bottom: 24px; }
+        .ai-box { background: linear-gradient(135deg, #0A2840 0%, #1E2F3A 100%); border-radius: 0; padding: 28px; color: white; margin-bottom: 24px; }
         .ai-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
         .ai-box p { font-size: 14px; opacity: 0.8; margin-bottom: 20px; }
         .ai-input-row { display: flex; gap: 12px; }
-        .ai-input { flex: 1; padding: 12px 16px; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); border-radius: 10px; color: white; font-size: 14px; font-family: inherit; outline: none; }
+        .ai-input { flex: 1; padding: 12px 16px; border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); border-radius: 0; color: white; font-size: 14px; font-family: inherit; outline: none; }
         .ai-input::placeholder { color: rgba(255,255,255,0.5); }
-        .ai-input:focus { border-color: var(--green); }
-        .btn-ai { background: var(--green); color: white; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
-        .btn-ai:hover { background: var(--green-hover); }
-        .ai-status { margin-top: 16px; padding: 12px 16px; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 13px; }
+        .ai-input:focus { border-color: var(--signal); }
+        .btn-ai { background: var(--signal); color: white; padding: 12px 24px; border-radius: 0; font-size: 14px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .btn-ai:hover { background: var(--signal-hover); }
+        .ai-status { margin-top: 16px; padding: 12px 16px; background: rgba(255,255,255,0.1); border-radius: 0; font-size: 13px; }
         .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .progress-bar { width: 100%; height: 6px; background: #edf2f7; border-radius: 3px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width 0.5s ease; }
-        .tags-container { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 10px; min-height: 44px; align-items: center; cursor: text; }
-        .tags-container:focus-within { border-color: var(--navy-light); box-shadow: 0 0 0 3px rgba(45,90,135,0.1); }
-        .tag-pill { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: #edf2f7; border-radius: 6px; font-size: 13px; font-weight: 500; }
+        .progress-bar { width: 100%; height: 6px; background: var(--bg-muted); border-radius: 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--signal); border-radius: 0; transition: width 0.5s ease; }
+        .tags-container { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 0; min-height: 44px; align-items: center; cursor: text; }
+        .tags-container:focus-within { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(26,54,93,0.1); }
+        .tag-pill { display: flex; align-items: center; gap: 4px; padding: 4px 10px; background: var(--bg-muted); border-radius: 0; font-size: 13px; font-weight: 500; }
         .tag-remove { cursor: pointer; opacity: 0.5; font-size: 16px; line-height: 1; }
         .tag-remove:hover { opacity: 1; color: #e53e3e; }
         .tag-input { border: none; outline: none; font-size: 14px; font-family: inherit; min-width: 120px; flex: 1; padding: 2px; }
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
-        .modal { background: white; border-radius: 16px; width: 100%; max-width: 700px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-        .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .modal { background: white; border-radius: 0; width: 100%; max-width: 700px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; border-radius: 0; }
         .modal-body { padding: 24px; }
         .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
-        .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; display: inline-block; }
+        .status-badge { padding: 4px 10px; border-radius: 0; font-size: 12px; font-weight: 600; display: inline-block; }
         .status-new { background: #ebf8ff; color: #2b6cb0; }
-        .status-contacted { background: #fefcbf; color: #975a16; }
-        .status-qualified { background: #c6f6d5; color: #276749; }
-        .toast { position: fixed; bottom: 24px; right: 24px; background: var(--navy); color: white; padding: 14px 20px; border-radius: 12px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px; z-index: 100; box-shadow: 0 8px 30px rgba(0,0,0,0.2); animation: slideUp 0.3s ease; }
+        .status-contacted { background: var(--gold-light); color: #975a16; }
+        .status-qualified { background: var(--signal-light); color: #276749; }
+        .toast { position: fixed; bottom: 24px; right: 24px; background: var(--primary); color: white; padding: 14px 20px; border-radius: 0; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px; z-index: 100; box-shadow: 0 8px 30px rgba(0,0,0,0.2); animation: slideUp 0.3s ease; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .toast-success { background: var(--green); }
+        .toast-success { background: var(--signal); }
         .empty-state { text-align: center; padding: 48px 24px; }
-        .empty-state h3 { font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-        .empty-state p { font-size: 14px; color: var(--text-light); max-width: 400px; margin: 0 auto 20px; }
+        .empty-state h3 { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+        .empty-state p { font-size: 14px; color: var(--text-secondary); max-width: 400px; margin: 0 auto 20px; }
         .settings-section { padding: 20px 0; border-bottom: 1px solid var(--border); }
         .settings-section:last-child { border-bottom: none; }
         .toggle { position: relative; width: 44px; height: 24px; }
         .toggle input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; inset: 0; background: #cbd5e0; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .toggle-slider { position: absolute; inset: 0; background: var(--border); border-radius: 0; cursor: pointer; transition: 0.2s; }
         .toggle-slider:before { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: 0.2s; }
-        .toggle input:checked + .toggle-slider { background: var(--green); }
+        .toggle input:checked + .toggle-slider { background: var(--signal); }
         .toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
 
         /* ── BLUR EFFECTS ── */
         .blurred { filter: blur(7px); user-select: none; pointer-events: none; }
         .blurred-light { filter: blur(5px); user-select: none; pointer-events: none; }
-        .lock-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.6); backdrop-filter: blur(2px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; border-radius: 13px; }
-        .lock-icon { width: 48px; height: 48px; background: var(--navy); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+        .lock-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.6); backdrop-filter: blur(2px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; border-radius: 0; }
+        .lock-icon { width: 48px; height: 48px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
 
         /* ── PRICING CARDS ── */
         .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
-        .pricing-card { border: 2px solid var(--border); border-radius: 16px; padding: 28px; text-align: center; transition: all 0.3s; position: relative; background: white; }
+        .pricing-card { border: 2px solid var(--border); border-radius: 0; padding: 28px; text-align: center; transition: all 0.3s; position: relative; background: white; }
         .pricing-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
-        .pricing-card.featured { border-color: var(--green); box-shadow: 0 8px 30px rgba(72,187,120,0.15); }
-        .pricing-card.active-plan { border-color: var(--green); background: #f0fff4; }
-        .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--green); color: white; padding: 4px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .pricing-card.featured { border-color: var(--accent); box-shadow: 0 8px 30px rgba(0,157,219,0.15); }
+        .pricing-card.active-plan { border-color: var(--accent); background: var(--signal-light); }
+        .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--signal); color: white; padding: 4px 16px; border-radius: 0; font-size: 12px; font-weight: 700; }
         .pricing-tier { font-size: 14px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-        .pricing-name { font-size: 22px; font-weight: 800; color: var(--navy); margin-bottom: 4px; }
-        .pricing-price { font-size: 36px; font-weight: 800; color: var(--navy); margin: 16px 0 4px; }
-        .pricing-price span { font-size: 16px; font-weight: 500; color: var(--text-light); }
-        .pricing-desc { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+        .pricing-name { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+        .pricing-price { font-size: 36px; font-weight: 800; color: var(--primary); margin: 16px 0 4px; }
+        .pricing-price span { font-size: 16px; font-weight: 500; color: var(--text-secondary); }
+        .pricing-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 20px; }
         .pricing-features { list-style: none; text-align: left; margin-bottom: 24px; }
-        .pricing-features li { padding: 8px 0; font-size: 14px; color: var(--text); display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid #f7fafc; }
+        .pricing-features li { padding: 8px 0; font-size: 14px; color: var(--text-primary); display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid var(--bg-light); }
         .pricing-features li:last-child { border-bottom: none; }
-        .pricing-check { color: var(--green); flex-shrink: 0; margin-top: 2px; }
+        .pricing-check { color: var(--signal); flex-shrink: 0; margin-top: 2px; }
 
         /* ── CONTRACT MODAL ── */
-        .contract-text { background: #f7fafc; border: 1px solid var(--border); border-radius: 10px; padding: 20px; max-height: 400px; overflow-y: auto; font-size: 13px; line-height: 1.8; color: var(--text); margin-bottom: 16px; }
-        .contract-text h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin: 16px 0 8px; }
+        .contract-text { background: var(--bg-light); border: 1px solid var(--border); border-radius: 0; padding: 20px; max-height: 400px; overflow-y: auto; font-size: 13px; line-height: 1.8; color: var(--text-primary); margin-bottom: 16px; }
+        .contract-text h4 { font-size: 15px; font-weight: 700; color: var(--primary); margin: 16px 0 8px; }
         .contract-text h4:first-child { margin-top: 0; }
         .contract-text p { margin-bottom: 8px; }
-        .contract-checkbox { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; background: var(--gold-bg); border: 1.5px solid var(--gold); border-radius: 10px; cursor: pointer; }
-        .contract-checkbox input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--green); }
+        .contract-checkbox { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; background: var(--gold-bg); border: 1.5px solid var(--gold); border-radius: 0; cursor: pointer; }
+        .contract-checkbox input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--signal); }
         .contract-checkbox label { font-size: 14px; font-weight: 500; cursor: pointer; }
 
         /* ── TIER BADGE IN SIDEBAR ── */
-        .tier-badge { padding: 6px 12px; background: linear-gradient(135deg, rgba(72,187,120,0.15), rgba(72,187,120,0.05)); border: 1px solid rgba(72,187,120,0.3); border-radius: 8px; display: flex; align-items: center; gap: 8px; margin: 12px 12px 4px; }
-        .tier-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+        .tier-badge { padding: 6px 12px; background: linear-gradient(135deg, rgba(0,157,219,0.15), rgba(0,157,219,0.05)); border: 1px solid rgba(0,157,219,0.3); border-radius: 0; display: flex; align-items: center; gap: 8px; margin: 12px 12px 4px; }
+        .tier-badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
         .tier-badge-text { font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 600; }
 
         /* ── UNLOCK BUTTON ── */
-        .unlock-btn { background: linear-gradient(135deg, var(--navy), var(--navy-light)); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
-        .unlock-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(26,54,93,0.3); }
+        .unlock-btn { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border: none; padding: 10px 20px; border-radius: 0; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+        .unlock-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(10,40,64,0.3); }
 
         .fade-in { animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 0; }
 
         @media (max-width: 900px) {
             .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin-left: auto; margin-right: auto; }
@@ -222,6 +235,9 @@ const Icons = {
     Crown: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 20h20l-2-14-5 6-3-8-3 8-5-6-2 14z"/></svg>,
     Zap: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
     FileText: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>,
+    Solutions: () => <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>,
+    Plus: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
+    Edit: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
 };
 
 // ─── MOCK DATA ──────────────────────────────────────────────────────────────
@@ -243,9 +259,17 @@ const SERVICE_OPTIONS = [
 ];
 
 const TIERS = {
-    R0: { name: 'Starter', price: 'Kostenlos', priceNum: 0, period: '', leadsPerWeek: 0, leadsPerMonth: 1, unlimited: false, desc: '1 Probe-Lead pro Monat', color: '#718096' },
-    R1: { name: 'Professional', price: '149', priceNum: 149, period: '/ Monat', leadsPerWeek: 3, leadsPerMonth: 12, unlimited: false, desc: '3 Leads pro Woche freischalten', color: '#2d5a87' },
-    R2: { name: 'Enterprise', price: '399', priceNum: 399, period: '/ Monat', leadsPerWeek: 999, leadsPerMonth: 999, unlimited: true, desc: 'Unbegrenzter Zugang zu allen Leads', color: '#276749' },
+    R0: { name: 'Starter', price: 'Kostenlos', priceNum: 0, period: '', leadsPerWeek: 0, leadsPerMonth: 1, unlimited: false, desc: '1 Probe-Lead pro Monat', color: '#6F7C86' },
+    R1: { name: 'Professional', price: '149', priceNum: 149, period: '/ Monat', leadsPerWeek: 3, leadsPerMonth: 12, unlimited: false, desc: '3 Leads pro Woche freischalten', color: '#009DDB' },
+    R2: { name: 'Enterprise', price: '399', priceNum: 399, period: '/ Monat', leadsPerWeek: 999, leadsPerMonth: 999, unlimited: true, desc: 'Unbegrenzter Zugang zu allen Leads', color: '#00B894' },
+};
+
+const SOLUTION_CATEGORIES = ['Schweißen', 'Palettierung', 'Maschinenbeschickung', 'Kleben / Dosieren', 'Verschrauben', 'Inspektion / Vision', 'Lackieren'];
+
+const EMPTY_SOLUTION = {
+    id: '', kategorie: '', loesungsname: '', roboter_inklusive: '', cobot_hersteller: '',
+    max_nutzlast: '', enthaltene_komponenten: '', software: '', preis_eur: '',
+    einrichtungszeit: '', roi_monate: '', brancheneignung: '', besondere_merkmale: '', website: ''
 };
 
 // ─── CONTEXT ────────────────────────────────────────────────────────────────
@@ -267,7 +291,7 @@ function ContractModal({ lead, onAccept, onClose, profile }) {
 
     return <div className="modal-overlay" onClick={onClose}>
         <div className="modal" style={{ maxWidth: 750 }} onClick={e => e.stopPropagation()}>
-            <div className="modal-header" style={{ background: 'linear-gradient(135deg, #1a365d, #2d5a87)', borderRadius: '16px 16px 0 0' }}>
+            <div className="modal-header" style={{ background: 'linear-gradient(135deg, #0A2840, #1E2F3A)', borderRadius: '0 0 0 0' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <Icons.Shield />
                     <div>
@@ -330,7 +354,7 @@ function ContractModal({ lead, onAccept, onClose, profile }) {
                     <label>Ich habe den Vermittlungsvertrag gelesen und akzeptiere die Bedingungen. Ich bestätige, dass ich bevollmächtigt bin, im Namen von <strong>{partnerName}</strong> rechtsverbindliche Vereinbarungen einzugehen. Mir ist bewusst, dass bei Vertragsabschluss mit dem vermittelten Lead eine Provision von 5% des Gesamtnettoauftragswertes an Robofolio fällig wird.</label>
                 </div>
             </div>
-            <div className="modal-footer" style={{ background: '#f7fafc' }}>
+            <div className="modal-footer" style={{ background: '#F5F7F9' }}>
                 <button className="btn btn-secondary" onClick={onClose}>Abbrechen</button>
                 <button className="btn btn-primary" disabled={!accepted} style={{ opacity: accepted ? 1 : 0.5 }} onClick={() => accepted && onAccept()}>
                     <Icons.Unlock /> Lead freischalten & Vertrag akzeptieren
@@ -347,6 +371,7 @@ function Sidebar({ page, setPage, leadCount, tier, unlockedCount }) {
         { id: 'dashboard', label: 'Dashboard', icon: Icons.Dashboard },
         { id: 'profile', label: 'Firmenprofil', icon: Icons.Profile },
         { id: 'leads', label: 'Passende Leads', icon: Icons.Leads, badge: leadCount },
+        { id: 'solutions', label: 'Lösungen', icon: Icons.Solutions },
         { id: 'documents', label: 'Dokumente', icon: Icons.Documents },
         { id: 'pricing', label: 'Abo & Preise', icon: Icons.Pricing },
         { id: 'settings', label: 'Einstellungen', icon: Icons.Settings },
@@ -370,7 +395,7 @@ function Sidebar({ page, setPage, leadCount, tier, unlockedCount }) {
             ))}
         </nav>
         <div style={{ position: 'absolute', bottom: 20, left: 12, right: 12 }}>
-            <div style={{ padding: '14px', background: 'rgba(255,255,255,0.05)', borderRadius: 12, fontSize: 13 }}>
+            <div style={{ padding: '14px', background: 'rgba(255,255,255,0.05)', borderRadius: 0, fontSize: 13 }}>
                 <div style={{ color: 'rgba(255,255,255,0.5)', marginBottom: 6 }}>Freigeschaltete Leads</div>
                 <div style={{ color: 'white', fontSize: 20, fontWeight: 800 }}>{unlockedCount} <span style={{ fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>/ {tier === 'R2' ? '∞' : tier === 'R1' ? '3 pro Woche' : '1 pro Monat'}</span></div>
             </div>
@@ -385,7 +410,7 @@ function DashboardPage({ leads, profile, tier, unlockedLeads }) {
     const avgMatch = leads.length ? Math.round(leads.reduce((a, l) => a + l.match, 0) / leads.length) : 0;
 
     return <div className="fade-in">
-        {tier === 'R0' && <div style={{ background: 'linear-gradient(135deg, #fffff0, #fefcbf)', border: '1.5px solid #d69e2e', borderRadius: 14, padding: 20, marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {tier === 'R0' && <div style={{ background: 'linear-gradient(135deg, #fffff0, #fefcbf)', border: '1.5px solid #d69e2e', borderRadius: 0, padding: 20, marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <Icons.Crown />
                 <div>
@@ -423,8 +448,8 @@ function DashboardPage({ leads, profile, tier, unlockedLeads }) {
                 <div className="card">
                     <div className="card-header"><div className="card-title">Ihr Profil</div><button className="btn btn-sm btn-secondary" onClick={() => setPage('profile')}>Bearbeiten →</button></div>
                     <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 16 }}>
-                        <div style={{ width: 56, height: 56, borderRadius: 12, background: 'linear-gradient(135deg, #1a365d, #2d5a87)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 20, fontWeight: 700 }}>{profile.companyName ? profile.companyName[0] : 'P'}</div>
-                        <div><div style={{ fontWeight: 700, fontSize: 16 }}>{profile.companyName || 'Ihr Unternehmen'}</div><div style={{ fontSize: 13, color: 'var(--text-light)' }}>{profile.city || 'Stadt hinzufügen'} · {profile.services.length} Services</div></div>
+                        <div style={{ width: 56, height: 56, borderRadius: 0, background: 'linear-gradient(135deg, #0A2840, #1E2F3A)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 20, fontWeight: 700 }}>{profile.companyName ? profile.companyName[0] : 'P'}</div>
+                        <div><div style={{ fontWeight: 700, fontSize: 16 }}>{profile.companyName || 'Ihr Unternehmen'}</div><div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{profile.city || 'Stadt hinzufügen'} · {profile.services.length} Services</div></div>
                     </div>
                     <div className="lead-tags">{profile.services.map(s => <span key={s} className="lead-tag">{s}</span>)}</div>
                 </div>
@@ -511,13 +536,13 @@ function ProfilePage({ profile, setProfile, setToast }) {
         </div>
         <div className="card">
             <div className="card-header"><div className="card-title">Services & Kompetenzen</div></div>
-            <p style={{ fontSize: 14, color: 'var(--text-light)', marginBottom: 16 }}>Diese Services werden für das Lead-Matching verwendet.</p>
+            <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 16 }}>Diese Services werden für das Lead-Matching verwendet.</p>
             <div className="tags-container">
                 {profile.services.map(s => <span key={s} className="tag-pill">{s} <span className="tag-remove" onClick={() => removeService(s)}>×</span></span>)}
                 <input className="tag-input" placeholder="Service hinzufügen..." value={tagInput} onChange={e => setTagInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && tagInput.trim()) { addService(tagInput.trim()); setTagInput(''); } }} />
             </div>
             <div style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                {SERVICE_OPTIONS.filter(s => !profile.services.includes(s)).slice(0, 12).map(s => <button key={s} className="btn btn-sm btn-secondary" style={{ borderRadius: 20, fontSize: 12, padding: '5px 12px' }} onClick={() => addService(s)}>+ {s}</button>)}
+                {SERVICE_OPTIONS.filter(s => !profile.services.includes(s)).slice(0, 12).map(s => <button key={s} className="btn btn-sm btn-secondary" style={{ borderRadius: 0, fontSize: 12, padding: '5px 12px' }} onClick={() => addService(s)}>+ {s}</button>)}
             </div>
         </div>
     </div>;
@@ -556,14 +581,14 @@ function LeadsPage({ leads, profile, tier, unlockedLeads, onUnlockLead, canUnloc
 
     return <div className="fade-in">
         {/* Tier info banner */}
-        <div style={{ background: 'white', border: '1.5px solid var(--border)', borderRadius: 14, padding: 16, marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ background: 'white', border: '1.5px solid var(--border)', borderRadius: 0, padding: 16, marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 10, background: tier === 'R2' ? '#c6f6d5' : tier === 'R1' ? '#ebf8ff' : '#edf2f7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 40, height: 40, borderRadius: 0, background: tier === 'R2' ? '#d4f5ed' : tier === 'R1' ? '#ebf8ff' : '#E6EAEE', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {tier === 'R2' ? <Icons.Crown /> : <Icons.Lock />}
                 </div>
                 <div>
                     <div style={{ fontWeight: 700, fontSize: 14 }}>Ihr Tarif: {tier} {tierInfo.name}</div>
-                    <div style={{ fontSize: 13, color: 'var(--text-light)' }}>
+                    <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
                         {tier === 'R2' ? 'Alle Leads sind für Sie sichtbar' : tier === 'R1' ? `${3 - Math.min(unlockedLeads.length, 3)} von 3 Freischaltungen diese Woche verfügbar` : `${1 - Math.min(unlockedLeads.length, 1)} von 1 Freischaltung diesen Monat verfügbar`}
                     </div>
                 </div>
@@ -598,12 +623,12 @@ function LeadsPage({ leads, profile, tier, unlockedLeads, onUnlockLead, canUnloc
                         </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        {!isUnlocked && <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: 'var(--text-muted)', background: '#edf2f7', padding: '4px 10px', borderRadius: 6, fontWeight: 600 }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Verschleiert</span>}
+                        {!isUnlocked && <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: 'var(--text-muted)', background: '#E6EAEE', padding: '4px 10px', borderRadius: 0, fontWeight: 600 }}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Verschleiert</span>}
                         {isUnlocked && <span className="status-badge status-qualified" style={{ fontSize: 11 }}>Freigeschaltet</span>}
                         <span className={`match-badge ${lead.match >= 80 ? 'match-high' : lead.match >= 60 ? 'match-medium' : 'match-low'}`}>{lead.match}% Match</span>
                     </div>
                 </div>
-                <p style={{ fontSize: 14, color: 'var(--text-light)', marginBottom: 12, lineHeight: 1.5, ...(isUnlocked ? {} : { filter: 'blur(6px)', userSelect: 'none' }) }}>{lead.description}</p>
+                <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 12, lineHeight: 1.5, ...(isUnlocked ? {} : { filter: 'blur(6px)', userSelect: 'none' }) }}>{lead.description}</p>
                 <div className="lead-tags">
                     {lead.needs.map(n => <span key={n} className="lead-tag" style={!isUnlocked ? { filter: 'blur(5px)', userSelect: 'none' } : {}}>{n}</span>)}
                 </div>
@@ -626,7 +651,7 @@ function LeadsPage({ leads, profile, tier, unlockedLeads, onUnlockLead, canUnloc
         {selectedLead && <div className="modal-overlay" onClick={() => setSelectedLead(null)}>
             <div className="modal" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
-                    <div><h3 style={{ fontWeight: 700, fontSize: 18 }}>{selectedLead.company}</h3><p style={{ fontSize: 13, color: 'var(--text-light)' }}>{selectedLead.city} · {selectedLead.industry}</p></div>
+                    <div><h3 style={{ fontWeight: 700, fontSize: 18 }}>{selectedLead.company}</h3><p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{selectedLead.city} · {selectedLead.industry}</p></div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <span className="status-badge status-qualified">Freigeschaltet</span>
                         <span className={`match-badge ${selectedLead.match >= 80 ? 'match-high' : selectedLead.match >= 60 ? 'match-medium' : 'match-low'}`}>{selectedLead.match}% Match</span>
@@ -644,11 +669,11 @@ function LeadsPage({ leads, profile, tier, unlockedLeads, onUnlockLead, canUnloc
                     <div><div className="form-label" style={{ marginBottom: 8 }}>Gesuchte Services</div>
                         <div className="lead-tags">{selectedLead.needs.map(n => {
                             const isMatch = profile.services.includes(n);
-                            return <span key={n} className="lead-tag" style={isMatch ? { background: '#c6f6d5', color: '#276749' } : {}}>{isMatch ? '✓ ' : ''}{n}</span>;
+                            return <span key={n} className="lead-tag" style={isMatch ? { background: '#d4f5ed', color: '#276749' } : {}}>{isMatch ? '✓ ' : ''}{n}</span>;
                         })}</div>
                     </div>
-                    <div style={{ marginTop: 16, padding: 12, background: '#f0fff4', borderRadius: 10, fontSize: 13, border: '1px solid #c6f6d5' }}>
-                        <strong>Vermittlungsvertrag aktiv</strong> — Bei Vertragsabschluss mit diesem Lead wird eine Provision von 5% des Gesamtnettoauftragswertes fällig. <span style={{ color: 'var(--text-light)' }}>Vertrag-ID: RF-V-{selectedLead.id.toString().padStart(5, '0')}</span>
+                    <div style={{ marginTop: 16, padding: 12, background: '#d4f5ed', borderRadius: 0, fontSize: 13, border: '1px solid #d4f5ed' }}>
+                        <strong>Vermittlungsvertrag aktiv</strong> — Bei Vertragsabschluss mit diesem Lead wird eine Provision von 5% des Gesamtnettoauftragswertes fällig. <span style={{ color: 'var(--text-secondary)' }}>Vertrag-ID: RF-V-{selectedLead.id.toString().padStart(5, '0')}</span>
                     </div>
                 </div>
                 <div className="modal-footer">
@@ -675,7 +700,7 @@ function DocumentsPage({ documents, setDocuments, setToast }) {
     return <div className="fade-in">
         <div className="card">
             <div className="card-header"><div className="card-title">Dokumente hochladen</div></div>
-            <p style={{ fontSize: 14, color: 'var(--text-light)', marginBottom: 20 }}>Laden Sie Produktkataloge, Service-Beschreibungen und technische Spezifikationen hoch. Robofolio analysiert diese Dokumente um Ihnen noch passendere Leads zu liefern.</p>
+            <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: 20 }}>Laden Sie Produktkataloge, Service-Beschreibungen und technische Spezifikationen hoch. Robofolio analysiert diese Dokumente um Ihnen noch passendere Leads zu liefern.</p>
             <div className={`upload-zone ${dragover ? 'dragover' : ''}`} onDragOver={e => { e.preventDefault(); setDragover(true); }} onDragLeave={() => setDragover(false)} onDrop={e => { e.preventDefault(); setDragover(false); handleFiles(e.dataTransfer.files); }} onClick={() => fileRef.current.click()}>
                 <Icons.Upload /><p style={{ fontSize: 16, fontWeight: 600, marginTop: 12 }}>Dateien hierhin ziehen</p><p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>oder klicken zum Durchsuchen</p><p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 12 }}>PDF, Word, Excel, Bilder · Max. 25 MB</p>
             </div>
@@ -713,15 +738,15 @@ function PricingPage({ tier, setTier, setToast }) {
 
     return <div className="fade-in">
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
-            <h2 style={{ fontSize: 28, fontWeight: 800, color: 'var(--navy)', marginBottom: 8 }}>Wählen Sie Ihren Plan</h2>
-            <p style={{ fontSize: 16, color: 'var(--text-light)', maxWidth: 500, margin: '0 auto' }}>Schalten Sie mehr Leads frei und finden Sie schneller die passenden Projekte für Ihr Unternehmen.</p>
+            <h2 style={{ fontSize: 28, fontWeight: 800, color: 'var(--primary)', marginBottom: 8 }}>Wählen Sie Ihren Plan</h2>
+            <p style={{ fontSize: 16, color: 'var(--text-secondary)', maxWidth: 500, margin: '0 auto' }}>Schalten Sie mehr Leads frei und finden Sie schneller die passenden Projekte für Ihr Unternehmen.</p>
         </div>
 
         <div className="pricing-grid">
             {plans.map(plan => (
                 <div key={plan.id} className={`pricing-card ${plan.featured ? 'featured' : ''} ${tier === plan.id ? 'active-plan' : ''}`}>
                     {plan.featured && <div className="pricing-badge">Beliebteste Wahl</div>}
-                    {tier === plan.id && <div className="pricing-badge" style={{ background: 'var(--navy)' }}>Ihr Plan</div>}
+                    {tier === plan.id && <div className="pricing-badge" style={{ background: 'var(--primary)' }}>Ihr Plan</div>}
                     <div className="pricing-tier">{plan.id}</div>
                     <div className="pricing-name">{plan.name}</div>
                     <div className="pricing-desc">{plan.desc}</div>
@@ -749,9 +774,174 @@ function PricingPage({ tier, setTier, setToast }) {
                 ['Wie funktioniert die 5% Provision?', 'Die Provision wird nur fällig, wenn Sie tatsächlich einen Auftrag mit dem vermittelten Lead abschließen. Sie bezieht sich auf den Gesamtnettoauftragswert inkl. Hardware, Software, Installation und Service.'],
             ].map(([q, a], i) => <div key={i} className="settings-section">
                 <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 6 }}>{q}</div>
-                <div style={{ fontSize: 14, color: 'var(--text-light)', lineHeight: 1.6 }}>{a}</div>
+                <div style={{ fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.6 }}>{a}</div>
             </div>)}
         </div>
+    </div>;
+}
+
+// ─── SOLUTIONS PAGE ────────────────────────────────────────────────────────
+function SolutionsPage({ solutions, setSolutions, setToast }) {
+    const [showModal, setShowModal] = useState(false);
+    const [editingId, setEditingId] = useState(null);
+    const [formData, setFormData] = useState({ ...EMPTY_SOLUTION });
+
+    const categoryIcons = {
+        'Schweißen': '🔥', 'Palettierung': '📦', 'Maschinenbeschickung': '⚙️',
+        'Kleben / Dosieren': '💧', 'Verschrauben': '🔩', 'Inspektion / Vision': '👁️',
+        'Lackieren': '🎨'
+    };
+
+    const openModal = (solution = null) => {
+        if (solution) {
+            setEditingId(solution.id);
+            setFormData(solution);
+        } else {
+            setEditingId(null);
+            setFormData({ ...EMPTY_SOLUTION });
+        }
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setEditingId(null);
+        setFormData({ ...EMPTY_SOLUTION });
+    };
+
+    const handleSave = () => {
+        if (!formData.loesungsname || !formData.kategorie) {
+            setToast({ message: 'Bitte Kategorie und Lösungsname ausfüllen', type: 'success' });
+            return;
+        }
+        if (editingId) {
+            setSolutions(solutions.map(s => s.id === editingId ? { ...formData, id: editingId } : s));
+            setToast({ message: 'Lösung aktualisiert!', type: 'success' });
+        } else {
+            const newSolution = { ...formData, id: Date.now().toString() };
+            setSolutions([...solutions, newSolution]);
+            setToast({ message: 'Neue Lösung hinzugefügt!', type: 'success' });
+        }
+        closeModal();
+    };
+
+    const handleDelete = (id) => {
+        setSolutions(solutions.filter(s => s.id !== id));
+        setToast({ message: 'Lösung gelöscht!', type: 'success' });
+    };
+
+    return <div className="fade-in">
+        <div className="card">
+            <div className="card-header">
+                <div className="card-title">Ihre Lösungen</div>
+                <button className="btn btn-primary btn-sm" onClick={() => openModal()}>
+                    <Icons.Plus /> Neue Lösung
+                </button>
+            </div>
+            {solutions.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-secondary)' }}>
+                    <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Noch keine Lösungen hinzugefügt</div>
+                    <div style={{ fontSize: 14 }}>Erstellen Sie Ihre erste Lösung, um Sie potenziellen Kunden zu präsentieren</div>
+                </div>
+            ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
+                    {solutions.map(solution => (
+                        <div key={solution.id} className="card" style={{ padding: 16, borderRadius: 0, position: 'relative' }}>
+                            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 }}>
+                                <div style={{ fontSize: 28 }}>{categoryIcons[solution.kategorie] || '🔧'}</div>
+                                <div style={{ display: 'flex', gap: 6 }}>
+                                    <button className="btn btn-sm" style={{ padding: '6px', background: '#E6EAEE', color: 'var(--primary)', border: 'none' }} onClick={() => openModal(solution)}>
+                                        <Icons.Edit />
+                                    </button>
+                                    <button className="btn btn-sm" style={{ padding: '6px', background: '#fff5f5', color: '#e53e3e', border: 'none' }} onClick={() => handleDelete(solution.id)}>
+                                        <Icons.Trash />
+                                    </button>
+                                </div>
+                            </div>
+                            <div style={{ fontWeight: 700, fontSize: 16, color: 'var(--primary)', marginBottom: 4 }}>{solution.loesungsname}</div>
+                            <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 12 }}>
+                                {solution.kategorie}
+                            </div>
+                            {solution.preis_eur && <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--signal)', marginBottom: 8 }}>ab €{solution.preis_eur}</div>}
+                            {solution.roi_monate && <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>ROI: {solution.roi_monate} Monate</div>}
+                            {solution.enthaltene_komponenten && <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 8, lineHeight: 1.4 }}>Komponenten: {solution.enthaltene_komponenten.substring(0, 50)}...</div>}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+
+        {showModal && (
+            <div className="modal-overlay" onClick={closeModal}>
+                <div className="modal" style={{ maxWidth: 600 }} onClick={e => e.stopPropagation()}>
+                    <div className="modal-header">
+                        <h3>{editingId ? 'Lösung bearbeiten' : 'Neue Lösung'}</h3>
+                        <button onClick={closeModal} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: 18 }}><Icons.X /></button>
+                    </div>
+                    <div className="modal-body" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+                        <div className="form-group">
+                            <label className="form-label">Kategorie *</label>
+                            <select className="form-input" value={formData.kategorie} onChange={e => setFormData({...formData, kategorie: e.target.value})}>
+                                <option value="">Wählen Sie eine Kategorie</option>
+                                {SOLUTION_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Lösungsname *</label>
+                            <input className="form-input" type="text" placeholder="z.B. Automatisierte Schweißzelle" value={formData.loesungsname} onChange={e => setFormData({...formData, loesungsname: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Roboter inklusive</label>
+                            <input className="form-input" type="text" placeholder="z.B. UR10e" value={formData.roboter_inklusive} onChange={e => setFormData({...formData, roboter_inklusive: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Cobot-Hersteller</label>
+                            <input className="form-input" type="text" placeholder="z.B. Universal Robots" value={formData.cobot_hersteller} onChange={e => setFormData({...formData, cobot_hersteller: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Max. Nutzlast (kg)</label>
+                            <input className="form-input" type="number" placeholder="z.B. 10" value={formData.max_nutzlast} onChange={e => setFormData({...formData, max_nutzlast: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Enthaltene Komponenten</label>
+                            <textarea className="form-input" placeholder="z.B. Roboter, Greifer, Sicherheitszaun, Schnittstellen-Module" value={formData.enthaltene_komponenten} onChange={e => setFormData({...formData, enthaltene_komponenten: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Software</label>
+                            <input className="form-input" type="text" placeholder="z.B. Proprietary Welding Suite v2.0" value={formData.software} onChange={e => setFormData({...formData, software: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Preis ca. EUR</label>
+                            <input className="form-input" type="number" placeholder="z.B. 45000" value={formData.preis_eur} onChange={e => setFormData({...formData, preis_eur: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Einrichtungszeit</label>
+                            <input className="form-input" type="text" placeholder="z.B. 3-4 Wochen" value={formData.einrichtungszeit} onChange={e => setFormData({...formData, einrichtungszeit: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">ROI Monate</label>
+                            <input className="form-input" type="text" placeholder="z.B. 18-24" value={formData.roi_monate} onChange={e => setFormData({...formData, roi_monate: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Brancheneignung</label>
+                            <textarea className="form-input" placeholder="z.B. Ideal für mittlere bis große Werkstätten mit hohem Schweißaufkommen" value={formData.brancheneignung} onChange={e => setFormData({...formData, brancheneignung: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Besondere Merkmale</label>
+                            <textarea className="form-input" placeholder="z.B. Hochfrequenz-Induktions-Steuerung, ISO 9001 zertifiziert" value={formData.besondere_merkmale} onChange={e => setFormData({...formData, besondere_merkmale: e.target.value})} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Website</label>
+                            <input className="form-input" type="url" placeholder="https://example.com/solution" value={formData.website} onChange={e => setFormData({...formData, website: e.target.value})} />
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button className="btn btn-secondary" onClick={closeModal}>Abbrechen</button>
+                        <button className="btn btn-primary" onClick={handleSave}><Icons.Check /> Speichern</button>
+                    </div>
+                </div>
+            </div>
+        )}
     </div>;
 }
 
@@ -762,14 +952,14 @@ function SettingsPage({ settings, setSettings, setToast }) {
             <div className="card-header"><div className="card-title">Benachrichtigungen</div><button className="btn btn-primary btn-sm" onClick={() => setToast({ message: 'Einstellungen gespeichert!', type: 'success' })}><Icons.Check /> Speichern</button></div>
             {[['E-Mail Benachrichtigungen', 'Erhalten Sie E-Mails bei neuen passenden Leads', 'emailNotifications'], ['Sofort-Benachrichtigungen', 'Sofortige Benachrichtigung bei Leads mit 80%+ Match', 'instantNotifications'], ['Wöchentlicher Report', 'Zusammenfassung der Leads und Aktivitäten', 'weeklyReport']].map(([title, desc, key]) =>
                 <div key={key} className="settings-section"><div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div><div style={{ fontWeight: 600, fontSize: 14 }}>{title}</div><div style={{ fontSize: 13, color: 'var(--text-light)', marginTop: 2 }}>{desc}</div></div>
+                    <div><div style={{ fontWeight: 600, fontSize: 14 }}>{title}</div><div style={{ fontSize: 13, color: 'var(--text-secondary)', marginTop: 2 }}>{desc}</div></div>
                     <label className="toggle"><input type="checkbox" checked={settings[key]} onChange={e => setSettings(s => ({...s, [key]: e.target.checked}))} /><span className="toggle-slider"></span></label>
                 </div></div>
             )}
         </div>
         <div className="card">
             <div className="card-header"><div className="card-title">Matching-Einstellungen</div></div>
-            <div className="settings-section"><div className="form-group"><label className="form-label">Mindest-Match-Score</label><div style={{ display: 'flex', alignItems: 'center', gap: 16 }}><input type="range" min="30" max="95" value={settings.minMatchScore} onChange={e => setSettings(s => ({...s, minMatchScore: parseInt(e.target.value)}))} style={{ flex: 1 }} /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--navy)', minWidth: 50 }}>{settings.minMatchScore}%</span></div></div></div>
+            <div className="settings-section"><div className="form-group"><label className="form-label">Mindest-Match-Score</label><div style={{ display: 'flex', alignItems: 'center', gap: 16 }}><input type="range" min="30" max="95" value={settings.minMatchScore} onChange={e => setSettings(s => ({...s, minMatchScore: parseInt(e.target.value)}))} style={{ flex: 1 }} /><span style={{ fontWeight: 700, fontSize: 16, color: 'var(--primary)', minWidth: 50 }}>{settings.minMatchScore}%</span></div></div></div>
             <div className="settings-section"><div className="form-group"><label className="form-label">Bevorzugte Region</label><select className="form-input" value={settings.preferredRegion} onChange={e => setSettings(s => ({...s, preferredRegion: e.target.value}))}><option value="all">Ganz Deutschland</option><option value="south">Süddeutschland</option><option value="north">Norddeutschland</option><option value="west">Westdeutschland</option><option value="east">Ostdeutschland</option></select></div></div>
         </div>
         <div className="card">
@@ -791,6 +981,7 @@ function App() {
         { id: 2, name: 'Service_Übersicht.docx', size: 1245184, type: 'docx', uploadDate: '2026-01-28', status: 'analyzed' },
     ]);
     const [settings, setSettings] = useState({ emailNotifications: true, instantNotifications: true, weeklyReport: false, minMatchScore: 50, preferredRegion: 'all', apiKey: '' });
+    const [solutions, setSolutions] = useState([]);
 
     const leads = MOCK_LEADS.filter(l => l.match >= settings.minMatchScore);
 
@@ -808,7 +999,7 @@ function App() {
         }
     };
 
-    const pageTitles = { dashboard: 'Dashboard', profile: 'Firmenprofil', leads: 'Passende Leads', documents: 'Dokumente', pricing: 'Abo & Preise', settings: 'Einstellungen' };
+    const pageTitles = { dashboard: 'Dashboard', profile: 'Firmenprofil', leads: 'Passende Leads', solutions: 'Lösungen verwalten', documents: 'Dokumente', pricing: 'Abo & Preise', settings: 'Einstellungen' };
 
     return <AppContext.Provider value={{ setPage }}>
         <Sidebar page={page} setPage={setPage} leadCount={leads.filter(l => l.status === 'new').length} tier={tier} unlockedCount={effectiveUnlocked.length} />
@@ -816,14 +1007,15 @@ function App() {
             <div className="topbar">
                 <h2>{pageTitles[page]}</h2>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: TIERS[tier].color, background: tier === 'R2' ? '#c6f6d5' : tier === 'R1' ? '#ebf8ff' : '#edf2f7', padding: '4px 12px', borderRadius: 20 }}>{tier} {TIERS[tier].name}</span>
-                    <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #1a365d, #2d5a87)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 14, fontWeight: 700 }}>{profile.companyName ? profile.companyName[0] : 'P'}</div>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: TIERS[tier].color, background: tier === 'R2' ? '#d4f5ed' : tier === 'R1' ? '#ebf8ff' : '#E6EAEE', padding: '4px 12px', borderRadius: 0 }}>{tier} {TIERS[tier].name}</span>
+                    <div style={{ width: 36, height: 36, borderRadius: 0, background: 'linear-gradient(135deg, #0A2840, #1E2F3A)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: 14, fontWeight: 700 }}>{profile.companyName ? profile.companyName[0] : 'P'}</div>
                 </div>
             </div>
             <div className="content">
                 {page === 'dashboard' && <DashboardPage leads={leads} profile={profile} tier={tier} unlockedLeads={effectiveUnlocked} />}
                 {page === 'profile' && <ProfilePage profile={profile} setProfile={setProfile} setToast={setToast} />}
                 {page === 'leads' && <LeadsPage leads={leads} profile={profile} tier={tier} unlockedLeads={effectiveUnlocked} onUnlockLead={handleUnlockLead} canUnlockMore={canUnlockMore || tier === 'R2'} />}
+                {page === 'solutions' && <SolutionsPage solutions={solutions} setSolutions={setSolutions} setToast={setToast} />}
                 {page === 'documents' && <DocumentsPage documents={documents} setDocuments={setDocuments} setToast={setToast} />}
                 {page === 'pricing' && <PricingPage tier={tier} setTier={setTier} setToast={setToast} />}
                 {page === 'settings' && <SettingsPage settings={settings} setSettings={setSettings} setToast={setToast} />}
