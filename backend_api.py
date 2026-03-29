@@ -1198,6 +1198,135 @@ Identifiziere 2-4 konkrete Automatisierungsmöglichkeiten basierend auf der Bran
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
+# ---------------------------------------------------------------------------
+# Partner Portal API — Solutions CRUD
+# ---------------------------------------------------------------------------
+
+# In-memory partner solutions store (per-session, for MVP)
+partner_solutions = {}  # partner_id -> list of solutions
+
+
+@app.route('/api/partner/solutions', methods=['GET'])
+def get_partner_solutions():
+    """Get all solutions for a partner"""
+    partner_id = request.args.get('partner_id', 'default')
+    solutions = partner_solutions.get(partner_id, [])
+    return jsonify({'success': True, 'solutions': solutions})
+
+
+@app.route('/api/partner/solutions', methods=['POST'])
+def add_partner_solution():
+    """Add a new solution for a partner"""
+    try:
+        data = request.get_json()
+        partner_id = data.get('partner_id', 'default')
+        solution = data.get('solution', {})
+
+        if not solution.get('loesungsname'):
+            return jsonify({'success': False, 'error': 'Lösungsname required'}), 400
+
+        # Generate ID
+        import uuid
+        solution['id'] = str(uuid.uuid4())[:8].upper()
+        solution['created_at'] = datetime.now().isoformat()
+        solution['updated_at'] = datetime.now().isoformat()
+        solution['status'] = 'active'
+
+        if partner_id not in partner_solutions:
+            partner_solutions[partner_id] = []
+        partner_solutions[partner_id].append(solution)
+
+        # Also add to the main database in memory
+        db = load_cobot_database()
+        if db:
+            db_entry = {
+                'ID': solution['id'],
+                'Kategorie': solution.get('kategorie', ''),
+                'Region': 'Europa',
+                'Land': 'Deutschland',
+                'Lösungsanbieter': partner_id,
+                'Lösungsname': solution.get('loesungsname', ''),
+                'Roboter inklusive': solution.get('roboter_inklusive', ''),
+                'Cobot-Hersteller': solution.get('cobot_hersteller', ''),
+                'Max. Nutzlast (kg)': solution.get('max_nutzlast', ''),
+                'Enthaltene Komponenten': solution.get('enthaltene_komponenten', ''),
+                'Software': solution.get('software', ''),
+                'Preis ca. (EUR)': solution.get('preis_eur', ''),
+                'Einrichtungszeit': solution.get('einrichtungszeit', ''),
+                'ROI (Monate)': solution.get('roi_monate', ''),
+                'Brancheneignung': solution.get('brancheneignung', ''),
+                'Besondere Merkmale': solution.get('besondere_merkmale', ''),
+                'Website': solution.get('website', ''),
+            }
+            db['solutions'].append(db_entry)
+
+        return jsonify({'success': True, 'solution': solution})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/partner/solutions/<solution_id>', methods=['PUT'])
+def update_partner_solution(solution_id):
+    """Update an existing solution"""
+    try:
+        data = request.get_json()
+        partner_id = data.get('partner_id', 'default')
+        updates = data.get('solution', {})
+
+        solutions = partner_solutions.get(partner_id, [])
+        for i, sol in enumerate(solutions):
+            if sol.get('id') == solution_id:
+                solutions[i] = {**sol, **updates, 'updated_at': datetime.now().isoformat()}
+                return jsonify({'success': True, 'solution': solutions[i]})
+
+        return jsonify({'success': False, 'error': 'Solution not found'}), 404
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/partner/solutions/<solution_id>', methods=['DELETE'])
+def delete_partner_solution(solution_id):
+    """Delete a solution"""
+    try:
+        partner_id = request.args.get('partner_id', 'default')
+        solutions = partner_solutions.get(partner_id, [])
+        partner_solutions[partner_id] = [s for s in solutions if s.get('id') != solution_id]
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/partner/leads', methods=['GET'])
+def get_partner_leads():
+    """Get leads matched to a partner's capabilities"""
+    partner_id = request.args.get('partner_id', 'default')
+    # For now, return the mock leads stored in memory from form submissions
+    # In production, this would query a database
+    return jsonify({
+        'success': True,
+        'leads': [],  # Will be populated as leads come in via /api/submit-lead
+        'total': 0
+    })
+
+
+@app.route('/api/partner/dashboard', methods=['GET'])
+def get_partner_dashboard():
+    """Get dashboard KPIs for a partner"""
+    partner_id = request.args.get('partner_id', 'default')
+    solutions = partner_solutions.get(partner_id, [])
+    return jsonify({
+        'success': True,
+        'kpis': {
+            'total_solutions': len(solutions),
+            'active_solutions': len([s for s in solutions if s.get('status') == 'active']),
+            'total_leads': 0,
+            'new_leads': 0,
+            'conversion_rate': 0,
+            'pipeline_value': 0,
+        }
+    })
+
+
 @app.route('/health', methods=['GET'])
 def health():
     """Health check endpoint"""
